@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using BoltJwt.Infrastructure.Context;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -25,8 +21,7 @@ namespace BoltJwt
 
                 try
                 {
-                    // TODO: Init db procedure here
-                    //new UserDbContextSeed().SeedAsync(services, loggerFactory).Wait();
+                    IdentityContextSeed.SeedAsync(services, loggerFactory, 1).Wait();
                 }
                 catch (Exception exception)
                 {
