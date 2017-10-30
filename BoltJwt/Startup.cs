@@ -12,9 +12,13 @@ namespace BoltJwt
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("settings.json", optional: true, reloadOnChange: true);
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -62,6 +66,12 @@ namespace BoltJwt
         private void ConfigureIdentityContext(IServiceCollection services)
         {
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                connectionString = Configuration.GetConnectionString("Default");
+            }
+
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new FormatException("The connection string is empty");

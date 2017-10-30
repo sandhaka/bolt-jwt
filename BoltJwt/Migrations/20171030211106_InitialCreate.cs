@@ -13,7 +13,7 @@ namespace BoltJwt.Migrations
                 name: "IdentityContext");
 
             migrationBuilder.CreateTable(
-                name: "authorizations",
+                name: "def_authorizations",
                 schema: "IdentityContext",
                 columns: table => new
                 {
@@ -23,7 +23,7 @@ namespace BoltJwt.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_authorizations", x => x.Id);
+                    table.PrimaryKey("PK_def_authorizations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,6 +101,28 @@ namespace BoltJwt.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "role_authorizations",
+                schema: "IdentityContext",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuthorizationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_role_authorizations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_role_authorizations_roles_RoleId",
+                        column: x => x.RoleId,
+                        principalSchema: "IdentityContext",
+                        principalTable: "roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserGroup",
                 columns: table => new
                 {
@@ -152,6 +174,28 @@ namespace BoltJwt.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "user_authorizations",
+                schema: "IdentityContext",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuthorizationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user_authorizations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_user_authorizations_users_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "IdentityContext",
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_GroupRole_RoleId",
                 table: "GroupRole",
@@ -165,6 +209,18 @@ namespace BoltJwt.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserRole_UserId",
                 table: "UserRole",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_role_authorizations_RoleId",
+                schema: "IdentityContext",
+                table: "role_authorizations",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_authorizations_UserId",
+                schema: "IdentityContext",
+                table: "user_authorizations",
                 column: "UserId");
         }
 
@@ -180,7 +236,15 @@ namespace BoltJwt.Migrations
                 name: "UserRole");
 
             migrationBuilder.DropTable(
-                name: "authorizations",
+                name: "def_authorizations",
+                schema: "IdentityContext");
+
+            migrationBuilder.DropTable(
+                name: "role_authorizations",
+                schema: "IdentityContext");
+
+            migrationBuilder.DropTable(
+                name: "user_authorizations",
                 schema: "IdentityContext");
 
             migrationBuilder.DropTable(

@@ -29,16 +29,16 @@ namespace BoltJwt.Model
         /// </summary>
         public List<UserGroup> UserGroups { get; }
 
-        private readonly List<string> _authorizations;
+        private readonly List<UserAuthorization> _authorizations;
 
         /// <summary>
         /// Authorization directly assigned
         /// </summary>
-        public IReadOnlyCollection<string> Authorizations => _authorizations;
+        public IReadOnlyCollection<UserAuthorization> Authorizations => _authorizations;
 
         public User()
         {
-            _authorizations = new List<string>();
+            _authorizations = new List<UserAuthorization>();
             UserGroups = new List<UserGroup>();
             UserRoles = new List<UserRole>();
         }
@@ -46,18 +46,19 @@ namespace BoltJwt.Model
         /// <summary>
         /// Assign an authorization directly
         /// </summary>
-        /// <param name="authorization">Authorization</param>
-        public void AssignAuthorization(Authorization authorization)
+        /// <param name="definedAuthorization">Authorization</param>
+        public void AssignAuthorization(DefinedAuthorization definedAuthorization)
         {
-            if (!IsAuthorized(authorization))
+            if (!IsAuthorized(definedAuthorization))
             {
-                _authorizations.Add(authorization.Name);
+                var userAuthorization = new UserAuthorization() {AuthorizationName = definedAuthorization.Name};
+                _authorizations.Add(userAuthorization);
             }
         }
 
-        private bool IsAuthorized(Authorization authorization)
+        private bool IsAuthorized(DefinedAuthorization definedAuthorization)
         {
-            return _authorizations.Any(i => i.Equals(authorization.Name));
+            return _authorizations.Any(i => i.AuthorizationName.Equals(definedAuthorization.Name));
         }
     }
 }

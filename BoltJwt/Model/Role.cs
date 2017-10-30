@@ -17,16 +17,16 @@ namespace BoltJwt.Model
         /// </summary>
         public List<GroupRole> GroupRoles { get; }
 
-        private readonly List<string> _authorizations;
+        private readonly List<RoleAuthorization> _authorizations;
 
         /// <summary>
         /// Role authorizations
         /// </summary>
-        public IReadOnlyCollection<string> Authorizations => _authorizations;
+        public IReadOnlyCollection<RoleAuthorization> Authorizations => _authorizations;
 
         public Role()
         {
-            _authorizations = new List<string>();
+            _authorizations = new List<RoleAuthorization>();
             UserRoles = new List<UserRole>();
             GroupRoles = new List<GroupRole>();
         }
@@ -34,12 +34,13 @@ namespace BoltJwt.Model
         /// <summary>
         /// Add an authorization
         /// </summary>
-        /// <param name="authorization">Authorization</param>
-        public void AddAuthorization(Authorization authorization)
+        /// <param name="definedAuthorization">Authorization</param>
+        public void AddAuthorization(DefinedAuthorization definedAuthorization)
         {
-            if (!_authorizations.Any(i => i.Equals(authorization.Name)))
+            if (!_authorizations.Any(i => i.AuthorizationName.Equals(definedAuthorization.Name)))
             {
-                _authorizations.Add(authorization.Name);
+                var authorization = new RoleAuthorization() {AuthorizationName = definedAuthorization.Name};
+                _authorizations.Add(authorization);
             }
         }
     }

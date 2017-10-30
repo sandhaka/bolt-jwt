@@ -11,7 +11,7 @@ using System;
 namespace BoltJwt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20171030154614_InitialCreate")]
+    [Migration("20171030211106_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace BoltJwt.Migrations
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BoltJwt.Model.Authorization", b =>
+            modelBuilder.Entity("BoltJwt.Model.DefinedAuthorization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -31,7 +31,7 @@ namespace BoltJwt.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("authorizations","IdentityContext");
+                    b.ToTable("def_authorizations","IdentityContext");
                 });
 
             modelBuilder.Entity("BoltJwt.Model.Group", b =>
@@ -48,9 +48,9 @@ namespace BoltJwt.Migrations
 
             modelBuilder.Entity("BoltJwt.Model.GroupRole", b =>
                 {
-                    b.Property<int>("GroupId");
+                    b.Property<int?>("GroupId");
 
-                    b.Property<int>("RoleId");
+                    b.Property<int?>("RoleId");
 
                     b.HasKey("GroupId", "RoleId");
 
@@ -69,6 +69,23 @@ namespace BoltJwt.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("roles","IdentityContext");
+                });
+
+            modelBuilder.Entity("BoltJwt.Model.RoleAuthorization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AuthorizationName")
+                        .IsRequired();
+
+                    b.Property<int>("RoleId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("role_authorizations","IdentityContext");
                 });
 
             modelBuilder.Entity("BoltJwt.Model.User", b =>
@@ -98,11 +115,28 @@ namespace BoltJwt.Migrations
                     b.ToTable("users","IdentityContext");
                 });
 
-            modelBuilder.Entity("BoltJwt.Model.UserGroup", b =>
+            modelBuilder.Entity("BoltJwt.Model.UserAuthorization", b =>
                 {
-                    b.Property<int>("GroupId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AuthorizationName")
+                        .IsRequired();
 
                     b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("user_authorizations","IdentityContext");
+                });
+
+            modelBuilder.Entity("BoltJwt.Model.UserGroup", b =>
+                {
+                    b.Property<int?>("GroupId");
+
+                    b.Property<int?>("UserId");
 
                     b.HasKey("GroupId", "UserId");
 
@@ -113,9 +147,9 @@ namespace BoltJwt.Migrations
 
             modelBuilder.Entity("BoltJwt.Model.UserRole", b =>
                 {
-                    b.Property<int>("RoleId");
+                    b.Property<int?>("RoleId");
 
-                    b.Property<int>("UserId");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("RoleId", "UserId");
 
@@ -134,6 +168,22 @@ namespace BoltJwt.Migrations
                     b.HasOne("BoltJwt.Model.Role", "Role")
                         .WithMany("GroupRoles")
                         .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BoltJwt.Model.RoleAuthorization", b =>
+                {
+                    b.HasOne("BoltJwt.Model.Role")
+                        .WithMany("Authorizations")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BoltJwt.Model.UserAuthorization", b =>
+                {
+                    b.HasOne("BoltJwt.Model.User")
+                        .WithMany("Authorizations")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

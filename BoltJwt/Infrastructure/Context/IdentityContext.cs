@@ -1,6 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using BoltJwt.Model;
+﻿using BoltJwt.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,7 +12,7 @@ namespace BoltJwt.Infrastructure.Context
 
         public DbSet<Group> Groups { get; set; }
 
-        public DbSet<Authorization> Authorizations { get; set; }
+        public DbSet<DefinedAuthorization> Authorizations { get; set; }
 
         public DbSet<Role> Roles { get; set; }
 
@@ -28,7 +26,9 @@ namespace BoltJwt.Infrastructure.Context
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Authorization>(ConfigureAuth);
+            modelBuilder.Entity<DefinedAuthorization>(ConfigureAuth);
+            modelBuilder.Entity<UserAuthorization>(ConfigureUserAuth);
+            modelBuilder.Entity<RoleAuthorization>(ConfigureRoleAuth);
 
             /**
              * Configure a many-to-many relationship with users and roles.
@@ -87,9 +87,23 @@ namespace BoltJwt.Infrastructure.Context
                 .HasForeignKey(pt => pt.RoleId);
         }
 
-        private void ConfigureAuth(EntityTypeBuilder<Authorization> authConfig)
+        private void ConfigureUserAuth(EntityTypeBuilder<UserAuthorization> userAuthConfig)
         {
-            authConfig.ToTable("authorizations", DefaultSchema);
+            userAuthConfig.ToTable("user_authorizations", DefaultSchema);
+            userAuthConfig.HasKey(a => a.Id);
+            userAuthConfig.Property<string>("AuthorizationName").IsRequired();
+        }
+
+        private void ConfigureRoleAuth(EntityTypeBuilder<RoleAuthorization> roleAuthConfig)
+        {
+            roleAuthConfig.ToTable("role_authorizations", DefaultSchema);
+            roleAuthConfig.HasKey(a => a.Id);
+            roleAuthConfig.Property<string>("AuthorizationName").IsRequired();
+        }
+
+        private void ConfigureAuth(EntityTypeBuilder<DefinedAuthorization> authConfig)
+        {
+            authConfig.ToTable("def_authorizations", DefaultSchema);
             authConfig.HasKey(a => a.Id);
             authConfig.Property<string>("Name").IsRequired();
         }
@@ -106,6 +120,11 @@ namespace BoltJwt.Infrastructure.Context
             roleConfig.ToTable("roles", DefaultSchema);
             roleConfig.HasKey(r => r.Id);
             roleConfig.Property<string>("Description").IsRequired(false);
+
+            roleConfig.HasMany(i => i.Authorizations)
+                .WithOne()
+                .HasForeignKey(p => p.RoleId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         private void ConfigureUsers(EntityTypeBuilder<User> usersConfig)
@@ -119,6 +138,11 @@ namespace BoltJwt.Infrastructure.Context
             usersConfig.Property<string>("Email").IsRequired(false);
             usersConfig.Property<bool>("Admin").IsRequired();
             usersConfig.Property<bool>("Root").IsRequired();
+
+            usersConfig.HasMany(i => i.Authorizations)
+                .WithOne()
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
