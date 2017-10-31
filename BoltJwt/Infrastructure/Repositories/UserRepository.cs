@@ -34,6 +34,12 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <param name="item">User</param>
         public void Update(User item)
         {
+            // The root user is not editable
+            if (item.Root)
+            {
+                return;
+            }
+
             _context.Entry(item).State = EntityState.Modified;
         }
 
@@ -45,6 +51,7 @@ namespace BoltJwt.Infrastructure.Repositories
         public async Task<User> GetAsync(int id)
         {
             var user = await _context.Users.FindAsync(id);
+
             if (user != null)
             {
                 await _context.Entry(user)

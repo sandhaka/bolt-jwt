@@ -76,6 +76,7 @@ namespace BoltJwt
             {
                 throw new FormatException("The connection string is empty");
             }
+
             services.AddEntityFrameworkSqlServer()
                 .AddDbContext<IdentityContext>(options =>
                 {
