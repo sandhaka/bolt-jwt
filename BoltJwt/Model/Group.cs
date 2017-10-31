@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BoltJwt.Model.Abstractions;
 
 namespace BoltJwt.Model
 {

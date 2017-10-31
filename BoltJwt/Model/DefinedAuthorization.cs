@@ -1,4 +1,6 @@
-﻿namespace BoltJwt.Model
+﻿using BoltJwt.Model.Abstractions;
+
+namespace BoltJwt.Model
 {
     public class DefinedAuthorization : Entity
     {
