@@ -4,6 +4,6 @@ namespace BoltJwt.Model
 {
     public class DefinedAuthorization : Entity
     {
-        public string Name;
+        public string Name { get; set; }
     }
 }

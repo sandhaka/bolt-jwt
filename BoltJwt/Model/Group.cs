@@ -5,7 +5,7 @@ namespace BoltJwt.Model
 {
     public class Group : Entity
     {
-        public string Description;
+        public string Description { get; set; }
 
         /// <summary>
         /// User groups

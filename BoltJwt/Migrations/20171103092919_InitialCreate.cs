@@ -19,7 +19,7 @@ namespace BoltJwt.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,12 +62,12 @@ namespace BoltJwt.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Admin = table.Column<bool>(type: "bit", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Root = table.Column<bool>(type: "bit", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserName = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -107,7 +107,7 @@ namespace BoltJwt.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AuthorizationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AuthorizationName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -181,7 +181,7 @@ namespace BoltJwt.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AuthorizationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AuthorizationName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -212,16 +212,52 @@ namespace BoltJwt.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_def_authorizations_Name",
+                schema: "IdentityContext",
+                table: "def_authorizations",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_role_authorizations_AuthorizationName",
+                schema: "IdentityContext",
+                table: "role_authorizations",
+                column: "AuthorizationName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_role_authorizations_RoleId",
                 schema: "IdentityContext",
                 table: "role_authorizations",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_user_authorizations_AuthorizationName",
+                schema: "IdentityContext",
+                table: "user_authorizations",
+                column: "AuthorizationName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_user_authorizations_UserId",
                 schema: "IdentityContext",
                 table: "user_authorizations",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_Email",
+                schema: "IdentityContext",
+                table: "users",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_UserName",
+                schema: "IdentityContext",
+                table: "users",
+                column: "UserName",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

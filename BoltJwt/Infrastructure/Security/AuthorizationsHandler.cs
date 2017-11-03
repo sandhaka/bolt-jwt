@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json.Linq;
+
+namespace BoltJwt.Infrastructure.Security
+{
+    /// <summary>
+    /// Authorization handler to check the authorization of the user
+    /// </summary>
+    public class AuthorizationsHandler : AuthorizationHandler<AuthorizationsRequirement>
+    {
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthorizationsRequirement requirement)
+        {
+            // Get the authorizations list from the claims contained in the token obtained before
+            var authorizationsList = context.User.Claims.FirstOrDefault(i => i.Type == "authorizations");
+
+            var authorizations = (List<string>)JObject
+                .Parse(authorizationsList?.Value ?? throw new NullReferenceException("Authorizations claim"))
+                .ToObject(typeof(List<string>));
+
+            // Check is the user is authorized to access the resources
+            foreach (var authorization in authorizations)
+            {
+                if (requirement.Authorizations.Contains(authorization))
+                {
+                    context.Succeed(requirement);
+                    break;
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+    }
+}

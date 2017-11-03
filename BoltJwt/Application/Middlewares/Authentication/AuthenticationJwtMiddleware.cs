@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 
 namespace BoltJwt.Application.Middlewares.Authentication
 {
+    /// <summary>
+    /// Base class for auth jwt middlewares
+    /// </summary>
     public abstract class AuthenticationJwtMiddleware
     {
         /// <summary>

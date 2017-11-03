@@ -23,11 +23,28 @@ namespace BoltJwt.Infrastructure.Context
             try
             {
                 var context = (IdentityContext) services.GetService(typeof(IdentityContext));
+
+                if (!context.Authorizations.Any(i => i.Name.Equals(Constants.AdministrativeAuth)))
+                {
+                    context.Authorizations.Add(new DefinedAuthorization
+                    {
+                        Name = Constants.AdministrativeAuth
+                    });
+                }
+                if (!context.Authorizations.Any(i => i.Name.Equals(Constants.RootAuth)))
+                {
+                    context.Authorizations.Add(new DefinedAuthorization
+                    {
+                        Name = Constants.RootAuth
+                    });
+                }
+
                 if (!context.Users.Any(i=>i.Root && i.UserName == "root"))
                 {
                     context.Users.Add(CreateRoot());
-                    await context.SaveChangesAsync();
                 }
+
+                await context.SaveChangesAsync();
             }
             catch (Exception e)
             {

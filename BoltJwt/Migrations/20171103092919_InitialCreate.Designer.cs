@@ -11,7 +11,7 @@ using System;
 namespace BoltJwt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20171030211106_InitialCreate")]
+    [Migration("20171103092919_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,9 @@ namespace BoltJwt.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("def_authorizations","IdentityContext");
                 });
@@ -83,6 +86,9 @@ namespace BoltJwt.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuthorizationName")
+                        .IsUnique();
+
                     b.HasIndex("RoleId");
 
                     b.ToTable("role_authorizations","IdentityContext");
@@ -112,6 +118,13 @@ namespace BoltJwt.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
                     b.ToTable("users","IdentityContext");
                 });
 
@@ -126,6 +139,9 @@ namespace BoltJwt.Migrations
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorizationName")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 

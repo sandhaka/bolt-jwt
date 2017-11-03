@@ -30,6 +30,9 @@ namespace BoltJwt.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("def_authorizations","IdentityContext");
                 });
 
@@ -82,6 +85,9 @@ namespace BoltJwt.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuthorizationName")
+                        .IsUnique();
+
                     b.HasIndex("RoleId");
 
                     b.ToTable("role_authorizations","IdentityContext");
@@ -111,6 +117,13 @@ namespace BoltJwt.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
                     b.ToTable("users","IdentityContext");
                 });
 
@@ -125,6 +138,9 @@ namespace BoltJwt.Migrations
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorizationName")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 

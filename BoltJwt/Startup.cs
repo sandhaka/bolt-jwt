@@ -1,8 +1,17 @@
 ﻿using System;
 using System.Reflection;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using BoltJwt.Application.Middlewares.Authentication;
+using BoltJwt.Application.Services;
 using BoltJwt.Infrastructure.Context;
+using BoltJwt.Infrastructure.Modules;
+using BoltJwt.Infrastructure.Security;
+using BoltJwt.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +25,7 @@ namespace BoltJwt
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("settings.json", optional: true, reloadOnChange: true);
+                .AddJsonFile($"settings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
             Configuration = builder.Build();
         }
@@ -24,12 +33,9 @@ namespace BoltJwt
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            /**
-             * Configure db
-             * Entities for: Users, Groups, Roles and Authorizations
-             */
+            // Add the db context
             ConfigureIdentityContext(services);
 
             // Add cors and create Policy with options
@@ -42,11 +48,44 @@ namespace BoltJwt
                         .AllowCredentials() );
             });
 
-            services.AddMvc();
+            // Add Jwt based authentication
+            services.AddJwtBearerAuthentication(Configuration);
+
+            // Add authorization policies
+            services.AddAuthorization(options =>
+            {
+                // Adding a custom policy to control the access to the controllers.
+                // Users, groups and authorizations can be edited only by the root or by a 'admin' user.
+                options.AddPolicy("BoltJwtAdmin", policyBuilder => policyBuilder.AddRequirements(
+                    new AuthorizationsRequirement(
+                        Constants.AdministrativeAuth,
+                        Constants.RootAuth))
+                );
+            });
+
+            // Add Mvc service and setup the base authorization policy globally
+            services.AddMvc(config =>
+            {
+                // Require authenticated user as default
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+
+            // Di
+            var container = new ContainerBuilder();
+            container.Populate(services);
+
+            container.RegisterModule(new ApplicationModule());
+
+            return new AutofacServiceProvider(container.Build());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            IServiceProvider services)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 
@@ -60,17 +99,16 @@ namespace BoltJwt
                 loggerFactory.AddDebug(LogLevel.Warning);
             }
 
+            // Configuring the Json Web Token provider
+            app.UseJwtProvider(services, Configuration);
+
+            // Mvc
             app.UseMvc();
         }
 
         private void ConfigureIdentityContext(IServiceCollection services)
         {
-            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-
-            if (string.IsNullOrWhiteSpace(connectionString))
-            {
-                connectionString = Configuration.GetConnectionString("Default");
-            }
+            var connectionString = Configuration.GetConnectionString("mssql.data.connection");
 
             if (string.IsNullOrEmpty(connectionString))
             {

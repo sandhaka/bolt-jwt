@@ -92,6 +92,8 @@ namespace BoltJwt.Infrastructure.Context
             userAuthConfig.ToTable("user_authorizations", DefaultSchema);
             userAuthConfig.HasKey(a => a.Id);
             userAuthConfig.Property<string>("AuthorizationName").IsRequired();
+
+            userAuthConfig.HasIndex(a => a.AuthorizationName).IsUnique();
         }
 
         private void ConfigureRoleAuth(EntityTypeBuilder<RoleAuthorization> roleAuthConfig)
@@ -99,6 +101,8 @@ namespace BoltJwt.Infrastructure.Context
             roleAuthConfig.ToTable("role_authorizations", DefaultSchema);
             roleAuthConfig.HasKey(a => a.Id);
             roleAuthConfig.Property<string>("AuthorizationName").IsRequired();
+
+            roleAuthConfig.HasIndex(a => a.AuthorizationName).IsUnique();
         }
 
         private void ConfigureAuth(EntityTypeBuilder<DefinedAuthorization> authConfig)
@@ -106,6 +110,8 @@ namespace BoltJwt.Infrastructure.Context
             authConfig.ToTable("def_authorizations", DefaultSchema);
             authConfig.HasKey(a => a.Id);
             authConfig.Property<string>("Name").IsRequired();
+
+            authConfig.HasIndex(a => a.Name).IsUnique();
         }
 
         private void ConfigureGroups(EntityTypeBuilder<Group> groupConfig)
@@ -138,6 +144,9 @@ namespace BoltJwt.Infrastructure.Context
             usersConfig.Property<string>("Email").IsRequired(false);
             usersConfig.Property<bool>("Admin").IsRequired();
             usersConfig.Property<bool>("Root").IsRequired();
+
+            usersConfig.HasIndex(u => u.UserName).IsUnique();
+            usersConfig.HasIndex(u => u.Email).IsUnique();
 
             usersConfig.HasMany(i => i.Authorizations)
                 .WithOne()

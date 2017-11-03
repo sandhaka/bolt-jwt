@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Security.Principal;
+using System.Text;
 using System.Threading.Tasks;
 using BoltJwt.Infrastructure.Context;
 using BoltJwt.Model;
 using BoltJwt.Model.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace BoltJwt.Infrastructure.Repositories
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IUserRepository
     {
         private readonly IdentityContext _context;
 
@@ -63,6 +69,51 @@ namespace BoltJwt.Infrastructure.Repositories
             }
 
             return user;
+        }
+
+        /// <summary>
+        /// Return the user identity claims
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="password">Password</param>
+        /// <returns>Identity claims</returns>
+        public async Task<ClaimsIdentity> GetIdentityAsync(string username, string password)
+        {
+            ClaimsIdentity claimsIdentity = null;
+
+            var user = await _context.Users.FirstOrDefaultAsync(i => i.UserName == username);
+
+            if (user != null)
+            {
+                using (var md5Hash = MD5.Create())
+                {
+                    var hash = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+                    var sBuilder = new StringBuilder();
+
+                    foreach (var t in hash)
+                    {
+                        sBuilder.Append(t.ToString("x2"));
+                    }
+
+                    if (user.Password.Equals(sBuilder.ToString()))
+                    {
+                        var authorizations = user.Authorizations.Select(i => i.AuthorizationName);
+
+                        claimsIdentity = new ClaimsIdentity(
+                            new GenericIdentity(username, "Token"),
+                            new []
+                            {
+                                new Claim("isAdmin", user.Admin ? "true" : "false"),
+                                new Claim("isRoot", user.Root ? "true" : "false"),
+                                new Claim("userId", user.Id.ToString()),
+                                new Claim("username", user.UserName),
+                                new Claim("authorizations", JObject.FromObject(authorizations).ToString())
+                            });
+                    }
+                }
+            }
+
+            return claimsIdentity;
         }
     }
 }

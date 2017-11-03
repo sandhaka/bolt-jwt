@@ -2,3 +2,13 @@
 .idea/
 BoltJwt/bin
 BoltJwt/obj
+
+# Certificates:
+*.key
+*.pem
+*.srl
+*.csr
+*.ext
+*.pfx
+*.crt
+*.passphrase

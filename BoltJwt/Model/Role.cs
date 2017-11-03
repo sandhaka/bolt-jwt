@@ -6,7 +6,7 @@ namespace BoltJwt.Model
 {
     public class Role : Entity
     {
-        public string Description;
+        public string Description { get; set; }
 
         /// <summary>
         /// Users with this role

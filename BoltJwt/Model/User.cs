@@ -6,19 +6,25 @@ namespace BoltJwt.Model
 {
     public class User : Entity
     {
-        public string Name;
+        public string Name { get; set; }
 
-        public string Surname;
+        public string Surname { get; set; }
 
-        public string UserName;
+        public string UserName { get; set; }
 
-        public string Password;
+        public string Password { get; set; }
 
-        public string Email;
+        public string Email { get; set; }
 
-        public bool Admin;
+        /// <summary>
+        /// Admin is a special user allowed to edit users in BoltJwt except the root
+        /// </summary>
+        public bool Admin { get; set; }
 
-        public bool Root;
+        /// <summary>
+        /// Root user is the default BoltJwt admin
+        /// </summary>
+        public bool Root { get; set; }
 
         /// <summary>
         /// Roles of the user
