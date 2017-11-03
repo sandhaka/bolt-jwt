@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using BoltJwt.Infrastructure.Context;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -11,30 +12,27 @@ namespace BoltJwt
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
-
-            using (var scope = host.Services.CreateScope())
+            BuildWebHost(args).MigrateDbContext<IdentityContext>((context, services) =>
             {
-                var services = scope.ServiceProvider;
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 var logger = loggerFactory.CreateLogger("BuildWebHost");
 
                 try
                 {
-                    IdentityContextSeed.SeedAsync(services, loggerFactory, 1).Wait();
+                    IdentityContextSeed.SeedAsync(context, loggerFactory).Wait();
                 }
                 catch (Exception exception)
                 {
                     logger.LogError(exception, "An error occurred seeding the DB.");
                 }
-            }
-
-            host.Run();
+            }).Run();
         }
 
         private static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
     }

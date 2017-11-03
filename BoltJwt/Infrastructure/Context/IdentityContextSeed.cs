@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using BoltJwt.Model;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace BoltJwt.Infrastructure.Context
@@ -13,49 +14,49 @@ namespace BoltJwt.Infrastructure.Context
         /// <summary>
         /// Initialize the users table with the root user
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="context"></param>
         /// <param name="loggerFactory"></param>
-        /// <param name="retry"></param>
         /// <returns>Task</returns>
-        public static async Task SeedAsync(IServiceProvider services, ILoggerFactory loggerFactory, int retry = 0)
+        public static async Task SeedAsync(IdentityContext context, ILoggerFactory loggerFactory)
         {
-            var availabilityRetry = retry;
             try
             {
-                var context = (IdentityContext) services.GetService(typeof(IdentityContext));
-
-                if (!context.Authorizations.Any(i => i.Name.Equals(Constants.AdministrativeAuth)))
+                using (context)
                 {
-                    context.Authorizations.Add(new DefinedAuthorization
+                    context.Database.Migrate();
+
+                    if (!context.Authorizations.Any(i => i.Name.Equals(Constants.AdministrativeAuth)))
                     {
-                        Name = Constants.AdministrativeAuth
-                    });
-                }
-                if (!context.Authorizations.Any(i => i.Name.Equals(Constants.RootAuth)))
-                {
-                    context.Authorizations.Add(new DefinedAuthorization
+                        context.Authorizations.Add(new DefinedAuthorization
+                        {
+                            Name = Constants.AdministrativeAuth
+                        });
+
+                        await context.SaveChangesAsync();
+                    }
+
+                    if (!context.Authorizations.Any(i => i.Name.Equals(Constants.RootAuth)))
                     {
-                        Name = Constants.RootAuth
-                    });
-                }
+                        context.Authorizations.Add(new DefinedAuthorization
+                        {
+                            Name = Constants.RootAuth
+                        });
 
-                if (!context.Users.Any(i=>i.Root && i.UserName == "root"))
-                {
-                    context.Users.Add(CreateRoot());
-                }
+                        await context.SaveChangesAsync();
+                    }
 
-                await context.SaveChangesAsync();
+                    if (!context.Users.Any(i => i.Root && i.UserName == "root"))
+                    {
+                        context.Users.Add(CreateRoot());
+
+                        await context.SaveChangesAsync();
+                    }
+                }
             }
             catch (Exception e)
             {
                 var log = loggerFactory.CreateLogger(nameof(IdentityContextSeed));
                 log.LogError(e.Message);
-
-                if (availabilityRetry < 10)
-                {
-                    availabilityRetry++;
-                    await SeedAsync(services, loggerFactory, availabilityRetry);
-                }
             }
         }
 

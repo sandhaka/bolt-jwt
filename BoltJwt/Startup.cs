@@ -36,7 +36,22 @@ namespace BoltJwt
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add the db context
-            ConfigureIdentityContext(services);
+            var connectionString = Configuration.GetConnectionString("mssql.data.connection");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new FormatException("The connection string is empty");
+            }
+
+            services.AddEntityFrameworkSqlServer().AddDbContext<IdentityContext>(options =>
+                {
+                    options.UseSqlServer(connectionString, opts =>
+                    {
+                        // Give the name of the assembly that contain the migration instructions (the 'migrations' folder)
+                        opts.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                        opts.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                    });
+                });
 
             // Add cors and create Policy with options
             services.AddCors(options =>
@@ -74,6 +89,8 @@ namespace BoltJwt
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            services.AddOptions();
+
             // Di
             var container = new ContainerBuilder();
             container.Populate(services);
@@ -104,26 +121,6 @@ namespace BoltJwt
 
             // Mvc
             app.UseMvc();
-        }
-
-        private void ConfigureIdentityContext(IServiceCollection services)
-        {
-            var connectionString = Configuration.GetConnectionString("mssql.data.connection");
-
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new FormatException("The connection string is empty");
-            }
-
-            services.AddEntityFrameworkSqlServer()
-                .AddDbContext<IdentityContext>(options =>
-                {
-                    options.UseSqlServer(connectionString, opts =>
-                    {
-                        // Give the name of the assembly that contain the migration instructions (the 'migrations' folder)
-                        opts.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                    });
-                });
         }
     }
 }

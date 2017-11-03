@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BoltJwt.Application.Middlewares.Authentication
@@ -32,6 +33,6 @@ namespace BoltJwt.Application.Middlewares.Authentication
         /// <summary>
         /// Resolves a user identity given a username and password.
         /// </summary>
-        public Func<string, string, Task<ClaimsIdentity>> IdentityResolver { get; set; }
+        public Func<DbContext ,string, string, Task<ClaimsIdentity>> IdentityResolver { get; set; }
     }
 }

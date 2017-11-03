@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using BoltJwt.Infrastructure.Repositories;
+using BoltJwt.Infrastructure.Security;
 using BoltJwt.Model.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BoltJwt.Infrastructure.Modules
 {
@@ -8,7 +10,13 @@ namespace BoltJwt.Infrastructure.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<UserRepository>().As<IUserRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<UserRepository>()
+                .As<IUserRepository>()
+                .InstancePerLifetimeScope();
+            
+            builder.RegisterType<AuthorizationsHandler>()
+                .As<IAuthorizationHandler>()
+                .SingleInstance();
         }
     }
 }

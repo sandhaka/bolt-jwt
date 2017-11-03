@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using BoltJwt.Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -10,7 +11,7 @@ namespace BoltJwt.Application.Middlewares.Authentication
         {
         }
 
-        protected override Task GenerateTokenAsync(HttpContext httpContext)
+        protected override Task GenerateTokenAsync(HttpContext httpContext, IdentityContext dbContext)
         {
             throw new System.NotImplementedException();
         }

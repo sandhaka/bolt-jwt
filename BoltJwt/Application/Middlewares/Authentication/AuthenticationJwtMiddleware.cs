@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BoltJwt.Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -37,29 +38,31 @@ namespace BoltJwt.Application.Middlewares.Authentication
         /// <summary>
         /// Analyze a request - Return a new access token or delegate the request to the next middleware
         /// </summary>
-        /// <param name="context">Http context</param>
+        /// <param name="httpContext">Http context</param>
+        /// <param name="context">DbContext</param>
         /// <returns>Return the next task</returns>
-        public virtual Task Invoke(HttpContext context)
+        public virtual Task Invoke(HttpContext httpContext, IdentityContext context)
         {
-            if (!context.Request.Path.Equals(Options.Path, StringComparison.Ordinal))
+            if (!httpContext.Request.Path.Equals(Options.Path, StringComparison.Ordinal))
             {
-                return _next(context);
+                return _next(httpContext);
             }
 
-            if (!context.Request.Method.Equals("POST"))
+            if (!httpContext.Request.Method.Equals("POST"))
             {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                return context.Response.WriteAsync("Bad request.");
+                httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                return httpContext.Response.WriteAsync("Bad request.");
             }
 
-            return GenerateTokenAsync(context);
+            return GenerateTokenAsync(httpContext, context);
         }
 
         /// <summary>
         /// Implementation specific
         /// </summary>
+        /// <param name="context">DbContext</param>
         /// <param name="httpContext">Http context</param>
         /// <returns>Task</returns>
-        protected abstract Task GenerateTokenAsync(HttpContext httpContext);
+        protected abstract Task GenerateTokenAsync(HttpContext httpContext, IdentityContext context);
     }
 }

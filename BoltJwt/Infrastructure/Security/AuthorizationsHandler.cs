@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace BoltJwt.Infrastructure.Security
 {
@@ -17,9 +17,9 @@ namespace BoltJwt.Infrastructure.Security
             // Get the authorizations list from the claims contained in the token obtained before
             var authorizationsList = context.User.Claims.FirstOrDefault(i => i.Type == "authorizations");
 
-            var authorizations = (List<string>)JObject
-                .Parse(authorizationsList?.Value ?? throw new NullReferenceException("Authorizations claim"))
-                .ToObject(typeof(List<string>));
+            var authorizations =
+                (List<string>) JsonConvert.DeserializeObject(
+                    authorizationsList?.Value ?? throw new NullReferenceException("Authorizations claim"));
 
             // Check is the user is authorized to access the resources
             foreach (var authorization in authorizations)

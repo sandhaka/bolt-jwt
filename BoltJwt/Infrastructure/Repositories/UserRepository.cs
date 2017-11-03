@@ -9,7 +9,7 @@ using BoltJwt.Infrastructure.Context;
 using BoltJwt.Model;
 using BoltJwt.Model.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace BoltJwt.Infrastructure.Repositories
 {
@@ -74,14 +74,15 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <summary>
         /// Return the user identity claims
         /// </summary>
+        /// <param name="context">DbContext</param>
         /// <param name="username">Username</param>
         /// <param name="password">Password</param>
         /// <returns>Identity claims</returns>
-        public async Task<ClaimsIdentity> GetIdentityAsync(string username, string password)
+        public async Task<ClaimsIdentity> GetIdentityAsync(DbContext context, string username, string password)
         {
             ClaimsIdentity claimsIdentity = null;
 
-            var user = await _context.Users.FirstOrDefaultAsync(i => i.UserName == username);
+            var user = await ((IdentityContext) context).Users.FirstOrDefaultAsync(i => i.UserName == username);
 
             if (user != null)
             {
@@ -97,7 +98,7 @@ namespace BoltJwt.Infrastructure.Repositories
 
                     if (user.Password.Equals(sBuilder.ToString()))
                     {
-                        var authorizations = user.Authorizations.Select(i => i.AuthorizationName);
+                        var authorizations = user.Authorizations.Select(i => i.AuthorizationName).ToList();
 
                         claimsIdentity = new ClaimsIdentity(
                             new GenericIdentity(username, "Token"),
@@ -107,7 +108,7 @@ namespace BoltJwt.Infrastructure.Repositories
                                 new Claim("isRoot", user.Root ? "true" : "false"),
                                 new Claim("userId", user.Id.ToString()),
                                 new Claim("username", user.UserName),
-                                new Claim("authorizations", JObject.FromObject(authorizations).ToString())
+                                new Claim("authorizations", JsonConvert.SerializeObject(authorizations))
                             });
                     }
                 }

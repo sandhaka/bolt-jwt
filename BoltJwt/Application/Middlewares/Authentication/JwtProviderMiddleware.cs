@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BoltJwt.Application.Services;
+using BoltJwt.Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -19,9 +20,10 @@ namespace BoltJwt.Application.Middlewares.Authentication
             ThrowIfInvalidOptions(Options);
         }
 
-        protected override async Task GenerateTokenAsync(HttpContext httpContext)
+        protected override async Task GenerateTokenAsync(HttpContext httpContext, IdentityContext context)
         {
-            var jsonPost = JObject.Parse(await httpContext.Request.GetRawBodyStringAsync(Encoding.UTF8));
+            var bodyContent = await httpContext.Request.GetRawBodyStringAsync(Encoding.UTF8);
+            var jsonPost = JObject.Parse(bodyContent);
 
             var username = jsonPost["username"].Value<string>();
             var password = jsonPost["password"].Value<string>();
@@ -31,7 +33,7 @@ namespace BoltJwt.Application.Middlewares.Authentication
             if(opts == null)
                 throw new InvalidCastException("TokenProviderOptions");
 
-            var identity = await opts.IdentityResolver(username, password);
+            var identity = await opts.IdentityResolver(context ,username, password);
 
             if (identity == null)
             {
