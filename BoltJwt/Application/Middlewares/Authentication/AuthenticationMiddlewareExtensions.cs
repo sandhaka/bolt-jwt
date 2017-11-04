@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
-using BoltJwt.Model.Abstractions;
+using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,10 +18,13 @@ namespace BoltJwt.Application.Middlewares.Authentication
         {
             var userRepository = services.GetRequiredService<IUserRepository>();
 
+            // Get the private key
             var pfxPath = configuration.GetSection("Secrets:pfxCert").Value;
             var prvtKeyPassphrase = File.ReadAllText(configuration.GetSection("Secrets:PrvtKeyPassphrase").Value);
-
             var privateKey = new X509Certificate2(pfxPath, prvtKeyPassphrase).GetRSAPrivateKey();
+
+            // Use authentication middleware
+            builder.UseAuthentication();
 
             // Setup Token provider
             var tokenProviderOptions = new TokenProviderOptions()
@@ -29,7 +33,7 @@ namespace BoltJwt.Application.Middlewares.Authentication
                 Issuer = configuration.GetSection("Jwt:Issuer").Value,
                 Audience = configuration.GetSection("Jwt:Audience").Value,
                 SigningCredentials = new SigningCredentials(new RsaSecurityKey(privateKey), SecurityAlgorithms.RsaSha256),
-                IdentityResolver = userRepository.GetIdentityAsync
+                IdentityResolver = UserRepository.GetIdentityAsync
             };
 
             builder.UseMiddleware<JwtProviderMiddleware>(Options.Create(tokenProviderOptions));

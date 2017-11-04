@@ -20,8 +20,16 @@ namespace BoltJwt.Application.Middlewares.Authentication
             ThrowIfInvalidOptions(Options);
         }
 
+        /// <summary>
+        /// Resolve user credentials and build a JWT
+        /// </summary>
+        /// <param name="httpContext">http context</param>
+        /// <param name="context">db context</param>
+        /// <returns>task</returns>
+        /// <exception cref="InvalidCastException">Wrong token options exception</exception>
         protected override async Task GenerateTokenAsync(HttpContext httpContext, IdentityContext context)
         {
+            // Access to the body of the request
             var bodyContent = await httpContext.Request.GetRawBodyStringAsync(Encoding.UTF8);
             var jsonPost = JObject.Parse(bodyContent);
 
@@ -33,8 +41,8 @@ namespace BoltJwt.Application.Middlewares.Authentication
             if(opts == null)
                 throw new InvalidCastException("TokenProviderOptions");
 
+            // Check credentials
             var identity = await opts.IdentityResolver(context ,username, password);
-
             if (identity == null)
             {
                 httpContext.Response.StatusCode = 400;
@@ -44,15 +52,15 @@ namespace BoltJwt.Application.Middlewares.Authentication
 
             var encodedJwt = await CreateJwtAsync(opts, identity, username);
 
+            // Makes the expiration explicit in the response
             var response = new
             {
                 access_token = encodedJwt,
                 expires_in = (int)opts.Expiration.TotalSeconds
             };
 
-            // Serialize and return the response
+            // Serialize and return
             httpContext.Response.ContentType = "application/json";
-
             await httpContext.Response.WriteAsync(
                 JsonConvert.SerializeObject(response, SerializerSettings));
         }
@@ -73,7 +81,8 @@ namespace BoltJwt.Application.Middlewares.Authentication
                 new Claim(JwtRegisteredClaimNames.Jti, await options.NonceGenerator())
             };
 
-            // Add identity claims
+            // Add identity claims returned from the user respository
+            // These claims contains the defined authorizations for the user
             claims.AddRange(identity.Claims);
 
             // Create the JWT and write it to a string

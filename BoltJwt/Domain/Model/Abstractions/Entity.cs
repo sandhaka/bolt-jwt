@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BoltJwt.Model.Abstractions
+namespace BoltJwt.Domain.Model.Abstractions
 {
     public abstract class Entity
     {

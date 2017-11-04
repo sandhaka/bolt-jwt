@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BoltJwt.Model.Abstractions;
+using BoltJwt.Domain.Model.Abstractions;
 
-namespace BoltJwt.Model
+namespace BoltJwt.Domain.Model
 {
     public class User : Entity
     {
@@ -15,11 +15,6 @@ namespace BoltJwt.Model
         public string Password { get; set; }
 
         public string Email { get; set; }
-
-        /// <summary>
-        /// Admin is a special user allowed to edit users in BoltJwt except the root
-        /// </summary>
-        public bool Admin { get; set; }
 
         /// <summary>
         /// Root user is the default BoltJwt admin
@@ -61,6 +56,30 @@ namespace BoltJwt.Model
                 var userAuthorization = new UserAuthorization() {AuthorizationName = definedAuthorization.Name};
                 _authorizations.Add(userAuthorization);
             }
+        }
+
+        /// <summary>
+        /// Get the comprensive list of the authorizations assigned directly or indirectly though roles or groups
+        /// </summary>
+        /// <returns>Authorizations list</returns>
+        public IEnumerable<string> GetAllAuthorizationsAssigned()
+        {
+            // Collects in sets to avoid duplicates
+            var authorizations = Authorizations.Select(i => i.AuthorizationName).ToHashSet();
+
+            authorizations.UnionWith(
+                UserRoles.SelectMany(r =>
+                    r.Role.Authorizations.Select(a =>
+                        a.AuthorizationName))
+                .ToHashSet());
+
+            authorizations.UnionWith(
+                UserGroups.SelectMany(g =>
+                    g.Group.GroupRoles.SelectMany(gr =>
+                        gr.Role.Authorizations.Select(a => a.AuthorizationName)))
+                .ToHashSet());
+
+            return authorizations.ToArray();
         }
 
         private bool IsAuthorized(DefinedAuthorization definedAuthorization)

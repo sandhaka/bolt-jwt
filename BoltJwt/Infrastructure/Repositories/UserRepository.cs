@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using BoltJwt.Domain.Model;
+using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.Context;
-using BoltJwt.Model;
-using BoltJwt.Model.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -78,11 +77,15 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <param name="username">Username</param>
         /// <param name="password">Password</param>
         /// <returns>Identity claims</returns>
-        public async Task<ClaimsIdentity> GetIdentityAsync(DbContext context, string username, string password)
+        public static async Task<ClaimsIdentity> GetIdentityAsync(IdentityContext context, string username, string password)
         {
             ClaimsIdentity claimsIdentity = null;
 
-            var user = await ((IdentityContext) context).Users.FirstOrDefaultAsync(i => i.UserName == username);
+            var user = await context.Users
+                .Include(i=>i.Authorizations)
+                .Include(i=>i.UserGroups)
+                .Include(i=>i.UserRoles)
+                .FirstOrDefaultAsync(i => i.UserName == username);
 
             if (user != null)
             {
@@ -98,13 +101,12 @@ namespace BoltJwt.Infrastructure.Repositories
 
                     if (user.Password.Equals(sBuilder.ToString()))
                     {
-                        var authorizations = user.Authorizations.Select(i => i.AuthorizationName).ToList();
+                        var authorizations = user.GetAllAuthorizationsAssigned();
 
                         claimsIdentity = new ClaimsIdentity(
                             new GenericIdentity(username, "Token"),
                             new []
                             {
-                                new Claim("isAdmin", user.Admin ? "true" : "false"),
                                 new Claim("isRoot", user.Root ? "true" : "false"),
                                 new Claim("userId", user.Id.ToString()),
                                 new Claim("username", user.UserName),

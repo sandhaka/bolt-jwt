@@ -1,7 +1,7 @@
 ﻿using Autofac;
+using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.Repositories;
 using BoltJwt.Infrastructure.Security;
-using BoltJwt.Model.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BoltJwt.Infrastructure.Modules

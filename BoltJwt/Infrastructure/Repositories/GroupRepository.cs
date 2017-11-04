@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BoltJwt.Domain.Model;
+using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.Context;
-using BoltJwt.Model;
-using BoltJwt.Model.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BoltJwt.Infrastructure.Repositories

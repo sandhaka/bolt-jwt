@@ -7,11 +7,8 @@ using BoltJwt.Application.Services;
 using BoltJwt.Infrastructure.Context;
 using BoltJwt.Infrastructure.Modules;
 using BoltJwt.Infrastructure.Security;
-using BoltJwt.Model;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,14 +32,13 @@ namespace BoltJwt
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            // Add the db context
+             // Add Db context through dependency injection. As default the context is instantiate by scope.
             var connectionString = Configuration.GetConnectionString("mssql.data.connection");
 
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new FormatException("The connection string is empty");
             }
-
             services.AddEntityFrameworkSqlServer().AddDbContext<IdentityContext>(options =>
                 {
                     options.UseSqlServer(connectionString, opts =>
@@ -53,7 +49,7 @@ namespace BoltJwt
                     });
                 });
 
-            // Add cors and create Policy with options
+            // Enable Cross origin requests
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -70,28 +66,16 @@ namespace BoltJwt
             services.AddAuthorization(options =>
             {
                 // Adding a custom policy to control the access to the controllers.
-                // Users, groups and authorizations can be edited only by the root or by a 'admin' user.
-                options.AddPolicy("BoltJwtAdmin", policyBuilder => policyBuilder.AddRequirements(
-                    new AuthorizationsRequirement(
-                        Constants.AdministrativeAuth,
-                        Constants.RootAuth))
-                );
+                options.AddCustomPolicies();
             });
 
-            // Add Mvc service and setup the base authorization policy globally
-            services.AddMvc(config =>
-            {
-                // Require authenticated user as default
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-
-                config.Filters.Add(new AuthorizeFilter(policy));
-            });
-
+            // Adding options
             services.AddOptions();
 
-            // Di
+            // Add Mvc
+            services.AddMvc();
+
+            // Using Autofac as additional dependency injection container
             var container = new ContainerBuilder();
             container.Populate(services);
 

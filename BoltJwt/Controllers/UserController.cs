@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using BoltJwt.Model;
-using BoltJwt.Model.Abstractions;
+using BoltJwt.Domain.Model;
+using BoltJwt.Domain.Model.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,22 +10,18 @@ namespace BoltJwt.Controllers
     [Route("api/v1/[controller]")]
     public class UserController : Controller
     {
-        private readonly IUserRepository _userRepository;
-
         public UserController(IUserRepository userRepository)
         {
-            _userRepository = userRepository;
+
         }
 
-        [Route("user")]
-        [Authorize(Policy = "BoltJwtAdmin")]
         [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
         [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAsync(int id)
         {
-            var user = await _userRepository.GetAsync(id);
-            return user != null ? Ok(user) : (IActionResult) BadRequest();
+            return Ok();
         }
     }
 }

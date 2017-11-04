@@ -1,4 +1,4 @@
-﻿using BoltJwt.Model;
+﻿using BoltJwt.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,4 +1,4 @@
-﻿namespace BoltJwt.Model
+﻿namespace BoltJwt.Domain.Model
 {
     public class UserRole
     {

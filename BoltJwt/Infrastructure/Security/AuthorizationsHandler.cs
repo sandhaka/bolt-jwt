@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -14,11 +13,20 @@ namespace BoltJwt.Infrastructure.Security
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthorizationsRequirement requirement)
         {
+            // Check if the user is the root
+            var rootClaim = context.User.Claims.FirstOrDefault(i => i.Type == "isRoot")?.Value;
+
+            if (!string.IsNullOrEmpty(rootClaim) && bool.Parse(rootClaim))
+            {
+                context.Succeed(requirement);
+                return Task.CompletedTask;
+            }
+
             // Get the authorizations list from the claims contained in the token obtained before
             var authorizationsList = context.User.Claims.FirstOrDefault(i => i.Type == "authorizations");
 
             var authorizations =
-                (List<string>) JsonConvert.DeserializeObject(
+                JsonConvert.DeserializeObject<string[]>(
                     authorizationsList?.Value ?? throw new NullReferenceException("Authorizations claim"));
 
             // Check is the user is authorized to access the resources

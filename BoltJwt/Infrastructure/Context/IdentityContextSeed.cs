@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using BoltJwt.Model;
+using BoltJwt.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -30,16 +30,6 @@ namespace BoltJwt.Infrastructure.Context
                         context.Authorizations.Add(new DefinedAuthorization
                         {
                             Name = Constants.AdministrativeAuth
-                        });
-
-                        await context.SaveChangesAsync();
-                    }
-
-                    if (!context.Authorizations.Any(i => i.Name.Equals(Constants.RootAuth)))
-                    {
-                        context.Authorizations.Add(new DefinedAuthorization
-                        {
-                            Name = Constants.RootAuth
                         });
 
                         await context.SaveChangesAsync();
@@ -73,7 +63,6 @@ namespace BoltJwt.Infrastructure.Context
 
             var user = new User()
             {
-                Admin = true,
                 Root = true,
                 Name = "Root",
                 Surname = "Root",

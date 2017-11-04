@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BoltJwt.Model.Abstractions;
+using BoltJwt.Domain.Model.Abstractions;
 
-namespace BoltJwt.Model
+namespace BoltJwt.Domain.Model
 {
     public class Role : Entity
     {

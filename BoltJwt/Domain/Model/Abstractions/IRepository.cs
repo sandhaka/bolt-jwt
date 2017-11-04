@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace BoltJwt.Model.Abstractions
+namespace BoltJwt.Domain.Model.Abstractions
 {
     public interface IRepository<T>
     {

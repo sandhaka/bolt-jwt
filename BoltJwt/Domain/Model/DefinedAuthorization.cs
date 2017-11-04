@@ -1,6 +1,6 @@
-﻿using BoltJwt.Model.Abstractions;
+﻿using BoltJwt.Domain.Model.Abstractions;
 
-namespace BoltJwt.Model
+namespace BoltJwt.Domain.Model
 {
     public class DefinedAuthorization : Entity
     {

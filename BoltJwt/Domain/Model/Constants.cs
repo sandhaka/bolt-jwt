@@ -1,8 +1,7 @@
-﻿namespace BoltJwt.Model
+﻿namespace BoltJwt.Domain.Model
 {
     public class Constants
     {
         public const string AdministrativeAuth = "administrative";
-        public const string RootAuth = "root";
     }
 }
