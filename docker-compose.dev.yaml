@@ -1,0 +1,6 @@
+version: '3.2'
+
+services:
+  sql.data:
+   volumes:
+     - /home/sandhaka/data/boltJwt/mssql.data.dev:/var/opt/mssql
