@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using BoltJwt.Domain.Model.Abstractions;
 
 namespace BoltJwt.Domain.Model
@@ -80,6 +82,23 @@ namespace BoltJwt.Domain.Model
                 .ToHashSet());
 
             return authorizations.ToArray();
+        }
+
+        public static string PassordEncrypt(string password)
+        {
+            using (var md5Hash = MD5.Create())
+            {
+                var hash = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                var sBuilder = new StringBuilder();
+
+                foreach (var t in hash)
+                {
+                    sBuilder.Append(t.ToString("x2"));
+                }
+
+                return sBuilder.ToString();
+            }
         }
 
         private bool IsAuthorized(DefinedAuthorization definedAuthorization)

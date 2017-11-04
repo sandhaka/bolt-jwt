@@ -80,6 +80,7 @@ namespace BoltJwt
             container.Populate(services);
 
             container.RegisterModule(new ApplicationModule());
+            container.RegisterModule(new MediatorModule());
 
             return new AutofacServiceProvider(container.Build());
         }

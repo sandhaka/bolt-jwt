@@ -13,7 +13,10 @@ namespace BoltJwt.Infrastructure.Security
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthorizationsRequirement requirement)
         {
-            // Check if the user is the root
+            /*
+             * Check if the user is the root
+             * Root is a omnipotent user
+             */
             var rootClaim = context.User.Claims.FirstOrDefault(i => i.Type == "isRoot")?.Value;
 
             if (!string.IsNullOrEmpty(rootClaim) && bool.Parse(rootClaim))
@@ -21,6 +24,10 @@ namespace BoltJwt.Infrastructure.Security
                 context.Succeed(requirement);
                 return Task.CompletedTask;
             }
+
+            /*
+             * Otherwise check the custom authorizations list
+             */
 
             // Get the authorizations list from the claims contained in the token obtained before
             var authorizationsList = context.User.Claims.FirstOrDefault(i => i.Type == "authorizations");

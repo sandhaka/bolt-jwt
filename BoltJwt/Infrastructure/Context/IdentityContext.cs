@@ -1,10 +1,13 @@
-﻿using BoltJwt.Domain.Model;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using BoltJwt.Domain.Model;
+using BoltJwt.Domain.Model.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BoltJwt.Infrastructure.Context
 {
-    public class IdentityContext : DbContext
+    public class IdentityContext : DbContext, IUnitOfWork
     {
         private const string DefaultSchema = nameof(IdentityContext);
 
@@ -17,6 +20,13 @@ namespace BoltJwt.Infrastructure.Context
         public DbSet<Role> Roles { get; set; }
 
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) { }
+
+        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var result = await base.SaveChangesAsync(cancellationToken);
+
+            return true;
+        }
 
         /// <summary>
         /// Configure model mapping
@@ -118,14 +128,14 @@ namespace BoltJwt.Infrastructure.Context
         {
             groupConfig.ToTable("groups", DefaultSchema);
             groupConfig.HasKey(g => g.Id);
-            groupConfig.Property<string>("Description").IsRequired(false);
+            groupConfig.Property<string>("Description").IsRequired();
         }
 
         private void ConfigureRoles(EntityTypeBuilder<Role> roleConfig)
         {
             roleConfig.ToTable("roles", DefaultSchema);
             roleConfig.HasKey(r => r.Id);
-            roleConfig.Property<string>("Description").IsRequired(false);
+            roleConfig.Property<string>("Description").IsRequired();
 
             roleConfig.HasMany(i => i.Authorizations)
                 .WithOne()
@@ -141,9 +151,8 @@ namespace BoltJwt.Infrastructure.Context
             usersConfig.Property<string>("Surname").IsRequired(false);
             usersConfig.Property<string>("UserName").IsRequired();
             usersConfig.Property<string>("Password").IsRequired();
-            usersConfig.Property<string>("Email").IsRequired(false);
-            usersConfig.Property<bool>("Admin").IsRequired();
-            usersConfig.Property<bool>("Root").IsRequired();
+            usersConfig.Property<string>("Email").IsRequired();
+            usersConfig.Property<bool>("Root").HasDefaultValue(false);
 
             usersConfig.HasIndex(u => u.UserName).IsUnique();
             usersConfig.HasIndex(u => u.Email).IsUnique();
