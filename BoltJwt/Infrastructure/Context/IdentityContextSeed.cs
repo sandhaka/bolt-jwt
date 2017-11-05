@@ -12,7 +12,7 @@ namespace BoltJwt.Infrastructure.Context
     public static class IdentityContextSeed
     {
         /// <summary>
-        /// Initialize the users table with the root user
+        /// Initialize the db
         /// </summary>
         /// <param name="context"></param>
         /// <param name="loggerFactory"></param>
