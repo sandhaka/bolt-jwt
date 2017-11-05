@@ -3,21 +3,19 @@ How to create a signed certificate to use during development phase:
 
 #### Created CA root:
 
-**ca.key** is the private key of the root certificate
+**myCA.key** is the private key of the root certificate
 
-**CA.pem** is the root certificate
-
-**lcalCA.pfx** is the root certificate to import in my pc trusted cert manager
+**myCA.pem** is the root certificate
 
 #### Created certificate for the development:
 
-**dev.boltjwt.com.key** is the private key --> using in dev
+**dev.boltjwt.key** is the private key --> using in dev
 
-**dev.boltjwt.com.csr** is the CSR file (cert signin request)
+**dev.boltjwt.csr** is the CSR file (cert signin request)
 
-**dev.boltjwt.com.ext** is the configuration file
+**dev.boltjwt.ext** is the configuration file
 
-**dev.boltjwt.com.crt** is the signed certificate --> using in dev
+**dev.boltjwt.crt** is the signed certificate --> using in dev
 
 **dev.boltjwt.pfx** this a pfx format certificate to simplify the access to the private key though the code
 

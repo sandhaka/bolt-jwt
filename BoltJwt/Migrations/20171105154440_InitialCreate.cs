@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+using System.Collections.Generic;
 
 namespace BoltJwt.Migrations
 {
@@ -31,7 +33,7 @@ namespace BoltJwt.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,7 +47,7 @@ namespace BoltJwt.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,11 +61,10 @@ namespace BoltJwt.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Admin = table.Column<bool>(type: "bit", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Root = table.Column<bool>(type: "bit", nullable: false),
+                    Root = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -247,8 +248,7 @@ namespace BoltJwt.Migrations
                 schema: "IdentityContext",
                 table: "users",
                 column: "Email",
-                unique: true,
-                filter: "[Email] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_users_UserName",

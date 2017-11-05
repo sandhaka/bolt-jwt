@@ -13,3 +13,6 @@ BoltJwt/obj/*
 *.pfx
 *.crt
 *.passphrase
+
+# Local configurations
+docker-compose.dev.local.yml

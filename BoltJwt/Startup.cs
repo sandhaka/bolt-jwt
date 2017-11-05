@@ -22,7 +22,7 @@ namespace BoltJwt
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile($"settings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                .AddJsonFile($"settings.json", optional: true, reloadOnChange: true);
 
             Configuration = builder.Build();
         }
@@ -32,9 +32,9 @@ namespace BoltJwt
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-             // Add Db context through dependency injection. As default the context is instantiate by scope.
-            var connectionString = Configuration.GetConnectionString("mssql.data.connection");
+            var connectionString = Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING");
 
+            // Add Db context through dependency injection. As default the context is instantiate by scope.
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new FormatException("The connection string is empty");

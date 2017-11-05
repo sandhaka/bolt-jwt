@@ -156,6 +156,7 @@ namespace BoltJwt.Infrastructure.Context
 
             usersConfig.HasIndex(u => u.UserName).IsUnique();
             usersConfig.HasIndex(u => u.Email).IsUnique();
+            usersConfig.HasIndex(u => u.Email).IsUnique();
 
             usersConfig.HasMany(i => i.Authorizations)
                 .WithOne()

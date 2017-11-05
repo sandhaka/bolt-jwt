@@ -1,2 +1,4 @@
 *
 !obj/docker/
+!certs/
+certs/README.md

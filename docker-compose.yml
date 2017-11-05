@@ -1,0 +1,24 @@
+version: '3.2'
+services:
+
+  sql.data:
+    image: microsoft/mssql-server-linux
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${SQL_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - ${HOME}/data/mssql:/var/opt/mssql
+
+  boltjwt:
+    image: sandhaka/bolt-jwt:0.1-dev
+    build: ./BoltJwt/
+    ports:
+      - "80:80"
+    depends_on:
+      - sql.data
+    environment:
+      - SQL_CONNECTION_STRING=${SQL_CONNECTION_STRING}
+    volumes:
+      - ./BoltJwt/certs:/app/certs

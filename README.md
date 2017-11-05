@@ -16,20 +16,23 @@ Every token contains a 'authorizations' private claim with the user configured a
 #### How to start?
 To use the service you have to do the following stuff:
 
-- Creates a valid **key pair** used to generate the signed tokens. There is a certificates example list 
-and a link with the detailed instructions in certs/README.md. 
-Place yours keys and certificates in the certs folder with the correct names. 
-If you want to edit the names you have to edit the settings of the project with the corrects one (In a production
-environment you should to take care of the location security of these certificates).
+Creates a valid **key pair** used to generate the signed tokens. **There is a certificates example list 
+and a link with the detailed instructions in certs/README.md.**
 
-- Run a Mssql instance and the BoltJwt container using the docker-compose file in the project folder. 
-*TODO: Create a script to init the DB, at the moment you have to run: `dotnet ef database update -v`
-before starting the service at the first time. At the moment you have also to customize the connection string.*
+##### Run with docker-compose
+Run a Mssql instance and the BoltJwt container using the docker-compose file in the project folder. 
+```sh 
+SQL_CONNECTION_STRING='<your-sql-conn-string>'  SQL_PASSWORD='<your-sa-password>' docker-compose up --build
+```
 
-- (*TODO*) Connect to the web interface with the 'root' user (Default password: 'root'). 
+##### Run as a docker image
+You can run BoltJwt as a docker image, following the instruction in BoltJwt/README.md file.
+
+##### Use it (*TODO*)
+Connect to the web interface with the 'root' user (Default password: 'root'). 
 Then, creates / edit users, roles and  groups for your application. 
 
-- Use yours authorizations in yours services. Authorizations are embedded in the Token. **You can decode it
+Use yours authorizations in yours services. Authorizations are embedded in the Token. **You can decode it
 with the public key created bofore.**
 
 #### Consumers setup example
@@ -46,7 +49,7 @@ Into Jwt payload there are some registered claims:
 - Iat (Issued At)
 - Jti (JWT ID)
 
->Have a look to the [RFC 7519](https://tools.ietf.org/html/rfc7519) for more details about the registered claims.
+> Have a look to the [RFC 7519](https://tools.ietf.org/html/rfc7519) for more details about the registered claims.
 
 After these claims there are a list of "private claims" defined by the application:
 - isRoot Is a flag for the root user. Only the "Boltjwt" root has this flag set to true.

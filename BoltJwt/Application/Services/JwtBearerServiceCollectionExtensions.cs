@@ -21,7 +21,7 @@ namespace BoltJwt.Application.Services
         public static IServiceCollection AddJwtBearerAuthentication(this IServiceCollection services,
             IConfiguration configuration)
         {
-            var pubKeyPath = configuration.GetSection("Secrets:PublicKey").Value;
+            var pubKeyPath = "certs/dev.boltjwt.crt";
 
             var publicKey = new X509Certificate2(pubKeyPath).GetRSAPublicKey();
 
