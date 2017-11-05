@@ -14,7 +14,7 @@ BoltJwt docker image
 Only MS SQL is supported
 
 #### Key pair
-You have to use yours key pair to generate valid tokens though a docker volume
+You have to use yours key pair to generate valid tokens
 
 - **dev.boltjwt.pfx**: Private key
 - **dev.boltjwt.crt**: The signed certificate to decode the token used by all other consumer services
@@ -35,6 +35,3 @@ docker run -p 80:80 -e 'SQL_CONNECTION_STRING=<your sql conn string>' -v <your c
 
 ##### SQL_CONNECTION_STRING
 Specity the connection string to a MS SQL Server instance.
-
-##### SQL_PASSWORD
-Specity a password for the SQL 'sa' user (optional, default is 'Password&1').
