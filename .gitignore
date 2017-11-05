@@ -1,7 +1,8 @@
 
 .idea/
-BoltJwt/bin
-BoltJwt/obj
+BoltJwt/bin/*
+BoltJwt/obj/*
+!BoltJwt/obj/docker/
 
 # Certificates:
 *.key
