@@ -1,5 +1,5 @@
 FROM microsoft/aspnetcore:2.0.0
 WORKDIR /app
 EXPOSE 80
-COPY bin/Debug/netcoreapp2.0/publish .
+COPY obj/docker .
 ENTRYPOINT /bin/bash -c "dotnet BoltJwt.dll"
