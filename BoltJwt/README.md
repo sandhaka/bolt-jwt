@@ -1,5 +1,5 @@
-BoltJwt docker image
--
+## BoltJwt docker image
+
 *Work in progress*
 
 ### Availables tags
@@ -35,3 +35,45 @@ docker run -p 80:80 -e 'SQL_CONNECTION_STRING=<your sql conn string>' -v <your c
 
 ##### SQL_CONNECTION_STRING
 Specity the connection string to a MS SQL Server instance.
+
+#### Api
+```text
+/api/token
+```
+Retrieve the token
+
+Example:
+
+```sh 
+curl -H "Content-Type: application/json" -X POST -d "{'username':'root','password':'root'}" -v http://127.0.0.1:5000/api/token
+```
+Output:
+```sh
+* timeout on name lookup is not supported
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to 127.0.0.1 (127.0.0.1) port 5000 (#0)
+> POST /api/token HTTP/1.1
+> Host: 127.0.0.1:5000
+> User-Agent: curl/7.50.3
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 37
+>
+* upload completely sent off: 37 out of 37 bytes
+< HTTP/1.1 200 OK
+< Date: Mon, 06 Nov 2017 17:30:10 GMT
+< Content-Type: application/json
+< Server: Kestrel
+< Transfer-Encoding: chunked
+<
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJCb2x0Snd0Iiwic3ViIjoicm9vdCIsImF1ZCI6WyJCb2x0Snd0QXVkIiwiQm9sdEp3dEF1ZCJdLCJpYXQiOjE1MDk5ODk0MTAsImp0aSI6ImViMWRkNjEwLWUzNGItNDRiMS05OTBhLTcyZGFiZDU2OTE2YyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJyb290IiwiaXNSb290IjoidHJ1ZSIsInVzZXJJZCI6IjEiLCJ1c2VybmFtZSI6InJvb3QiLCJhdXRob3JpemF0aW9ucyI6IltdIiwibmJmIjoxNTA5OTg5NDEwLCJleHAiOjE1MTA1OTQyMTB9.b7FX_C6b-KgJLOYbJh-bZFHD9hgrYG8DVNUJtv4ebNPVwLa1eSva1FaevkhiJZ1pvpF8PyEDpzhsSjrvwcOinVPXBaYJQE6ylpI5o8_fMSXVeXpYk2jvp4GGYUqg36G35fJgfIyyGbTPUC24o6pKfgxHAgf5jWawPFLfVpk8HHAerz8xFbBUP4USQUvJC6yvDhL_GzsAChW3bVNEXvESPDVNUHDZyhvW_qx3r0UvTQjjIjDTE6MWp-FoT3N5QhptG4G9oCXLxFDG7IFF-UVRPcOb4TGP3Av4Fx4Zxq6Rlm2m3MlLpEorjsHHFAPV8O3sNe40tQjwd0shmu7uqQ_idQ",
+  "expires_in": 604800
+}* Curl_http_done: called premature == 0
+* Connection #0 to host 127.0.0.1 left intact
+```
+On windows system the above command become:
+```sh
+curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"root\",\"password\":\"root\"}" -v http://127.0.0.1:5000/api/token
+```
