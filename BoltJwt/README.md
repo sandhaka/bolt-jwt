@@ -22,6 +22,8 @@ You have to use yours key pair to generate valid tokens
 
 At the moment the key names are fixed.
 
+Mount these files to '/app/certs' container folder.
+
 #### Start a mssql instance
 ```sh 
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=<your strong password>' -p 1433:1433 -d microsoft/mssql-server-linux
@@ -34,7 +36,7 @@ docker run -p 80:80 -e 'SQL_CONNECTION_STRING=<your sql conn string>' -v <your c
 #### Available environment variables
 
 ##### SQL_CONNECTION_STRING
-Specity the connection string to a MS SQL Server instance.
+Specify the connection string for a MS SQL Server instance.
 
 #### Api
 ```text
