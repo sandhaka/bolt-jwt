@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using BoltJwt.Application.Commands.Users;
 using MediatR;
@@ -14,7 +15,7 @@ namespace BoltJwt.Controllers
 
         public UserController(IMediator mediator)
         {
-            _mediator = mediator;
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [Route("")]
@@ -22,7 +23,7 @@ namespace BoltJwt.Controllers
         [Authorize(Policy = "bJwtAdmins")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetAsync([FromBody] UserInsertCommand userInsertCommand)
+        public async Task<IActionResult> AddAsync([FromBody] UserInsertCommand userInsertCommand)
         {
             var result = await _mediator.Send(userInsertCommand);
 
@@ -37,6 +38,18 @@ namespace BoltJwt.Controllers
         public async Task<IActionResult> UpdateAsync([FromBody] UserEditCommand userEditCommand)
         {
             var result = await _mediator.Send(userEditCommand);
+
+            return result ? Ok() : (IActionResult) BadRequest();
+        }
+
+        [Route("")]
+        [HttpDelete]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DeleteAsync([FromBody] UserDeleteCommand userDeleteCommand)
+        {
+            var result = await _mediator.Send(userDeleteCommand);
 
             return result ? Ok() : (IActionResult) BadRequest();
         }
