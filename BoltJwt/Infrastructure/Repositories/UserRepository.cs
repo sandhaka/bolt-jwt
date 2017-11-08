@@ -56,6 +56,11 @@ namespace BoltJwt.Infrastructure.Repositories
                 throw new EntityNotFoundException($"{nameof(User)} - Id: {id}");
             }
 
+            if (userToUpdate.Root)
+            {
+                throw new RootUserIsNotEditable();
+            }
+
             userToUpdate.Name = userEditDto.Name;
             userToUpdate.Surname = userEditDto.Surname;
             userToUpdate.UserName = userEditDto.UserName;
@@ -76,6 +81,11 @@ namespace BoltJwt.Infrastructure.Repositories
             if (userToDelete == null)
             {
                 throw new EntityNotFoundException($"{nameof(User)} - Id: {id}");
+            }
+
+            if (userToDelete.Root)
+            {
+                throw new RootUserIsNotEditable();
             }
 
             _context.Entry(userToDelete).State = EntityState.Deleted;
