@@ -18,11 +18,10 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <summary>
         /// Update user informations and mark it as modified
         /// </summary>
-        /// <param name="id">User id</param>
         /// <param name="userEditDto">User info</param>
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">User not found</exception>
-        Task UpdateAsync(int id, UserEditDto userEditDto);
+        Task UpdateAsync(UserEditDto userEditDto);
 
         /// <summary>
         /// Mark a user as deleted

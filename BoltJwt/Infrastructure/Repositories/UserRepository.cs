@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 namespace BoltJwt.Infrastructure.Repositories
 {
     /// <summary>
-    /// User operations
+    /// Define user operations
     /// </summary>
     public class UserRepository : IUserRepository
     {
@@ -41,19 +41,18 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Update user informations and mark it as modified
+        /// Update user informations
         /// </summary>
-        /// <param name="id">User id</param>
         /// <param name="userEditDto">User info</param>
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">User not found</exception>
-        public async Task UpdateAsync(int id, UserEditDto userEditDto)
+        public async Task UpdateAsync(UserEditDto userEditDto)
         {
-            var userToUpdate = await _context.Users.FindAsync(id);
+            var userToUpdate = await _context.Users.FindAsync(userEditDto.Id);
 
             if (userToUpdate == null)
             {
-                throw new EntityNotFoundException($"{nameof(User)} - Id: {id}");
+                throw new EntityNotFoundException($"{nameof(User)} - Id: {userEditDto.Id}");
             }
 
             if (userToUpdate.Root)

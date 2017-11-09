@@ -2,6 +2,7 @@
 using Autofac;
 using BoltJwt.Application.Commands.Users;
 using System.Reflection;
+using BoltJwt.Application.Commands.Roles;
 using BoltJwt.Application.Validations;
 using FluentValidation;
 using MediatR;
@@ -15,7 +16,12 @@ namespace BoltJwt.Infrastructure.Modules
             builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)
                 .AsImplementedInterfaces();
 
-            // Register all the Command classes (they implement IAsyncRequestHandler) in assembly holding the Commands
+            /**
+             * Register all the Command classes (they implement IAsyncRequestHandler) in assembly holding the Commands
+             */
+
+            #region [Users]
+
             builder.RegisterAssemblyTypes(typeof(UserInsertCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
 
@@ -29,6 +35,20 @@ namespace BoltJwt.Infrastructure.Modules
                 .RegisterAssemblyTypes(typeof(UserInsertCommandValidator).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
+
+            #endregion
+
+            #region [Roles]
+
+            builder.RegisterAssemblyTypes(typeof(RoleInsertCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+
+            builder
+                .RegisterAssemblyTypes(typeof(RoleInsertCommandValidator).GetTypeInfo().Assembly)
+                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+                .AsImplementedInterfaces();
+
+            #endregion
 
             builder.Register<SingleInstanceFactory>(context =>
             {

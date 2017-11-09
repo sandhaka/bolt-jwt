@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
@@ -11,7 +12,7 @@ namespace BoltJwt.Application.Commands.Users
 
         public UserEditCommandHandler(IUserRepository userRepository)
         {
-            _userRepository = userRepository;
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
         public async Task<bool> Handle(UserEditCommand userEditCommand)
@@ -20,12 +21,13 @@ namespace BoltJwt.Application.Commands.Users
 
             var userEditDto = new UserEditDto
             {
+                Id = userEditCommand.Id,
                 Name = userEditCommand.Name,
                 Surname = userEditCommand.Surname,
                 UserName = userEditCommand.UserName
             };
 
-            await _userRepository.UpdateAsync(userEditCommand.Id, userEditDto);
+            await _userRepository.UpdateAsync(userEditDto);
 
             return await _userRepository.UnitOfWork.SaveEntitiesAsync();
         }
