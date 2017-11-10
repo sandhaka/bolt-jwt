@@ -43,6 +43,12 @@ namespace BoltJwt.Infrastructure.Modules
             builder.RegisterAssemblyTypes(typeof(RoleInsertCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
 
+            builder.RegisterAssemblyTypes(typeof(RoleEditCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+
+            builder.RegisterAssemblyTypes(typeof(RoleDeleteCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+
             builder
                 .RegisterAssemblyTypes(typeof(RoleInsertCommandValidator).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))

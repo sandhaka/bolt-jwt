@@ -30,7 +30,7 @@ namespace BoltJwt.Application.Commands.Roles
                 // Check if the authorization is valid (check if a definition of it exists)
                 if (!_authorizationRepository.ContainsAuthorization(authorization))
                 {
-                    throw new UnknowAuthorization(authorization);
+                    throw new UnknowAuthorizationException(authorization);
                 }
 
                 role.AddAuthorization(authorization);
