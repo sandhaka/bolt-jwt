@@ -51,15 +51,15 @@ namespace BoltJwt.Migrations
 
             modelBuilder.Entity("BoltJwt.Domain.Model.GroupRole", b =>
                 {
-                    b.Property<int?>("GroupId");
+                    b.Property<int>("GroupId");
 
-                    b.Property<int?>("RoleId");
+                    b.Property<int>("RoleId");
 
                     b.HasKey("GroupId", "RoleId");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("GroupRole");
+                    b.ToTable("GroupRole","IdentityContext");
                 });
 
             modelBuilder.Entity("BoltJwt.Domain.Model.Role", b =>
@@ -159,28 +159,28 @@ namespace BoltJwt.Migrations
 
             modelBuilder.Entity("BoltJwt.Domain.Model.UserGroup", b =>
                 {
-                    b.Property<int?>("GroupId");
+                    b.Property<int>("GroupId");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("GroupId", "UserId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserGroup");
+                    b.ToTable("UserGroup","IdentityContext");
                 });
 
             modelBuilder.Entity("BoltJwt.Domain.Model.UserRole", b =>
                 {
-                    b.Property<int?>("RoleId");
+                    b.Property<int>("RoleId");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("RoleId", "UserId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRole");
+                    b.ToTable("UserRole","IdentityContext");
                 });
 
             modelBuilder.Entity("BoltJwt.Domain.Model.GroupRole", b =>
@@ -188,12 +188,12 @@ namespace BoltJwt.Migrations
                     b.HasOne("BoltJwt.Domain.Model.Group", "Group")
                         .WithMany("GroupRoles")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BoltJwt.Domain.Model.Role", "Role")
                         .WithMany("GroupRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BoltJwt.Domain.Model.RoleAuthorization", b =>
@@ -227,12 +227,12 @@ namespace BoltJwt.Migrations
                     b.HasOne("BoltJwt.Domain.Model.Group", "Group")
                         .WithMany("UserGroups")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BoltJwt.Domain.Model.User", "User")
                         .WithMany("UserGroups")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BoltJwt.Domain.Model.UserRole", b =>
@@ -240,12 +240,12 @@ namespace BoltJwt.Migrations
                     b.HasOne("BoltJwt.Domain.Model.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BoltJwt.Domain.Model.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

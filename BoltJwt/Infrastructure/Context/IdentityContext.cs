@@ -39,62 +39,72 @@ namespace BoltJwt.Infrastructure.Context
             modelBuilder.Entity<DefinedAuthorization>(ConfigureAuth);
             modelBuilder.Entity<UserAuthorization>(ConfigureUserAuth);
             modelBuilder.Entity<RoleAuthorization>(ConfigureRoleAuth);
+            modelBuilder.Entity<Group>(ConfigureGroups);
+            modelBuilder.Entity<User>(ConfigureUsers);
+            modelBuilder.Entity<Role>(ConfigureRoles);
 
             /**
              * Configure a many-to-many relationship with users and roles.
              * A user can have more than one roles. A role can be assigned to many user.
              */
-            modelBuilder.Entity<User>(ConfigureUsers);
-            modelBuilder.Entity<Role>(ConfigureRoles);
 
+            modelBuilder.Entity<UserRole>().ToTable("UserRole", DefaultSchema);
             modelBuilder.Entity<UserRole>()
                 .HasKey(t => new {t.RoleId, t.UserId});
 
             modelBuilder.Entity<UserRole>()
                 .HasOne(pt => pt.User)
                 .WithMany(p => p.UserRoles)
-                .HasForeignKey(pt => pt.UserId);
+                .HasForeignKey(pt => pt.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserRole>()
                 .HasOne(pt => pt.Role)
                 .WithMany(p => p.UserRoles)
-                .HasForeignKey(pt => pt.RoleId);
+                .HasForeignKey(pt => pt.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             /**
              * Configure a many-to-many relationship with users and groups.
              * A user can be a member of more than one group. A group can contains many users.
              */
-            modelBuilder.Entity<Group>(ConfigureGroups);
 
+            modelBuilder.Entity<UserGroup>().ToTable("UserGroup", DefaultSchema);
             modelBuilder.Entity<UserGroup>()
                 .HasKey(t => new {t.GroupId, t.UserId});
 
             modelBuilder.Entity<UserGroup>()
                 .HasOne(pt => pt.User)
                 .WithMany(p => p.UserGroups)
-                .HasForeignKey(pt => pt.UserId);
+                .HasForeignKey(pt => pt.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserGroup>()
                 .HasOne(pt => pt.Group)
                 .WithMany(p => p.UserGroups)
-                .HasForeignKey(pt => pt.GroupId);
+                .HasForeignKey(pt => pt.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             /**
              * Configure a many-to-many relationship with roles and groups.
              * A group can have more than one roles. A role can be assigned to many groups.
              */
+
+            modelBuilder.Entity<GroupRole>().ToTable("GroupRole", DefaultSchema);
             modelBuilder.Entity<GroupRole>()
                 .HasKey(t => new {t.GroupId, t.RoleId});
 
             modelBuilder.Entity<GroupRole>()
                 .HasOne(pt => pt.Group)
                 .WithMany(p => p.GroupRoles)
-                .HasForeignKey(pt => pt.GroupId);
+                .HasForeignKey(pt => pt.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<GroupRole>()
                 .HasOne(pt => pt.Role)
                 .WithMany(p => p.GroupRoles)
-                .HasForeignKey(pt => pt.RoleId);
+                .HasForeignKey(pt => pt.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         private void ConfigureUserAuth(EntityTypeBuilder<UserAuthorization> userAuthConfig)
