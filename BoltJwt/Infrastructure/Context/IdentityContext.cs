@@ -122,6 +122,16 @@ namespace BoltJwt.Infrastructure.Context
             authConfig.Property<string>("Name").IsRequired();
 
             authConfig.HasIndex(a => a.Name).IsUnique();
+
+            authConfig.HasMany(i => i.RolesAuthorizations)
+                .WithOne()
+                .HasForeignKey(p => p.DefAuthorizationId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            authConfig.HasMany(i => i.UserAuthorizations)
+                .WithOne()
+                .HasForeignKey(p => p.DefAuthorizationId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         private void ConfigureGroups(EntityTypeBuilder<Group> groupConfig)
@@ -155,7 +165,6 @@ namespace BoltJwt.Infrastructure.Context
             usersConfig.Property<bool>("Root").HasDefaultValue(false);
 
             usersConfig.HasIndex(u => u.UserName).IsUnique();
-            usersConfig.HasIndex(u => u.Email).IsUnique();
             usersConfig.HasIndex(u => u.Email).IsUnique();
 
             usersConfig.HasMany(i => i.Authorizations)

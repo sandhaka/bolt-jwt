@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.Context;
+using BoltJwt.Infrastructure.Repositories.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BoltJwt.Infrastructure.Repositories
@@ -43,7 +44,14 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <returns>Task</returns>
         public async Task DeleteAsync(int id)
         {
-            // TODO: Check if is assigned before!
+            var authToDelete = await _context.Authorizations.FindAsync(id);
+
+            if (authToDelete.Name == Constants.AdministrativeAuth)
+            {
+                throw new NotEditableEntityException($"Authorization definition: {Constants.AdministrativeAuth}");
+            }
+
+            _context.Entry(authToDelete).State = EntityState.Deleted;
         }
 
         /// <summary>

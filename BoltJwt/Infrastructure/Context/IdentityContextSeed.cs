@@ -27,10 +27,7 @@ namespace BoltJwt.Infrastructure.Context
 
                     if (!context.Authorizations.Any(i => i.Name.Equals(Constants.AdministrativeAuth)))
                     {
-                        context.Authorizations.Add(new DefinedAuthorization
-                        {
-                            Name = Constants.AdministrativeAuth
-                        });
+                        context.Authorizations.Add(new DefinedAuthorization(Constants.AdministrativeAuth));
 
                         await context.SaveChangesAsync();
                     }

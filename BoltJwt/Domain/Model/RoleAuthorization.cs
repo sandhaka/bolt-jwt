@@ -7,5 +7,7 @@ namespace BoltJwt.Domain.Model
         public string AuthorizationName { get; set; }
 
         public int RoleId { get; set; }
+
+        public int DefAuthorizationId { get; set; }
     }
 }

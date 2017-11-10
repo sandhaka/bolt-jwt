@@ -57,7 +57,7 @@ namespace BoltJwt.Infrastructure.Repositories
 
             if (userToUpdate.Root)
             {
-                throw new RootUserIsNotEditable();
+                throw new NotEditableEntityException("Root user");
             }
 
             userToUpdate.Name = userEditDto.Name;
@@ -84,7 +84,7 @@ namespace BoltJwt.Infrastructure.Repositories
 
             if (userToDelete.Root)
             {
-                throw new RootUserIsNotEditable();
+                throw new NotEditableEntityException("Root user");
             }
 
             _context.Entry(userToDelete).State = EntityState.Deleted;
@@ -109,7 +109,7 @@ namespace BoltJwt.Infrastructure.Repositories
 
             if (user != null)
             {
-                if (user.Password.Equals(User.PassordEncrypt(password)))
+                if (user.Password.Equals(User.PasswordEncrypt(password)))
                 {
                     var authorizations = user.GetAllAuthorizationsAssigned();
 

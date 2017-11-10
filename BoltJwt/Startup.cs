@@ -34,6 +34,11 @@ namespace BoltJwt
         {
             var connectionString = Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING");
 
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = Configuration.GetSection("DefaultConnectionString").Value;
+            }
+
             // Add Db context through dependency injection. As default the context is instantiate by scope.
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -56,7 +61,7 @@ namespace BoltJwt
                     builder => builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials() );
+                        .AllowCredentials());
             });
 
             // Add Jwt based authentication

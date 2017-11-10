@@ -107,11 +107,19 @@ namespace BoltJwt.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuthorizationName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DefAuthorizationId = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_role_authorizations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_role_authorizations_def_authorizations_DefAuthorizationId",
+                        column: x => x.DefAuthorizationId,
+                        principalSchema: "IdentityContext",
+                        principalTable: "def_authorizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_role_authorizations_roles_RoleId",
                         column: x => x.RoleId,
@@ -181,11 +189,19 @@ namespace BoltJwt.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuthorizationName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DefAuthorizationId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_user_authorizations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_user_authorizations_def_authorizations_DefAuthorizationId",
+                        column: x => x.DefAuthorizationId,
+                        principalSchema: "IdentityContext",
+                        principalTable: "def_authorizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_user_authorizations_users_UserId",
                         column: x => x.UserId,
@@ -225,6 +241,12 @@ namespace BoltJwt.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_role_authorizations_DefAuthorizationId",
+                schema: "IdentityContext",
+                table: "role_authorizations",
+                column: "DefAuthorizationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_role_authorizations_RoleId",
                 schema: "IdentityContext",
                 table: "role_authorizations",
@@ -236,6 +258,12 @@ namespace BoltJwt.Migrations
                 table: "user_authorizations",
                 column: "AuthorizationName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_authorizations_DefAuthorizationId",
+                schema: "IdentityContext",
+                table: "user_authorizations",
+                column: "DefAuthorizationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_authorizations_UserId",
@@ -270,10 +298,6 @@ namespace BoltJwt.Migrations
                 name: "UserRole");
 
             migrationBuilder.DropTable(
-                name: "def_authorizations",
-                schema: "IdentityContext");
-
-            migrationBuilder.DropTable(
                 name: "role_authorizations",
                 schema: "IdentityContext");
 
@@ -287,6 +311,10 @@ namespace BoltJwt.Migrations
 
             migrationBuilder.DropTable(
                 name: "roles",
+                schema: "IdentityContext");
+
+            migrationBuilder.DropTable(
+                name: "def_authorizations",
                 schema: "IdentityContext");
 
             migrationBuilder.DropTable(

@@ -84,7 +84,7 @@ namespace BoltJwt.Domain.Model
             return authorizations.ToArray();
         }
 
-        public static string PassordEncrypt(string password)
+        public static string PasswordEncrypt(string password)
         {
             using (var md5Hash = MD5.Create())
             {

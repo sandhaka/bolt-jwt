@@ -2,9 +2,9 @@
 
 namespace BoltJwt.Infrastructure.Repositories.Exceptions
 {
-    public class UnknowAuthorization : Exception
+    public class UnknowAuthorizationException : Exception
     {
-        public UnknowAuthorization(string authorizationName)
+        public UnknowAuthorizationException(string authorizationName)
         {
             AuthorizationName = authorizationName;
         }

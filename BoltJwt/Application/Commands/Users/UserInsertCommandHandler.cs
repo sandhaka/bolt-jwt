@@ -25,7 +25,7 @@ namespace BoltJwt.Application.Commands.Users
                 Name = userInsertCommand.Name,
                 Surname = userInsertCommand.Surname,
                 UserName = userInsertCommand.UserName,
-                Password = User.PassordEncrypt(userInsertCommand.Password)
+                Password = User.PasswordEncrypt(userInsertCommand.Password)
             };
 
             _userRepository.Add(newUser);

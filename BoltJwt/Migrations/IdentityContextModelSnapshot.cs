@@ -83,12 +83,16 @@ namespace BoltJwt.Migrations
                     b.Property<string>("AuthorizationName")
                         .IsRequired();
 
+                    b.Property<int>("DefAuthorizationId");
+
                     b.Property<int>("RoleId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorizationName")
                         .IsUnique();
+
+                    b.HasIndex("DefAuthorizationId");
 
                     b.HasIndex("RoleId");
 
@@ -137,12 +141,16 @@ namespace BoltJwt.Migrations
                     b.Property<string>("AuthorizationName")
                         .IsRequired();
 
+                    b.Property<int>("DefAuthorizationId");
+
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorizationName")
                         .IsUnique();
+
+                    b.HasIndex("DefAuthorizationId");
 
                     b.HasIndex("UserId");
 
@@ -190,6 +198,11 @@ namespace BoltJwt.Migrations
 
             modelBuilder.Entity("BoltJwt.Domain.Model.RoleAuthorization", b =>
                 {
+                    b.HasOne("BoltJwt.Domain.Model.DefinedAuthorization")
+                        .WithMany("RolesAuthorizations")
+                        .HasForeignKey("DefAuthorizationId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("BoltJwt.Domain.Model.Role")
                         .WithMany("Authorizations")
                         .HasForeignKey("RoleId")
@@ -198,6 +211,11 @@ namespace BoltJwt.Migrations
 
             modelBuilder.Entity("BoltJwt.Domain.Model.UserAuthorization", b =>
                 {
+                    b.HasOne("BoltJwt.Domain.Model.DefinedAuthorization")
+                        .WithMany("UserAuthorizations")
+                        .HasForeignKey("DefAuthorizationId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("BoltJwt.Domain.Model.User")
                         .WithMany("Authorizations")
                         .HasForeignKey("UserId")
