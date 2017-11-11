@@ -11,16 +11,20 @@ namespace BoltJwt.Infrastructure.Context
     {
         private const string DefaultSchema = nameof(IdentityContext);
 
+        // Mapped sets:
+
         public DbSet<User> Users { get; set; }
-
         public DbSet<Group> Groups { get; set; }
-
         public DbSet<DefinedAuthorization> Authorizations { get; set; }
-
         public DbSet<Role> Roles { get; set; }
 
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) { }
 
+        /// <summary>
+        /// Save the current context
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Save result</returns>
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var result = await base.SaveChangesAsync(cancellationToken);
@@ -36,6 +40,10 @@ namespace BoltJwt.Infrastructure.Context
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            /**
+             * Configure entity tables
+             */
+
             modelBuilder.Entity<DefinedAuthorization>(ConfigureAuth);
             modelBuilder.Entity<UserAuthorization>(ConfigureUserAuth);
             modelBuilder.Entity<RoleAuthorization>(ConfigureRoleAuth);
@@ -44,11 +52,14 @@ namespace BoltJwt.Infrastructure.Context
             modelBuilder.Entity<Role>(ConfigureRoles);
 
             /**
+             * Configure join tables
+             */
+
+            /**
              * Configure a many-to-many relationship with users and roles.
              * A user can have more than one roles. A role can be assigned to many user.
              */
-
-            modelBuilder.Entity<UserRole>().ToTable("UserRole", DefaultSchema);
+            modelBuilder.Entity<UserRole>().ToTable("user_role", DefaultSchema);
             modelBuilder.Entity<UserRole>()
                 .HasKey(t => new {t.RoleId, t.UserId});
 
@@ -68,8 +79,7 @@ namespace BoltJwt.Infrastructure.Context
              * Configure a many-to-many relationship with users and groups.
              * A user can be a member of more than one group. A group can contains many users.
              */
-
-            modelBuilder.Entity<UserGroup>().ToTable("UserGroup", DefaultSchema);
+            modelBuilder.Entity<UserGroup>().ToTable("user_group", DefaultSchema);
             modelBuilder.Entity<UserGroup>()
                 .HasKey(t => new {t.GroupId, t.UserId});
 
@@ -89,8 +99,7 @@ namespace BoltJwt.Infrastructure.Context
              * Configure a many-to-many relationship with roles and groups.
              * A group can have more than one roles. A role can be assigned to many groups.
              */
-
-            modelBuilder.Entity<GroupRole>().ToTable("GroupRole", DefaultSchema);
+            modelBuilder.Entity<GroupRole>().ToTable("group_role", DefaultSchema);
             modelBuilder.Entity<GroupRole>()
                 .HasKey(t => new {t.GroupId, t.RoleId});
 
