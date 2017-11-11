@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "73f2eeb0dde6f20a24a921ffa7bee093ed08e85f"
+    "signature": "9e416a7b85195f625bcbb46e514bdd091d86bc8e"
   },
   "compilationOptions": {
     "defines": [
@@ -30,6 +30,7 @@
           "Microsoft.AspNetCore.All": "2.0.0",
           "Microsoft.AspNetCore.Authentication": "2.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "2.0.0",
+          "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "2.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.0.0",
           "Microsoft.NETCore.App": "2.0.0",
           "Newtonsoft.Json": "10.0.3"
@@ -198,6 +199,14 @@
         },
         "compile": {
           "lib/netstandard1.6/Microsoft.AI.DependencyCollector.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.Client/5.2.2": {
+        "runtime": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        },
+        "compile": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
         }
       },
       "Microsoft.AspNetCore/2.0.0": {
@@ -1124,6 +1133,20 @@
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.AspNetCore.Mvc.ViewFeatures.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Mvc.WebApiCompatShim/2.0.0": {
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.2",
+          "Microsoft.AspNetCore.Mvc.Core": "2.0.0",
+          "Microsoft.AspNetCore.Mvc.Formatters.Json": "2.0.0",
+          "Microsoft.AspNetCore.WebUtilities": "2.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Mvc.WebApiCompatShim.dll": {}
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Mvc.WebApiCompatShim.dll": {}
         }
       },
       "Microsoft.AspNetCore.NodeServices/2.0.0": {
@@ -4112,6 +4135,13 @@
       "hashPath": "microsoft.applicationinsights.dependencycollector.2.4.1.nupkg.sha512",
       "runtimeStoreManifestName": "aspnetcore-store-2.0.0-linux-x64.xml;aspnetcore-store-2.0.0-osx-x64.xml;aspnetcore-store-2.0.0-win7-x64.xml;aspnetcore-store-2.0.0-win7-x86.xml"
     },
+    "Microsoft.AspNet.WebApi.Client/5.2.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YVq+s0WeXrPxJk57CoElbtMYf95j76uJcW6nue3Cs4eIer9sgUp4rasSo0gALX3ls1Zf2jMceOLik9X/sJyrwA==",
+      "path": "microsoft.aspnet.webapi.client/5.2.2",
+      "hashPath": "microsoft.aspnet.webapi.client.5.2.2.nupkg.sha512"
+    },
     "Microsoft.AspNetCore/2.0.0": {
       "type": "package",
       "serviceable": true,
@@ -4589,6 +4619,13 @@
       "path": "microsoft.aspnetcore.mvc.viewfeatures/2.0.0",
       "hashPath": "microsoft.aspnetcore.mvc.viewfeatures.2.0.0.nupkg.sha512",
       "runtimeStoreManifestName": "aspnetcore-store-2.0.0-linux-x64.xml;aspnetcore-store-2.0.0-osx-x64.xml;aspnetcore-store-2.0.0-win7-x64.xml;aspnetcore-store-2.0.0-win7-x86.xml"
+    },
+    "Microsoft.AspNetCore.Mvc.WebApiCompatShim/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6kPpYC+KPtTHqSVSJOv1U7ywFadgt1LgHngu/mlWrrrmZJAOISyY9u8T+VnsmTOPMI1zs5s1qduAOF2KeaRXcQ==",
+      "path": "microsoft.aspnetcore.mvc.webapicompatshim/2.0.0",
+      "hashPath": "microsoft.aspnetcore.mvc.webapicompatshim.2.0.0.nupkg.sha512"
     },
     "Microsoft.AspNetCore.NodeServices/2.0.0": {
       "type": "package",
