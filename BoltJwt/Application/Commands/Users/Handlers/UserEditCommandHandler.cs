@@ -4,7 +4,7 @@ using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 
-namespace BoltJwt.Application.Commands.Users
+namespace BoltJwt.Application.Commands.Users.Handlers
 {
     public class UserEditCommandHandler : IAsyncRequestHandler<UserEditCommand, bool>
     {

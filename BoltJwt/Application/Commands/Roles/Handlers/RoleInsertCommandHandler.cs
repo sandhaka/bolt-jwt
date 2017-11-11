@@ -5,7 +5,7 @@ using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
 using MediatR;
 
-namespace BoltJwt.Application.Commands.Roles
+namespace BoltJwt.Application.Commands.Roles.Handlers
 {
     public class RoleInsertCommandHandler : IAsyncRequestHandler<RoleInsertCommand, bool>
     {

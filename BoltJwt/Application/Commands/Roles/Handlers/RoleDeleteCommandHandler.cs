@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 
-namespace BoltJwt.Application.Commands.Roles
+namespace BoltJwt.Application.Commands.Roles.Handlers
 {
     public class RoleDeleteCommandHandler : IAsyncRequestHandler<RoleDeleteCommand, bool>
     {

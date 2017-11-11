@@ -4,7 +4,7 @@ using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 
-namespace BoltJwt.Application.Commands.Roles
+namespace BoltJwt.Application.Commands.Roles.Handlers
 {
     public class RoleEditCommandHandler : IAsyncRequestHandler<RoleEditCommand, bool>
     {

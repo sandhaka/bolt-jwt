@@ -3,7 +3,7 @@ using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 
-namespace BoltJwt.Application.Commands.Users
+namespace BoltJwt.Application.Commands.Users.Handlers
 {
     public class UserInsertCommandHandler : IAsyncRequestHandler<UserInsertCommand, bool>
     {
