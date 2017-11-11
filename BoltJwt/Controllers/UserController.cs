@@ -53,5 +53,17 @@ namespace BoltJwt.Controllers
 
             return result ? Ok() : (IActionResult) BadRequest();
         }
+
+        [Route("add.auth")]
+        [HttpPost]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> AddAuthAsync([FromBody] AddAuthorizationUserCommand addAuthorizationUserCommand)
+        {
+            var result = await _mediator.Send(addAuthorizationUserCommand);
+
+            return result ? Ok() : (IActionResult) BadRequest();
+        }
     }
 }

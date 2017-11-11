@@ -5,18 +5,19 @@ using MediatR;
 
 namespace BoltJwt.Application.Commands.Users
 {
-    public class UserDeleteCommandHandler : IAsyncRequestHandler<UserDeleteCommand, bool>
+    public class AddAuthorizationCommandHandler : IAsyncRequestHandler<AddAuthorizationUserCommand, bool>
     {
         private readonly IUserRepository _userRepository;
 
-        public UserDeleteCommandHandler(IUserRepository userRepository)
+        public AddAuthorizationCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        public async Task<bool> Handle(UserDeleteCommand userDeleteCommand)
+        public async Task<bool> Handle(AddAuthorizationUserCommand addAuthorizationUserCommand)
         {
-            await _userRepository.DeleteAsync(userDeleteCommand.Id);
+            await _userRepository.AssignAuthorizationAsync(addAuthorizationUserCommand.UserId,
+                addAuthorizationUserCommand.AuthorizationName);
 
             return await _userRepository.UnitOfWork.SaveEntitiesAsync();
         }

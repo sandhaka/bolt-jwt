@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -30,6 +32,16 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Get a user by Id
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>User entity</returns>
+        public async Task<User> GetAsync(int id)
+        {
+            return await _context.Users.FindAsync(id);
+        }
+
+        /// <summary>
         /// Add a new user
         /// </summary>
         /// <param name="user">User</param>
@@ -48,12 +60,8 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <exception cref="EntityNotFoundException">User not found</exception>
         public async Task UpdateAsync(UserEditDto userEditDto)
         {
-            var userToUpdate = await _context.Users.FindAsync(userEditDto.Id);
-
-            if (userToUpdate == null)
-            {
-                throw new EntityNotFoundException($"{nameof(User)} - Id: {userEditDto.Id}");
-            }
+            var userToUpdate = await _context.Users.FindAsync(userEditDto.Id) ??
+                               throw new EntityNotFoundException($"{nameof(User)} - Id: {userEditDto.Id}");
 
             if (userToUpdate.Root)
             {
@@ -75,12 +83,8 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <exception cref="EntityNotFoundException">User not found</exception>
         public async Task DeleteAsync(int id)
         {
-            var userToDelete = await _context.Users.FindAsync(id);
-
-            if (userToDelete == null)
-            {
-                throw new EntityNotFoundException($"{nameof(User)} - Id: {id}");
-            }
+            var userToDelete = await _context.Users.FindAsync(id) ??
+                               throw new EntityNotFoundException($"{nameof(User)} - Id: {id}");
 
             if (userToDelete.Root)
             {
@@ -88,6 +92,32 @@ namespace BoltJwt.Infrastructure.Repositories
             }
 
             _context.Entry(userToDelete).State = EntityState.Deleted;
+        }
+
+        /// <summary>
+        /// Assign an authorization directly
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <param name="authName">Authorization name</param>
+        /// <returns>Task</returns>
+        public async Task AssignAuthorizationAsync(int userId, string authName)
+        {
+            var authorization = await _context.Authorizations.FirstAsync(i => i.Name == authName) ??
+                                throw new EntityNotFoundException(nameof(DefinedAuthorization));
+
+            var user = await _context.Users.FindAsync(userId) ?? throw new EntityNotFoundException(nameof(User));
+
+            if (user.Root)
+            {
+                throw new NotEditableEntityException("Root user");
+            }
+
+            user.Authorizations.Add(
+                new UserAuthorization
+                {
+                    DefAuthorizationId = authorization.Id,
+                    UserId = user.Id
+                });
         }
 
         /// <summary>
@@ -105,27 +135,66 @@ namespace BoltJwt.Infrastructure.Repositories
                 .Include(i=>i.Authorizations)
                 .Include(i=>i.UserGroups)
                 .Include(i=>i.UserRoles)
-                .FirstOrDefaultAsync(i => i.UserName == username);
+                .FirstOrDefaultAsync(i => i.UserName == username) ?? throw new EntityNotFoundException(nameof(User));
 
-            if (user != null)
+            if (user.Password.Equals(User.PasswordEncrypt(password)))
             {
-                if (user.Password.Equals(User.PasswordEncrypt(password)))
-                {
-                    var authorizations = user.GetAllAuthorizationsAssigned();
-
-                    claimsIdentity = new ClaimsIdentity(
-                        new GenericIdentity(username, "Token"),
-                        new []
-                        {
-                            new Claim("isRoot", user.Root ? "true" : "false"),
-                            new Claim("userId", user.Id.ToString()),
-                            new Claim("username", user.UserName),
-                            new Claim("authorizations", JsonConvert.SerializeObject(authorizations))
-                        });
-                }
+                throw new WrongCredentialsException();
             }
 
+            var authorizations = GetAllAuthorizationsAssigned(context, user);
+
+            claimsIdentity = new ClaimsIdentity(
+                new GenericIdentity(username, "Token"),
+                new []
+                {
+                    new Claim("isRoot", user.Root ? "true" : "false"),
+                    new Claim("userId", user.Id.ToString()),
+                    new Claim("username", user.UserName),
+                    new Claim("authorizations", JsonConvert.SerializeObject(authorizations))
+                });
+
             return claimsIdentity;
+        }
+
+        /// <summary>
+        /// Get the comprensive list of the authorizations assigned directly or indirectly trough roles or groups
+        /// </summary>
+        /// <returns>Authorization names list</returns>
+        private static IEnumerable<string> GetAllAuthorizationsAssigned(IdentityContext context, User user)
+        {
+            // Authorizations directly assigned:
+            var authorizations = from auths in context.Authorizations
+                join userAuth in user.Authorizations on auths.Id equals userAuth.DefAuthorizationId
+                select auths;
+
+            // Authorization assigned through user roles
+            var authorizationsFromRoles = from auths in context.Authorizations
+                join roleAuth in (
+                    from uRoles in context.Roles
+                    join userRole in user.UserRoles on uRoles.Id equals userRole.RoleId
+                    select uRoles).SelectMany(i => i.Authorizations).ToArray() on auths.Id equals roleAuth.DefAuthorizationId
+                select auths;
+
+            // Authorization assigned through roles of the user groups
+            var authorizationsFromRolesGroups = from auths in context.Authorizations
+                join roleAuth in (
+                    from uRoles in context.Roles
+                    join groupRole in (
+                        from groups in context.Groups
+                        join userGroup in user.UserGroups on groups.Id equals userGroup.GroupId
+                        select groups).SelectMany(i => i.GroupRoles).ToArray() on uRoles.Id equals groupRole.RoleId
+                    select uRoles
+                ).SelectMany(i => i.Authorizations).ToArray() on auths.Id equals roleAuth.DefAuthorizationId
+                select auths;
+
+            // Add all in a HashSet to avoid duplicates
+            var authorizationSet = authorizations.ToHashSet();
+
+            authorizationSet.UnionWith(authorizationsFromRoles);
+            authorizationSet.UnionWith(authorizationsFromRolesGroups);
+
+            return authorizationSet.Select(i => i.Name).ToArray();
         }
 
         #region [Helpers]
