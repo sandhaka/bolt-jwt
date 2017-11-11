@@ -121,6 +121,32 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Assign a role
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <param name="roleId">Role id</param>
+        /// <returns>Task</returns>
+        public async Task AssignRoleAsync(int userId, int roleId)
+        {
+            var role = await _context.Roles.FindAsync(roleId) ??
+                       throw new EntityNotFoundException(nameof(Role));
+
+            var user = await _context.Users.FindAsync(userId) ?? throw new EntityNotFoundException(nameof(User));
+
+            if (user.Root)
+            {
+                throw new NotEditableEntityException("Root user");
+            }
+
+            user.UserRoles.Add(
+                new UserRole
+                {
+                    RoleId = roleId,
+                    UserId = user.Id
+                });
+        }
+
+        /// <summary>
         /// Return the user identity claims
         /// </summary>
         /// <param name="context">DbContext</param>

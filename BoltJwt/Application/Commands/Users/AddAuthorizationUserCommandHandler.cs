@@ -5,11 +5,11 @@ using MediatR;
 
 namespace BoltJwt.Application.Commands.Users
 {
-    public class AddAuthorizationCommandHandler : IAsyncRequestHandler<AddAuthorizationUserCommand, bool>
+    public class AddAuthorizationUserCommandHandler : IAsyncRequestHandler<AddAuthorizationUserCommand, bool>
     {
         private readonly IUserRepository _userRepository;
 
-        public AddAuthorizationCommandHandler(IUserRepository userRepository)
+        public AddAuthorizationUserCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }

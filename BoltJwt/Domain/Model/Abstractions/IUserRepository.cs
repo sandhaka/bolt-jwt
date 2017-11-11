@@ -46,6 +46,14 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <returns>Task</returns>
         Task AssignAuthorizationAsync(int userId, string authName);
 
+        /// <summary>
+        /// Assign a role
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <param name="roleId">Role id</param>
+        /// <returns>Task</returns>
+        Task AssignRoleAsync(int userId, int roleId);
+
         Task UserNameExistsAsync(string username);
         Task EmailExistsAsync(string email);
     }
