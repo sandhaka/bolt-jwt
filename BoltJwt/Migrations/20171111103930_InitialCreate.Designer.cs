@@ -11,9 +11,10 @@ using System;
 namespace BoltJwt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20171111103930_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,10 +87,9 @@ namespace BoltJwt.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("DefAuthorizationId");
 
-                    b.HasIndex("DefAuthorizationId", "RoleId")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.ToTable("role_authorizations","IdentityContext");
                 });
@@ -139,10 +139,9 @@ namespace BoltJwt.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("DefAuthorizationId");
 
-                    b.HasIndex("DefAuthorizationId", "UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("user_authorizations","IdentityContext");
                 });

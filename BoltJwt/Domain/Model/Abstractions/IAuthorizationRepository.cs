@@ -21,6 +21,13 @@ namespace BoltJwt.Domain.Model.Abstractions
         Task DeleteAsync(int id);
 
         /// <summary>
+        /// Return a authorization definition by his name
+        /// </summary>
+        /// <param name="name">Authorization name</param>
+        /// <returns>Authorization definition</returns>
+        Task<DefinedAuthorization> GetByNameAsync(string name);
+
+        /// <summary>
         /// Check if the authorization name has a definition
         /// </summary>
         /// <param name="name">Authorization name</param>

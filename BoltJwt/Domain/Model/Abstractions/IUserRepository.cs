@@ -9,6 +9,13 @@ namespace BoltJwt.Domain.Model.Abstractions
         IUnitOfWork UnitOfWork { get; }
 
         /// <summary>
+        /// Get a user by Id
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>User entity</returns>
+        Task<User> GetAsync(int id);
+
+        /// <summary>
         /// Add a new user
         /// </summary>
         /// <param name="user">User</param>
@@ -30,6 +37,14 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">User not found</exception>
         Task DeleteAsync(int id);
+
+        /// <summary>
+        /// Assign an authorization directly
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <param name="authName">Authorization name</param>
+        /// <returns>Task</returns>
+        Task AssignAuthorizationAsync(int userId, string authName);
 
         Task UserNameExistsAsync(string username);
         Task EmailExistsAsync(string email);

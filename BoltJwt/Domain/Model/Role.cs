@@ -35,13 +35,18 @@ namespace BoltJwt.Domain.Model
         /// <summary>
         /// Add an authorization
         /// </summary>
-        /// <param name="authorizationName">Authorization</param>
-        public void AddAuthorization(string authorizationName)
+        /// <param name="authorization">Authorization</param>
+        public void AddAuthorization(DefinedAuthorization authorization)
         {
-            if (!_authorizations.Any(i => i.AuthorizationName.Equals(authorizationName)))
+            if (_authorizations.All(i => i.DefAuthorizationId != authorization.Id))
             {
-                var authorization = new RoleAuthorization() {AuthorizationName = authorizationName};
-                _authorizations.Add(authorization);
+                var roleAuthorization = new RoleAuthorization
+                {
+                    DefAuthorizationId = authorization.Id,
+                    RoleId = Id
+                };
+
+                _authorizations.Add(roleAuthorization);
             }
         }
     }

@@ -33,55 +33,26 @@ namespace BoltJwt.Domain.Model
         /// </summary>
         public List<UserGroup> UserGroups { get; }
 
-        private readonly List<UserAuthorization> _authorizations;
-
         /// <summary>
         /// Authorization directly assigned
         /// </summary>
-        public IReadOnlyCollection<UserAuthorization> Authorizations => _authorizations;
+        public List<UserAuthorization> Authorizations { get; set; }
 
         public User()
         {
-            _authorizations = new List<UserAuthorization>();
+            Authorizations = new List<UserAuthorization>();
             UserGroups = new List<UserGroup>();
             UserRoles = new List<UserRole>();
         }
 
         /// <summary>
-        /// Assign an authorization directly
+        /// Check if the authorization is assigned
         /// </summary>
         /// <param name="definedAuthorization">Authorization</param>
-        public void AssignAuthorization(DefinedAuthorization definedAuthorization)
+        /// <returns>Assigned</returns>
+        public bool IsAuthorized(DefinedAuthorization definedAuthorization)
         {
-            if (!IsAuthorized(definedAuthorization))
-            {
-                var userAuthorization = new UserAuthorization() {AuthorizationName = definedAuthorization.Name};
-                _authorizations.Add(userAuthorization);
-            }
-        }
-
-        /// <summary>
-        /// Get the comprensive list of the authorizations assigned directly or indirectly though roles or groups
-        /// </summary>
-        /// <returns>Authorizations list</returns>
-        public IEnumerable<string> GetAllAuthorizationsAssigned()
-        {
-            // Collects in sets to avoid duplicates
-            var authorizations = Authorizations.Select(i => i.AuthorizationName).ToHashSet();
-
-            authorizations.UnionWith(
-                UserRoles.SelectMany(r =>
-                    r.Role.Authorizations.Select(a =>
-                        a.AuthorizationName))
-                .ToHashSet());
-
-            authorizations.UnionWith(
-                UserGroups.SelectMany(g =>
-                    g.Group.GroupRoles.SelectMany(gr =>
-                        gr.Role.Authorizations.Select(a => a.AuthorizationName)))
-                .ToHashSet());
-
-            return authorizations.ToArray();
+            return Authorizations.Any(i => i.DefAuthorizationId == definedAuthorization.Id);
         }
 
         public static string PasswordEncrypt(string password)
@@ -99,11 +70,6 @@ namespace BoltJwt.Domain.Model
 
                 return sBuilder.ToString();
             }
-        }
-
-        private bool IsAuthorized(DefinedAuthorization definedAuthorization)
-        {
-            return _authorizations.Any(i => i.AuthorizationName.Equals(definedAuthorization.Name));
         }
     }
 }

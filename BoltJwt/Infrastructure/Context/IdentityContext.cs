@@ -120,18 +120,16 @@ namespace BoltJwt.Infrastructure.Context
         {
             userAuthConfig.ToTable("user_authorizations", DefaultSchema);
             userAuthConfig.HasKey(a => a.Id);
-            userAuthConfig.Property<string>("AuthorizationName").IsRequired();
 
-            userAuthConfig.HasIndex(a => a.AuthorizationName).IsUnique();
+            userAuthConfig.HasIndex(i => new {i.DefAuthorizationId, i.UserId}).IsUnique();
         }
 
         private void ConfigureRoleAuth(EntityTypeBuilder<RoleAuthorization> roleAuthConfig)
         {
             roleAuthConfig.ToTable("role_authorizations", DefaultSchema);
             roleAuthConfig.HasKey(a => a.Id);
-            roleAuthConfig.Property<string>("AuthorizationName").IsRequired();
 
-            roleAuthConfig.HasIndex(a => a.AuthorizationName).IsUnique();
+            roleAuthConfig.HasIndex(i => new {i.DefAuthorizationId, i.RoleId}).IsUnique();
         }
 
         private void ConfigureAuth(EntityTypeBuilder<DefinedAuthorization> authConfig)
