@@ -1,4 +1,4 @@
-
+packages/
 .idea/
 BoltJwt/bin/*
 BoltJwt/obj/*
@@ -21,3 +21,7 @@ docker-compose.dev.local.yml
 
 # sql scripts for testing
 db-testing/
+
+# Unit test project
+BoltJwtUnitTest/bin/*
+BoltJwtUnitTest/obj/*
