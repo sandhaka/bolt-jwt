@@ -28,12 +28,10 @@ namespace BoltJwt.Application.Commands.Roles
             foreach (var authorization in roleInsertCommand.Authorizations)
             {
                 // Check if the authorization is valid (check if a definition of it exists)
-                if (!_authorizationRepository.ContainsAuthorization(authorization))
-                {
-                    throw new UnknowAuthorizationException(authorization);
-                }
+                var definedAuthorization = await _authorizationRepository.GetByNameAsync(authorization) ??
+                                           throw new EntityNotFoundException(nameof(DefinedAuthorization));
 
-                role.AddAuthorization(authorization);
+                role.AddAuthorization(definedAuthorization);
             }
 
             _roleRepository.Add(role);

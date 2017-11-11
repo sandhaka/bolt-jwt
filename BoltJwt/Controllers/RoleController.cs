@@ -41,5 +41,17 @@ namespace BoltJwt.Controllers
 
             return result ? Ok() : (IActionResult) BadRequest();
         }
+
+        [Route("")]
+        [HttpDelete]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DeleteAsync([FromBody] RoleDeleteCommand roleDeleteCommand)
+        {
+            var result = await _mediator.Send(roleDeleteCommand);
+
+            return result ? Ok() : (IActionResult) BadRequest();
+        }
     }
 }

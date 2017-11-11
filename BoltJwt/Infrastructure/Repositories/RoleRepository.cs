@@ -45,12 +45,8 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <exception cref="EntityNotFoundException">Role not found</exception>
         public async Task UpdateAsync(RoleEditDto roleEditDto)
         {
-            var roleToUpdate = await _context.Roles.FindAsync(roleEditDto.Id);
-
-            if (roleToUpdate == null)
-            {
-                throw new EntityNotFoundException($"{nameof(Role)} - Id: {roleEditDto.Id}");
-            }
+            var roleToUpdate = await _context.Roles.FindAsync(roleEditDto.Id) ??
+                               throw new EntityNotFoundException($"{nameof(Role)} - Id: {roleEditDto.Id}");
 
             roleToUpdate.Description = roleEditDto.Description;
 
@@ -65,12 +61,8 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <exception cref="EntityNotFoundException">Role not found</exception>
         public async Task DeleteAsync(int id)
         {
-            var roleToDelete = await _context.Roles.FindAsync(id);
-
-            if (roleToDelete == null)
-            {
-                throw new EntityNotFoundException($"{nameof(Role)} - Id: {id}");
-            }
+            var roleToDelete = await _context.Roles.FindAsync(id) ??
+                               throw new EntityNotFoundException($"{nameof(Role)} - Id: {id}");
 
             _context.Entry(roleToDelete).State = EntityState.Deleted;
         }

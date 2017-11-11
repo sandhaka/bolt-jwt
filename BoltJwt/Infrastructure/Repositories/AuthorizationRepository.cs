@@ -55,6 +55,16 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Return a authorization definition by his name
+        /// </summary>
+        /// <param name="name">Authorization name</param>
+        /// <returns>Authorization definition</returns>
+        public async Task<DefinedAuthorization> GetByNameAsync(string name)
+        {
+            return await _context.Authorizations.FirstAsync(i => i.Name == name);
+        }
+
+        /// <summary>
         /// Check if the authorization name has a definition
         /// </summary>
         /// <param name="name">Authorization name</param>

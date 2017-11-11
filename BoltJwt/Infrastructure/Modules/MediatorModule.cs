@@ -31,8 +31,16 @@ namespace BoltJwt.Infrastructure.Modules
             builder.RegisterAssemblyTypes(typeof(UserDeleteCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
 
+            builder.RegisterAssemblyTypes(typeof(AddAuthorizationUserCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+
             builder
                 .RegisterAssemblyTypes(typeof(UserInsertCommandValidator).GetTypeInfo().Assembly)
+                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+                .AsImplementedInterfaces();
+
+            builder
+                .RegisterAssemblyTypes(typeof(AddAuthorizationUserCommandValidator).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
 
