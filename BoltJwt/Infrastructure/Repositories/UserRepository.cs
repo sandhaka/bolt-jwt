@@ -141,7 +141,7 @@ namespace BoltJwt.Infrastructure.Repositories
             user.UserRoles.Add(
                 new UserRole
                 {
-                    RoleId = roleId,
+                    RoleId = role.Id,
                     UserId = user.Id
                 });
         }

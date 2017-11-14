@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Application.Commands.Roles;
 using BoltJwt.Application.Commands.Roles.Handlers;
