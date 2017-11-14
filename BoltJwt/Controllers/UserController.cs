@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web.Http;
 using BoltJwt.Application.Commands.Users;
+using BoltJwt.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +14,32 @@ namespace BoltJwt.Controllers
     public class UserController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IUserQueries _userQueries;
 
-        public UserController(IMediator mediator)
+        public UserController(IMediator mediator, IUserQueries userQueries)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _userQueries = userQueries ?? throw new ArgumentNullException(nameof(userQueries));
+        }
+
+        [Route("")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetAsync([FromUri] int id)
+        {
+            var result = await _userQueries.GetUserAsync(id);
+
+            return Ok(result);
+        }
+
+        [Route("all")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetAsync()
+        {
+            var result = await _userQueries.GetUsersAsync();
+
+            return Ok(result);
         }
 
         [Route("")]

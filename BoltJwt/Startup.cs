@@ -84,7 +84,7 @@ namespace BoltJwt
             var container = new ContainerBuilder();
             container.Populate(services);
 
-            container.RegisterModule(new ApplicationModule());
+            container.RegisterModule(new ApplicationModule(connectionString));
             container.RegisterModule(new MediatorModule());
 
             return new AutofacServiceProvider(container.Build());

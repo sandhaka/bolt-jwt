@@ -163,7 +163,7 @@ namespace BoltJwt.Infrastructure.Repositories
                 .Include(i=>i.UserRoles)
                 .FirstOrDefaultAsync(i => i.UserName == username) ?? throw new EntityNotFoundException(nameof(User));
 
-            if (user.Password.Equals(User.PasswordEncrypt(password)))
+            if (!user.Password.Equals(User.PasswordEncrypt(password)))
             {
                 throw new WrongCredentialsException();
             }
