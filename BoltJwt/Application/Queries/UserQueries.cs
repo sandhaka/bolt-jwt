@@ -8,9 +8,12 @@ using Dapper;
 
 namespace BoltJwt.Application.Queries
 {
+    /// <summary>
+    /// Queries for the 'User' entity
+    /// </summary>
     public class UserQueries : IUserQueries
     {
-        private readonly string _connectionString = String.Empty;
+        private readonly string _connectionString;
 
         public UserQueries(string connectionString)
         {

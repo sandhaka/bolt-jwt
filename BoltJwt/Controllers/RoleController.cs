@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using BoltJwt.Application.Commands.Roles;
+using BoltJwt.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,22 @@ namespace BoltJwt.Controllers
     public class RoleController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IRoleQueries _roleQueries;
 
-        public RoleController(IMediator mediator)
+        public RoleController(IMediator mediator, IRoleQueries roleQueries)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _roleQueries = roleQueries ?? throw new ArgumentNullException(nameof(roleQueries));
+        }
+
+        [Route("all")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetAsync()
+        {
+            var result = await _roleQueries.GetRolesAsync();
+
+            return Ok(result);
         }
 
         [Route("")]
