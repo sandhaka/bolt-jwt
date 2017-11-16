@@ -2,6 +2,7 @@
 using Autofac;
 using BoltJwt.Application.Commands.Users;
 using System.Reflection;
+using BoltJwt.Application.Commands.Authorizations;
 using BoltJwt.Application.Commands.Roles;
 using BoltJwt.Application.Validations;
 using FluentValidation;
@@ -59,6 +60,18 @@ namespace BoltJwt.Infrastructure.Modules
 
             builder
                 .RegisterAssemblyTypes(typeof(RoleInsertCommandValidator).GetTypeInfo().Assembly)
+                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+                .AsImplementedInterfaces();
+
+            #endregion
+
+            #region [Authorizations]
+
+            builder.RegisterAssemblyTypes(typeof(AuthorizationInsertCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+
+            builder
+                .RegisterAssemblyTypes(typeof(AuthorizationInsertCommandValidator).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
 

@@ -22,7 +22,7 @@ namespace BoltJwt.Application.Queries
                 : throw new ArgumentNullException(nameof(connectionString));
         }
 
-        public async Task<dynamic> GetUserAsync(int id)
+        public async Task<dynamic> GetAsync(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -39,7 +39,7 @@ namespace BoltJwt.Application.Queries
             }
         }
 
-        public async Task<IEnumerable<dynamic>> GetUsersAsync()
+        public async Task<IEnumerable<dynamic>> GetAsync()
         {
             using (var connection = new SqlConnection(_connectionString))
             {

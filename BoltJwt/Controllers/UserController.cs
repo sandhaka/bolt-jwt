@@ -27,7 +27,7 @@ namespace BoltJwt.Controllers
         [Authorize(Policy = "bJwtAdmins")]
         public async Task<IActionResult> GetAsync([FromUri] int id)
         {
-            var result = await _userQueries.GetUserAsync(id);
+            var result = await _userQueries.GetAsync(id);
 
             return Ok(result);
         }
@@ -37,7 +37,7 @@ namespace BoltJwt.Controllers
         [Authorize(Policy = "bJwtAdmins")]
         public async Task<IActionResult> GetAsync()
         {
-            var result = await _userQueries.GetUsersAsync();
+            var result = await _userQueries.GetAsync();
 
             return Ok(result);
         }

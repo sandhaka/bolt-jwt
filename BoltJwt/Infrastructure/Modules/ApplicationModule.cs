@@ -23,7 +23,11 @@ namespace BoltJwt.Infrastructure.Modules
             builder.Register(compContext => new RoleQueries(ConnectionString))
                 .As<IRoleQueries>()
                 .InstancePerLifetimeScope();
-            
+
+            builder.Register(compContext => new AuthorizationQueries(ConnectionString))
+                .As<IAuthorizationQueries>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<AuthorizationsHandler>()
                 .As<IAuthorizationHandler>()
                 .SingleInstance();

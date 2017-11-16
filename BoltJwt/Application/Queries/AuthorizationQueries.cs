@@ -2,52 +2,47 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Dynamic;
+using System.Linq;
 using System.Threading.Tasks;
+using BoltJwt.Domain.Model;
 using Dapper;
 
 namespace BoltJwt.Application.Queries
 {
     /// <summary>
-    /// Queries for the 'Role' entity
+    /// Queries for the 'DefAuthorization' entity
     /// </summary>
-    public class RoleQueries : IRoleQueries
+    public class AuthorizationQueries : IAuthorizationQueries
     {
         private readonly string _connectionString;
 
-        public RoleQueries(string connectionString)
+        public AuthorizationQueries(string connectionString)
         {
             _connectionString = !string.IsNullOrWhiteSpace(connectionString)
                 ? connectionString
                 : throw new ArgumentNullException(nameof(connectionString));
         }
 
-        public async Task<dynamic> GetAsync()
+        public async Task<IEnumerable<dynamic>> GetAsync()
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
                 var result = await connection.QueryAsync<dynamic>(
-                    @"SELECT r.Description as role, da.Name as auth FROM IdentityContext.roles r
-                        JOIN IdentityContext.role_authorizations ra ON r.Id = ra.RoleId
-                        JOIN IdentityContext.def_authorizations da ON ra.DefAuthorizationId = da.Id");
+                    $@"SELECT Id as id, Name as auth FROM IdentityContext.def_authorizations
+                        WHERE Name <> '{Constants.AdministrativeAuth}'");
 
-                return MapRolesResult(result);
+                return result.AsList().Select(r => MapAuthResult(r)).ToList();
             }
         }
 
-        private dynamic MapRolesResult(dynamic result)
+        private dynamic MapAuthResult(dynamic result)
         {
             dynamic dto = new ExpandoObject();
 
-            dto.Role = result[0].role;
-
-            dto.Authorizations = new List<dynamic>();
-
-            foreach (var r in result)
-            {
-                dto.Authorizations.Add(r.auth);
-            }
+            dto.id = result.id;
+            dto.authorization = result.auth;
 
             return dto;
         }

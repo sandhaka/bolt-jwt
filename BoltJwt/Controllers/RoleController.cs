@@ -26,7 +26,7 @@ namespace BoltJwt.Controllers
         [Authorize(Policy = "bJwtAdmins")]
         public async Task<IActionResult> GetAsync()
         {
-            var result = await _roleQueries.GetRolesAsync();
+            var result = await _roleQueries.GetAsync();
 
             return Ok(result);
         }

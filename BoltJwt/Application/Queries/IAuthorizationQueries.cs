@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 
 namespace BoltJwt.Application.Queries
 {
-    public interface IUserQueries
+    public interface IAuthorizationQueries
     {
-        Task<object> GetAsync(int id);
         Task<IEnumerable<object>> GetAsync();
     }
 }
