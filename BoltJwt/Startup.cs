@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BoltJwt.Application.Middlewares.Authentication;
+using BoltJwt.Application.Middlewares.ExceptionHandling;
 using BoltJwt.Application.Services;
 using BoltJwt.Infrastructure.Context;
 using BoltJwt.Infrastructure.Modules;
@@ -103,6 +104,9 @@ namespace BoltJwt
             }
             else
             {
+                // Adding exception handling middleware
+                app.UseMiddleware<ExceptionHandlingMiddleware>();
+
                 loggerFactory.AddDebug(LogLevel.Warning);
             }
 

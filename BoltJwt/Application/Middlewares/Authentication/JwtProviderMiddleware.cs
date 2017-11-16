@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BoltJwt.Application.Middlewares.Authentication
 {
-    public class JwtProviderMiddleware : AuthenticationJwtMiddleware, IMiddleware
+    public class JwtProviderMiddleware : AuthenticationJwtMiddleware
     {
         public JwtProviderMiddleware(RequestDelegate next, IOptions<TokenOptions> options) : base(next, options)
         {

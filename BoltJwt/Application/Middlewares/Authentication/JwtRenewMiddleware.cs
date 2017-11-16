@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace BoltJwt.Application.Middlewares.Authentication
 {
-    public class JwtRenewMiddleware : AuthenticationJwtMiddleware, IMiddleware
+    public class JwtRenewMiddleware : AuthenticationJwtMiddleware
     {
         public JwtRenewMiddleware(RequestDelegate next, IOptions<TokenOptions> options) : base(next, options)
         {
