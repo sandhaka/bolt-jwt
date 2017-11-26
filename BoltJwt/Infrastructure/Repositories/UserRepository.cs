@@ -157,15 +157,15 @@ namespace BoltJwt.Infrastructure.Repositories
         {
             ClaimsIdentity claimsIdentity = null;
 
-            var user = await context.Users
+             var user = await context.Users
                 .Include(i=>i.Authorizations)
                 .Include(i=>i.UserGroups)
                 .Include(i=>i.UserRoles)
-                .FirstOrDefaultAsync(i => i.UserName == username) ?? throw new EntityNotFoundException(nameof(User));
+                .FirstOrDefaultAsync(i => i.UserName == username);
 
-            if (!user.Password.Equals(User.PasswordEncrypt(password)))
+            if (user == null || !user.Password.Equals(User.PasswordEncrypt(password)))
             {
-                throw new WrongCredentialsException();
+                return null;
             }
 
             var authorizations = GetAllAuthorizationsAssigned(context, user);

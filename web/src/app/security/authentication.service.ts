@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {UtilityService} from '../shared/utils.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {TokenResponse} from "./token.response";
+import {TokenResponse} from './token.response';
 
 @Injectable()
 export class AuthenticationService {
@@ -21,7 +21,7 @@ export class AuthenticationService {
    * @param {string} password
    * @returns {Observable<boolean>}
    */
-  login(username: string, password: string): Observable<boolean> {
+  getToken(username: string, password: string): Observable<boolean> {
 
     const body = { username: username, password: password };
 

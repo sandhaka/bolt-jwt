@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import {AuthGuardService} from './security/auth.guard.service';
+
 // Import Containers
 import {
   FullLayoutComponent,
@@ -16,6 +18,7 @@ export const routes: Routes = [
   {
     path: '',
     component: FullLayoutComponent,
+    canActivate: [AuthGuardService],
     data: {
       title: 'Home'
     },
