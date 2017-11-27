@@ -43,11 +43,6 @@ namespace BoltJwt.Application.Middlewares.Authentication
         /// <returns>Return the next task</returns>
         public virtual Task Invoke(HttpContext httpContext, IdentityContext context)
         {
-            if (!httpContext.Request.Path.Equals(Options.Path, StringComparison.Ordinal))
-            {
-                return _next(httpContext);
-            }
-
             if (!httpContext.Request.Method.Equals("POST"))
             {
                 httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;

@@ -104,10 +104,6 @@ namespace BoltJwt.Application.Middlewares.Authentication
                 throw new NullReferenceException("Wrong token provider options");
             }
 
-            if (string.IsNullOrEmpty(options.Path))
-            {
-                throw new ArgumentNullException(nameof(TokenOptions.Path));
-            }
             if (options.Expiration == TimeSpan.Zero)
             {
                 throw new ArgumentException("Must be a non-zero TimeSpan.", nameof(TokenOptions.Expiration));

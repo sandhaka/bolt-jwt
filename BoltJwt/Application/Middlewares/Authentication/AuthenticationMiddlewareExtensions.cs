@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using BoltJwt.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -25,22 +26,24 @@ namespace BoltJwt.Application.Middlewares.Authentication
             // Setup Token provider
             var tokenProviderOptions = new TokenProviderOptions()
             {
-                Path = "/api/token",
                 Issuer = configuration.GetSection("Jwt:Issuer").Value,
                 Audience = configuration.GetSection("Jwt:Audience").Value,
                 SigningCredentials = new SigningCredentials(new RsaSecurityKey(privateKey), SecurityAlgorithms.RsaSha256),
                 IdentityResolver = UserRepository.GetIdentityAsync
             };
 
-            builder.UseMiddleware<JwtProviderMiddleware>(Options.Create(tokenProviderOptions));
+            builder.Map(
+                new PathString("/api/token"),
+                a => a.UseMiddleware<JwtProviderMiddleware>(Options.Create(tokenProviderOptions))
+            );
 
             // Setup Token renew options
-            var tokenRenewOptions = new TokenOptions
-            {
-                Path = "/api/tokenrenew"
-            };
+            var tokenRenewOptions = new TokenOptions();
 
-            return builder.UseMiddleware<JwtRenewMiddleware>(Options.Create(tokenRenewOptions));
+            return builder.Map(
+                new PathString("/api/tokenrenew"),
+                a => a.UseMiddleware<JwtRenewMiddleware>(Options.Create(tokenRenewOptions))
+            );
         }
     }
 }

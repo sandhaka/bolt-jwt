@@ -97,16 +97,15 @@ namespace BoltJwt
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 
+            // Adding exception handling middleware
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 loggerFactory.AddDebug(LogLevel.Trace);
             }
             else
             {
-                // Adding exception handling middleware
-                app.UseMiddleware<ExceptionHandlingMiddleware>();
-
                 loggerFactory.AddDebug(LogLevel.Warning);
             }
 
