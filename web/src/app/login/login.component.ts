@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../security/authentication.service';
 import {Router} from '@angular/router';
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-login',
@@ -65,17 +66,24 @@ export class LoginComponent implements OnInit {
    * Login action
    */
   onNgSubmit() {
+    if (this.form.invalid) {
+      return;
+    }
     this.userDto = this.form.value;
     this.authService.getToken(this.userDto.username, this.userDto.password).subscribe(
-      (result: any) => {
+      (result: boolean) => {
         if (result) {
           this.router.navigate(['/dashboard']);
         } else {
           this.loginError = 'Username/password not valid';
         }
       },
-      (error: any) => {
-        this.loginError = 'Username/password not valid';
+      (error: HttpErrorResponse) => {
+        if(error.status === 400) {
+          this.loginError = 'Username/password not valid';
+        } else {
+          this.loginError = `${error.statusText}: ${error.message}`;
+        }
       }
     );
   }
