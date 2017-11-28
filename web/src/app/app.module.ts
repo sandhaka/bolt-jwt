@@ -41,7 +41,11 @@ const APP_COMPONENTS = [
   AppSidebarHeaderComponent,
   AppSidebarMinimizerComponent,
   APP_SIDEBAR_NAV
-]
+];
+
+const APP_MODULES = [
+  SecurityModule
+];
 
 // Import directives
 import {
@@ -56,7 +60,7 @@ const APP_DIRECTIVES = [
   NAV_DROPDOWN_DIRECTIVES,
   ReplaceDirective,
   SIDEBAR_TOGGLE_DIRECTIVES
-]
+];
 
 // Import routing module
 import { AppRoutingModule } from './app.routing';
@@ -73,7 +77,8 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     SecurityModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
-    ChartsModule
+    ChartsModule,
+    ...APP_MODULES
   ],
   declarations: [
     AppComponent,

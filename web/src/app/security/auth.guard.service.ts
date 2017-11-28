@@ -3,6 +3,9 @@ import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterSta
 import {Observable} from 'rxjs/Observable';
 import {AuthenticationService} from './authentication.service';
 
+/**
+ * General guard to protect routes
+ */
 @Injectable()
 export class AuthGuardService implements CanActivate {
 

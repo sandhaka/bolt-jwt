@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {UtilityService} from '../shared/utils.service';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {TokenResponse} from './token.response';
+import {UtilityService} from "../shared/utils.service";
 
 @Injectable()
 export class AuthenticationService {
@@ -16,7 +16,7 @@ export class AuthenticationService {
   }
 
   /**
-   * Login
+   * Retrieve a new json web token
    * @param {string} username
    * @param {string} password
    * @returns {Observable<boolean>}
@@ -40,6 +40,9 @@ export class AuthenticationService {
       });
   }
 
+  /**
+   * Delete the current token from the local storage
+   */
   logout(): void {
     // clear token remove user from local storage to log user out
     this.token = null;
@@ -52,22 +55,28 @@ export class AuthenticationService {
    */
   tokenCheck(): boolean {
 
+    // Retrieve the local copy of the token
     const storedToken = localStorage.getItem('currentUser');
 
     if (this.token && storedToken !== null) {
 
+      // Decode it
       const tokenData = JSON.parse(storedToken);
 
       // If the token is going to expire in less of a day renew it
       if (tokenData.exp > Date.now() &&
         tokenData.exp < Date.now() + 86400) {
 
-        this.tokenRenew().subscribe((result) => {
-          if (!result) {
-            console.warn('Error on token renew');
-          }
-          console.debug('Token renewed');
-        });
+        this.tokenRenew().subscribe(
+          (result) => {
+            if (!result) {
+              console.warn('Error on token renew');
+            }
+            console.debug('Token renewed');
+          },
+          (error: HttpErrorResponse) => {
+            console.warn(`Error on token renew: ${error.message}`);
+          });
 
         return true;
       } else if (tokenData.exp < Date.now()) {
@@ -101,7 +110,7 @@ export class AuthenticationService {
         }
 
         return false;
-    });
+      });
   }
 
   private storeToken(token: string) {

@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../security/authentication.service';
 import {Router} from '@angular/router';
 import {HttpErrorResponse} from "@angular/common/http";
+import {BsModalRef, BsModalService} from "ngx-bootstrap";
+import {ModalComponent} from "../shared/modals/modal.component";
 
 @Component({
   selector: 'app-login',
@@ -14,6 +16,8 @@ export class LoginComponent implements OnInit {
   private authService: AuthenticationService;
   private router: Router;
   private userDto: UserDto;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
   form: FormGroup;
 
   loginError = '';
@@ -31,12 +35,13 @@ export class LoginComponent implements OnInit {
     }
   };
 
-  constructor(authService: AuthenticationService, formBuilder: FormBuilder, router: Router) {
+  constructor(authService: AuthenticationService, formBuilder: FormBuilder, router: Router, modalService: BsModalService) {
 
     this.formBuilder = formBuilder;
     this.authService = authService;
     this.router = router;
     this.userDto = new UserDto();
+    this.bsModalService = modalService;
 
     this.form = this.formBuilder.group({
       'username': [
@@ -49,12 +54,18 @@ export class LoginComponent implements OnInit {
       ]
     });
 
+    /**
+     * Trigger validation on form data change
+     */
     this.form.valueChanges.subscribe((data) => {
       this.onDataChanged(data);
     });
     this.onDataChanged();
   }
 
+  /**
+   * forward to dashboard page if the user is authenticated
+   */
   ngOnInit() {
     if (this.authService.tokenCheck()) {
       this.router.navigate(['/dashboard']);
@@ -63,7 +74,7 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * Login action
+   * Login
    */
   onNgSubmit() {
     if (this.form.invalid) {
@@ -82,10 +93,23 @@ export class LoginComponent implements OnInit {
         if(error.status === 400) {
           this.loginError = 'Username/password not valid';
         } else {
-          this.loginError = `${error.statusText}: ${error.message}`;
+          this.openModal('Error', `${error.statusText}: ${error.message}`, 'modal-danger');
         }
       }
     );
+  }
+
+  /**
+   * Open a modal dialog
+   * @param {string} title
+   * @param {string} body
+   * @param {string} cssClass
+   */
+  private openModal(title: string, body: string, cssClass: string) {
+    this.bsModalRef = this.bsModalService.show(ModalComponent);
+    this.bsModalRef.content.modalTitle = title;
+    this.bsModalRef.content.modalClass = cssClass;
+    this.bsModalRef.content.modalText = body;
   }
 
   /**
