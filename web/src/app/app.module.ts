@@ -70,6 +70,23 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 
+// Imports for mock backend services
+import {environment} from "../environments/environment.mock";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {MockHttpInterceptor} from "./mockServices/mock-http.interceptor";
+
+let mockBackendProvider = [];
+
+if(environment.mockBackend) {
+  mockBackendProvider = [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MockHttpInterceptor,
+      multi: true
+    }
+  ];
+}
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -78,6 +95,7 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     ChartsModule,
+    HttpClientModule,
     ...APP_MODULES
   ],
   declarations: [
@@ -89,7 +107,9 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
   providers: [{
     provide: LocationStrategy,
     useClass: HashLocationStrategy
-  }],
+  },
+    ...mockBackendProvider
+  ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
