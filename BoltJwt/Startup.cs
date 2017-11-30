@@ -114,6 +114,9 @@ namespace BoltJwt
 
             // Mvc
             app.UseMvc();
+
+            // Serve web app
+            app.UseStaticFiles();
         }
     }
 }

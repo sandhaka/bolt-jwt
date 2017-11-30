@@ -23,4 +23,13 @@
   <ItemGroup>
     <Folder Include="Domain" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="wwwroot\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="wwwroot\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
 </Project>

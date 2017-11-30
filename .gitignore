@@ -2,6 +2,7 @@ packages/
 .idea/
 BoltJwt/bin/*
 BoltJwt/obj/*
+BoltJwt/wwwroot/*
 
 # Include binaries for docker build automation
 !BoltJwt/obj/docker/
