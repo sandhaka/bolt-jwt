@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BoltJwt.Application.Middlewares.Authentication;
@@ -115,7 +116,9 @@ namespace BoltJwt
             // Mvc
             app.UseMvc();
 
-            // Serve web app
+            // Serve web app - redirect to web app as default
+            app.UseStatusCodePagesWithReExecute("/");
+            app.UseDefaultFiles();
             app.UseStaticFiles();
         }
     }
