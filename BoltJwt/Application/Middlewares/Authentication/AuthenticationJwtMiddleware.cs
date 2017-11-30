@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BoltJwt.Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;

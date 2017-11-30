@@ -3,7 +3,8 @@ import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse} from
 import { Observable } from 'rxjs/Observable';
 
 // Import a "1 year valid" token
-import {DevToken} from "./fake-token.data";
+import {DevToken} from "./fake-token";
+import {FakeUserPagedData} from "./fake-user-paged-data";
 
 @Injectable()
 export class MockHttpInterceptor implements HttpInterceptor {
@@ -28,6 +29,15 @@ export class MockHttpInterceptor implements HttpInterceptor {
         resp.next(new HttpResponse({
           status: 200,
           body: DevToken
+        }))
+      });
+    }
+
+    if(url.match(/\/api\/v1\/user\/all/) && method === "GET") {
+      return new Observable(resp => {
+        resp.next(new HttpResponse({
+          status: 200,
+          body: FakeUserPagedData
         }))
       });
     }

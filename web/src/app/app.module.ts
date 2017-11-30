@@ -14,7 +14,7 @@ import {
 const APP_CONTAINERS = [
   FullLayoutComponent,
   SimpleLayoutComponent
-]
+];
 
 // Import components
 import {
@@ -71,14 +71,14 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 // Imports for mock backend services
-import {environment} from "../environments/environment.mock";
+import {environment} from "../environments/environment";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MockHttpInterceptor} from "./mockServices/mock-http.interceptor";
 
-let mockBackendProvider = [];
+let mockBackendProviders = [];
 
 if(environment.mockBackend) {
-  mockBackendProvider = [
+  mockBackendProviders = [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MockHttpInterceptor,
@@ -108,7 +108,7 @@ if(environment.mockBackend) {
     provide: LocationStrategy,
     useClass: HashLocationStrategy
   },
-    ...mockBackendProvider
+    ...mockBackendProviders
   ],
   bootstrap: [ AppComponent ]
 })

@@ -1,5 +1,5 @@
 {
-  "/api/token": {
+  "/api/*": {
     "target": "http://localhost:5000",
     "secure": false,
     "changeOrigin": false,

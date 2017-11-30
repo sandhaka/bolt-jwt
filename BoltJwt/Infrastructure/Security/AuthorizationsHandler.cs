@@ -13,6 +13,11 @@ namespace BoltJwt.Infrastructure.Security
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthorizationsRequirement requirement)
         {
+            if (!context.User.Identity.IsAuthenticated)
+            {
+                return Task.CompletedTask;
+            }
+
             /*
              * Check if the user is the root
              * Root is a omnipotent user

@@ -1,5 +1,5 @@
 /**
- * Token with 1 year validity - for development -
+ * Token with 1 year validity
  * @type {{access_token: string; expires_in: number}}
  */
 export const DevToken = {

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using BoltJwt.Application.Commands.Users;
 using BoltJwt.Application.Queries;
+using BoltJwt.Controllers.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +37,10 @@ namespace BoltJwt.Controllers
         [Route("all")]
         [HttpGet]
         [Authorize(Policy = "bJwtAdmins")]
-        public async Task<IActionResult> GetAsync()
+        [ProducesResponseType(typeof(PagedData<IEnumerable<object>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAsync([FromQuery] PageQuery query)
         {
-            var result = await _userQueries.GetAsync();
+            var result = await _userQueries.GetAsync(query);
 
             return Ok(result);
         }
