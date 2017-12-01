@@ -27,6 +27,8 @@ $green:                           #4dbd74;
 $teal:                            #20c997 !default;
 $cyan:                            #63c2de;
 
+$boltjwt-color-theme:             #5b06f6;
+
 $colors: (
   blue:                           $blue,
   indigo:                         $indigo,
@@ -44,10 +46,10 @@ $colors: (
 );
 
 $theme-colors: (
-  primary:                        $green, // $blue
+  primary:                        $boltjwt-color-theme, // $blue
   secondary:                      $gray-300, //$gray-300,
   success:                        $green,
-  info:                           $blue, //$cyan,
+  info:                           $boltjwt-color-theme, //$cyan,
   warning:                        $orange, //$yellow,
   danger:                         $red,
   light:                          $gray-100,

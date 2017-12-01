@@ -26,3 +26,6 @@ db-testing/
 # Unit test project
 BoltJwtUnitTest/bin/*
 BoltJwtUnitTest/obj/*
+
+# Gimp project
+*.xcf
