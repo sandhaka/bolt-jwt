@@ -74,6 +74,7 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import {environment} from "../environments/environment";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MockHttpInterceptor} from "./mockServices/mock-http.interceptor";
+import {AppHttpInterceptor} from "./security/http.interceptor";
 
 let mockBackendProviders = [];
 
@@ -91,7 +92,6 @@ if(environment.mockBackend) {
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SecurityModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     ChartsModule,
@@ -104,10 +104,16 @@ if(environment.mockBackend) {
     ...APP_COMPONENTS,
     ...APP_DIRECTIVES
   ],
-  providers: [{
-    provide: LocationStrategy,
-    useClass: HashLocationStrategy
-  },
+  providers: [
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppHttpInterceptor,
+      multi: true
+    },
     ...mockBackendProviders
   ],
   bootstrap: [ AppComponent ]

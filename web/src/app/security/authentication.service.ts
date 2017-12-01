@@ -97,9 +97,7 @@ export class AuthenticationService {
    */
   private tokenRenew(): Observable<boolean> {
 
-    return this.http.get<TokenResponse>('/api/tokenrenew', {
-      headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
-    })
+    return this.http.get<TokenResponse>('/api/tokenrenew')
       .map(response => {
 
         const token = response.access_token;
