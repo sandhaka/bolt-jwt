@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using BoltJwt.Application.Queries;
+using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Infrastructure.Repositories;
 using BoltJwt.Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 
@@ -26,6 +28,18 @@ namespace BoltJwt.Infrastructure.Modules
 
             builder.Register(compContext => new AuthorizationQueries(ConnectionString))
                 .As<IAuthorizationQueries>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<UserRepository>()
+                .As<IUserRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<RoleRepository>()
+                .As<IRoleRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<AuthorizationRepository>()
+                .As<IAuthorizationRepository>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<AuthorizationsHandler>()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
@@ -7,7 +8,7 @@ using MediatR;
 
 namespace BoltJwt.Application.Commands.Authorizations.Handlers
 {
-    public class AuthorizationInsertCommandHandler : IAsyncRequestHandler<AuthorizationInsertCommand, bool>
+    public class AuthorizationInsertCommandHandler : IRequestHandler<AuthorizationInsertCommand, bool>
     {
         private readonly IAuthorizationRepository _authorizationRepository;
 
@@ -17,7 +18,7 @@ namespace BoltJwt.Application.Commands.Authorizations.Handlers
                                        throw new ArgumentNullException(nameof(authorizationRepository));
         }
 
-        public async Task<bool> Handle(AuthorizationInsertCommand authorizationInsertCommand)
+        public async Task<bool> Handle(AuthorizationInsertCommand authorizationInsertCommand, CancellationToken cancellationToken)
         {
             var auth = new DefinedAuthorization(authorizationInsertCommand.Name);
 
@@ -28,7 +29,7 @@ namespace BoltJwt.Application.Commands.Authorizations.Handlers
 
             _authorizationRepository.Add(auth);
 
-            return await _authorizationRepository.UnitOfWork.SaveEntitiesAsync();
+            return await _authorizationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }

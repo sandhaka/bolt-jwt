@@ -31,7 +31,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _userQueries.GetAsync(id);
 
-            return Ok(result);
+            return Json(new {HttpStatusCode.OK});
         }
 
         [Route("all")]
@@ -54,7 +54,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(userInsertCommand);
 
-            return result ? Ok() : (IActionResult) BadRequest();
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
 
         [Route("update")]
@@ -66,7 +66,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(userEditCommand);
 
-            return result ? Ok() : (IActionResult) BadRequest();
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
 
         [Route("")]
@@ -78,7 +78,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(userDeleteCommand);
 
-            return result ? Ok() : (IActionResult) BadRequest();
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
 
         [Route("add.auth")]
@@ -90,7 +90,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(addAuthorizationUserCommand);
 
-            return result ? Ok() : (IActionResult) BadRequest();
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
 
         [Route("add.role")]
@@ -102,7 +102,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(addRoleUserCommand);
 
-            return result ? Ok() : (IActionResult) BadRequest();
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
     }
 }

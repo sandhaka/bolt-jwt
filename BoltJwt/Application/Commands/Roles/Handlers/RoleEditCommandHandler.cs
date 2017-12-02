@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model.Abstractions;
@@ -6,7 +7,7 @@ using MediatR;
 
 namespace BoltJwt.Application.Commands.Roles.Handlers
 {
-    public class RoleEditCommandHandler : IAsyncRequestHandler<RoleEditCommand, bool>
+    public class RoleEditCommandHandler : IRequestHandler<RoleEditCommand, bool>
     {
         private readonly IRoleRepository _roleRepository;
 
@@ -15,7 +16,7 @@ namespace BoltJwt.Application.Commands.Roles.Handlers
             _roleRepository = roleRepository ?? throw new ArgumentNullException(nameof(roleRepository));
         }
 
-        public async Task<bool> Handle(RoleEditCommand roleEditCommand)
+        public async Task<bool> Handle(RoleEditCommand roleEditCommand, CancellationToken cancellationToken)
         {
             var roleEditDto = new RoleEditDto
             {
@@ -25,7 +26,7 @@ namespace BoltJwt.Application.Commands.Roles.Handlers
 
             await _roleRepository.UpdateAsync(roleEditDto);
 
-            return await _roleRepository.UnitOfWork.SaveEntitiesAsync();
+            return await _roleRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }

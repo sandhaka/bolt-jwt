@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BoltJwt.Application.Middlewares.Authentication;

@@ -41,7 +41,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(authorizationInsertCommand);
 
-            return result ? Ok() : (IActionResult) BadRequest();
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
 
         [Route("")]
@@ -53,7 +53,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(authorizationDeleteCommand);
 
-            return result ? Ok() : (ActionResult) BadRequest();
+            return result ? Json(new { HttpStatusCode.OK }) : (ActionResult) BadRequest();
         }
     }
 }

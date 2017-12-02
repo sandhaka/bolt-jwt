@@ -34,7 +34,7 @@ namespace BoltJwtUnitTest.Application.Commands
             // Arrange
             _userRepository.Setup(x => x.Add(It.IsAny<User>()));
 
-            IAsyncRequestHandler<UserInsertCommand, bool> commandHandlerSut =
+            IRequestHandler<UserInsertCommand, bool> commandHandlerSut =
                 new UserInsertCommandHandler(_userRepository.Object);
 
             // Act
@@ -45,7 +45,7 @@ namespace BoltJwtUnitTest.Application.Commands
                 Password = "xxx",
                 Surname = "xxx",
                 UserName = "xxx"
-            });
+            }, CancellationToken.None);
 
             // Verify
             _userRepository.Verify(x => x.UserNameExistsAsync("xxx"), Times.Exactly(1));
@@ -60,7 +60,7 @@ namespace BoltJwtUnitTest.Application.Commands
             // Arrange
             _userRepository.Setup(x => x.UpdateAsync(It.IsAny<UserEditDto>())).Returns(Task.CompletedTask);
 
-            IAsyncRequestHandler<UserEditCommand, bool> commandHandlerSut =
+            IRequestHandler<UserEditCommand, bool> commandHandlerSut =
                 new UserEditCommandHandler(_userRepository.Object);
 
             // Act
@@ -70,7 +70,7 @@ namespace BoltJwtUnitTest.Application.Commands
                 Name = "xxx",
                 Surname = "xxx",
                 UserName = "xxx"
-            });
+            }, CancellationToken.None);
 
             // Verify
             _userRepository.Verify(x => x.UserNameExistsAsync("xxx"), Times.Exactly(1));

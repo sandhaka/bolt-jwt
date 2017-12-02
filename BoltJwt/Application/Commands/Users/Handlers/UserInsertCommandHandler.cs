@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 
 namespace BoltJwt.Application.Commands.Users.Handlers
 {
-    public class UserInsertCommandHandler : IAsyncRequestHandler<UserInsertCommand, bool>
+    public class UserInsertCommandHandler : IRequestHandler<UserInsertCommand, bool>
     {
         private readonly IUserRepository _userRepository;
 
@@ -14,7 +15,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
             _userRepository = userRepository;
         }
 
-        public async Task<bool> Handle(UserInsertCommand userInsertCommand)
+        public async Task<bool> Handle(UserInsertCommand userInsertCommand, CancellationToken cancellationToken)
         {
             await _userRepository.UserNameExistsAsync(userInsertCommand.UserName);
             await _userRepository.EmailExistsAsync(userInsertCommand.Email);
@@ -30,7 +31,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
 
             _userRepository.Add(newUser);
 
-            return await _userRepository.UnitOfWork.SaveEntitiesAsync();
+            return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }

@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
-using Autofac;
 using BoltJwt.Application.Commands.Users;
 using System.Reflection;
+using Autofac;
+using BoltJwt.Application.Commands;
 using BoltJwt.Application.Commands.Authorizations;
 using BoltJwt.Application.Commands.Roles;
 using BoltJwt.Application.Validations;
 using FluentValidation;
 using MediatR;
+using MediatR.Pipeline;
 
 namespace BoltJwt.Infrastructure.Modules
 {
@@ -18,22 +20,22 @@ namespace BoltJwt.Infrastructure.Modules
                 .AsImplementedInterfaces();
 
             /**
-             * Register all the Command classes (they implement IAsyncRequestHandler) in assembly holding the Commands
+             * Register all the Command classes (they implement IRequestHandler) in assembly holding the Commands
              */
 
             #region [Users]
 
             builder.RegisterAssemblyTypes(typeof(UserInsertCommand).GetTypeInfo().Assembly)
-                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             builder.RegisterAssemblyTypes(typeof(UserEditCommand).GetTypeInfo().Assembly)
-                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             builder.RegisterAssemblyTypes(typeof(UserDeleteCommand).GetTypeInfo().Assembly)
-                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             builder.RegisterAssemblyTypes(typeof(AddAuthorizationUserCommand).GetTypeInfo().Assembly)
-                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             builder
                 .RegisterAssemblyTypes(typeof(UserInsertCommandValidator).GetTypeInfo().Assembly)
@@ -50,13 +52,13 @@ namespace BoltJwt.Infrastructure.Modules
             #region [Roles]
 
             builder.RegisterAssemblyTypes(typeof(RoleInsertCommand).GetTypeInfo().Assembly)
-                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             builder.RegisterAssemblyTypes(typeof(RoleEditCommand).GetTypeInfo().Assembly)
-                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             builder.RegisterAssemblyTypes(typeof(RoleDeleteCommand).GetTypeInfo().Assembly)
-                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             builder
                 .RegisterAssemblyTypes(typeof(RoleInsertCommandValidator).GetTypeInfo().Assembly)
@@ -68,7 +70,7 @@ namespace BoltJwt.Infrastructure.Modules
             #region [Authorizations]
 
             builder.RegisterAssemblyTypes(typeof(AuthorizationInsertCommand).GetTypeInfo().Assembly)
-                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>));
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             builder
                 .RegisterAssemblyTypes(typeof(AuthorizationInsertCommandValidator).GetTypeInfo().Assembly)
@@ -77,21 +79,19 @@ namespace BoltJwt.Infrastructure.Modules
 
             #endregion
 
-            builder.Register<SingleInstanceFactory>(context =>
+            builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+
+            builder.Register<SingleInstanceFactory>(ctx =>
             {
-                var componentContext = context.Resolve<IComponentContext>();
-                return t => { object o; return componentContext.TryResolve(t, out o) ? o : null; };
+                var c = ctx.Resolve<IComponentContext>();
+                return t => c.Resolve(t);
             });
 
-            builder.Register<MultiInstanceFactory>(context =>
+            builder.Register<MultiInstanceFactory>(ctx =>
             {
-                var componentContext = context.Resolve<IComponentContext>();
-
-                return t =>
-                {
-                    var resolved = (IEnumerable<object>)componentContext.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
-                    return resolved;
-                };
+                var c = ctx.Resolve<IComponentContext>();
+                return t => (IEnumerable<object>)c.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
             });
 
             builder.RegisterGeneric(typeof(ValidatorPipeline<,>)).As(typeof(IPipelineBehavior<,>));

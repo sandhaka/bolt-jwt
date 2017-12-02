@@ -40,7 +40,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(roleInsertCommand);
 
-            return result ? Ok() : (IActionResult) BadRequest();
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
 
         [Route("update")]
@@ -52,7 +52,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(roleEditCommand);
 
-            return result ? Ok() : (IActionResult) BadRequest();
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
 
         [Route("")]
@@ -64,7 +64,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(roleDeleteCommand);
 
-            return result ? Ok() : (IActionResult) BadRequest();
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
     }
 }

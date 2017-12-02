@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 
 namespace BoltJwt.Application.Commands.Authorizations.Handlers
 {
-    public class AuthorizationDeleteCommandHandler : IAsyncRequestHandler<AuthorizationDeleteCommand, bool>
+    public class AuthorizationDeleteCommandHandler : IRequestHandler<AuthorizationDeleteCommand, bool>
     {
         private readonly IAuthorizationRepository _authorizationRepository;
 
@@ -15,11 +16,11 @@ namespace BoltJwt.Application.Commands.Authorizations.Handlers
                                        throw new ArgumentNullException(nameof(authorizationRepository));
         }
 
-        public async Task<bool> Handle(AuthorizationDeleteCommand authorizationDeleteCommand)
+        public async Task<bool> Handle(AuthorizationDeleteCommand authorizationDeleteCommand, CancellationToken cancellationToken)
         {
             await _authorizationRepository.DeleteAsync(authorizationDeleteCommand.Id);
 
-            return await _authorizationRepository.UnitOfWork.SaveEntitiesAsync();
+            return await _authorizationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace BoltJwtUnitTest.Application.Commands
             _authorizationRespository.Setup(x => x.GetByNameAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(new DefinedAuthorization("fake_auth")));
 
-            IAsyncRequestHandler<RoleInsertCommand, bool> commandHandlerSut =
+            IRequestHandler<RoleInsertCommand, bool> commandHandlerSut =
                 new RoleInsertCommandHandler(_roleRepository.Object, _authorizationRespository.Object);
 
             // Act
@@ -42,7 +42,7 @@ namespace BoltJwtUnitTest.Application.Commands
             {
                 Authorizations = new[] {"1", "2"},
                 Description = "fake_role"
-            });
+            }, CancellationToken.None);
 
             // Verify
             _roleRepository.Verify(x => x.Add(It.Is<Role>(r =>

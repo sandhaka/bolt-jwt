@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 
 namespace BoltJwt.Application.Commands.Roles.Handlers
 {
-    public class RoleDeleteCommandHandler : IAsyncRequestHandler<RoleDeleteCommand, bool>
+    public class RoleDeleteCommandHandler : IRequestHandler<RoleDeleteCommand, bool>
     {
         private readonly IRoleRepository _roleRepository;
 
@@ -14,11 +15,11 @@ namespace BoltJwt.Application.Commands.Roles.Handlers
             _roleRepository = roleRepository ?? throw new ArgumentNullException(nameof(roleRepository));
         }
 
-        public async Task<bool> Handle(RoleDeleteCommand roleDeleteCommand)
+        public async Task<bool> Handle(RoleDeleteCommand roleDeleteCommand, CancellationToken cancellationToken)
         {
             await _roleRepository.DeleteAsync(roleDeleteCommand.Id);
 
-            return await _roleRepository.UnitOfWork.SaveEntitiesAsync();
+            return await _roleRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }
