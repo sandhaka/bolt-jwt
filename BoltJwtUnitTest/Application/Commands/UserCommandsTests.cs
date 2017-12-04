@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Application.Commands.Users;
 using BoltJwt.Application.Commands.Users.Handlers;
+using BoltJwt.Application.Commands.Users.Responses;
 using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
@@ -58,9 +59,9 @@ namespace BoltJwtUnitTest.Application.Commands
         public void UpdateTest()
         {
             // Arrange
-            _userRepository.Setup(x => x.UpdateAsync(It.IsAny<UserEditDto>())).Returns(Task.CompletedTask);
+            _userRepository.Setup(x => x.UpdateAsync(It.IsAny<UserEditDto>())).Returns(Task.FromResult(new User()));
 
-            IRequestHandler<UserEditCommand, bool> commandHandlerSut =
+            IRequestHandler<UserEditCommand, UserEditResponse> commandHandlerSut =
                 new UserEditCommandHandler(_userRepository.Object);
 
             // Act

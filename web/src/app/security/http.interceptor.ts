@@ -1,7 +1,7 @@
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {Injectable, Injector} from "@angular/core";
-import {AuthenticationService} from "./authentication.service";
+import {SecurityService} from "./security.service";
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
@@ -10,7 +10,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    const auth = this.inj.get(AuthenticationService);
+    const auth = this.inj.get(SecurityService);
 
     if(auth.token) {
       req = req.clone({

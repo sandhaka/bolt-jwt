@@ -7,6 +7,7 @@ import {SharedModule} from "../../shared/shared.module";
 import {UsersRoutingModule} from "./users.routing";
 import {UsersService} from "./users.service";
 import {UsersComponent} from "./users.component";
+import {UserDetailsComponent} from "./user-details/user-details.component";
 
 @NgModule({
   imports: [
@@ -16,7 +17,10 @@ import {UsersComponent} from "./users.component";
     UsersRoutingModule,
     SharedModule
   ],
-  declarations: [UsersComponent],
+  declarations: [
+    UsersComponent,
+    UserDetailsComponent
+  ],
   entryComponents: [
     ModalComponent
   ],

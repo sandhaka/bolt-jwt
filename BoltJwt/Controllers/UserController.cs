@@ -66,7 +66,7 @@ namespace BoltJwt.Controllers
         {
             var result = await _mediator.Send(userEditCommand);
 
-            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
+            return Json(new {HttpStatusCode.OK, result});
         }
 
         [Route("")]

@@ -5,6 +5,7 @@ import {ModalModule} from "ngx-bootstrap/modal";
 import {CommonModule} from "@angular/common";
 import { DataTableComponent } from './datatable/data-table.component';
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
+import {ReactiveFormComponent} from "./base/reactiveForm.component";
 
 @NgModule({
   imports: [
@@ -14,11 +15,13 @@ import {NgxDatatableModule} from "@swimlane/ngx-datatable";
   ],
   declarations: [
     ModalComponent,
-    DataTableComponent
+    DataTableComponent,
+    ReactiveFormComponent
   ],
   exports: [
     ModalComponent,
-    DataTableComponent
+    DataTableComponent,
+    ReactiveFormComponent
   ]
 })
 export class SharedModule { }

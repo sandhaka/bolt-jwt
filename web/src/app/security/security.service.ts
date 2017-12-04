@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {TokenResponse} from './token.response';
 import {UtilityService} from "../shared/utils.service";
 
 @Injectable()
-export class AuthenticationService {
+export class SecurityService {
   public token: string;
 
   constructor(private http: HttpClient) {
@@ -50,6 +50,23 @@ export class AuthenticationService {
   }
 
   /**
+   * Return decoded token
+   * @returns {JSON}
+   */
+  getDecodedToken(): JSON {
+
+    if(this.token === null) {
+      return null;
+    }
+
+    const base64 = this.token.split('.')[1]
+      .replace('-', '+')
+      .replace('_', '/');
+
+    return JSON.parse(window.atob(base64));
+  }
+
+  /** // TODO: Adding check on 'admin' user and 'root'
    * Establish if the token is valid, if it's going to expire, renew it
    * @returns {boolean}
    */
@@ -60,7 +77,6 @@ export class AuthenticationService {
 
     if (this.token && storedToken !== null) {
 
-      // Decode it
       const tokenData = JSON.parse(storedToken);
 
       // If the token is going to expire in less of a day renew it

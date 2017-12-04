@@ -1,7 +1,35 @@
 <div class="animated fadeIn">
-  <app-data-table
-    [pageSize]="10"
-    [columnNames]="columnNames"
-    [getData]="getDataFunc">
-  </app-data-table>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <a (click)="toggleAccordion()">Filters</a>
+        </div>
+        <div *ngIf="filtersAccordionOpened" class="card-body">
+          TODO: filter form component
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-bottom: 25px;">
+    <div class="col-sm-12">
+      <app-data-table
+        [pageSize]="8"
+        [columnNames]="columnNames"
+        [getData]="getDataFunc"
+        [select]="onSelectFunc">
+      </app-data-table>
+    </div>
+  </div>
+  <div class="row" *ngIf="selectedUser">
+    <div class="col-sm-6">
+      <app-user-details
+        [user]="selectedUser"
+        (editedUserInfo)="onUserEdit($event)">
+      </app-user-details>
+    </div>
+    <div class="col-sm-6">
+      TODO auth list
+    </div>
+  </div>
 </div>

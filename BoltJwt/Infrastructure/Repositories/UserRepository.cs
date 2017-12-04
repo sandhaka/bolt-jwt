@@ -58,7 +58,7 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <param name="userEditDto">User info</param>
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">User not found</exception>
-        public async Task UpdateAsync(UserEditDto userEditDto)
+        public async Task<User> UpdateAsync(UserEditDto userEditDto)
         {
             var userToUpdate = await _context.Users.FindAsync(userEditDto.Id) ??
                                throw new EntityNotFoundException($"{nameof(User)} - Id: {userEditDto.Id}");
@@ -72,7 +72,11 @@ namespace BoltJwt.Infrastructure.Repositories
             userToUpdate.Surname = userEditDto.Surname;
             userToUpdate.UserName = userEditDto.UserName;
 
-            _context.Entry(userToUpdate).State = EntityState.Modified;
+            var entry = _context.Entry(userToUpdate);
+
+            entry.State = EntityState.Modified;
+
+            return entry.Entity;
         }
 
         /// <summary>

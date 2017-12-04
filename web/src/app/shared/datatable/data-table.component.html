@@ -1,16 +1,21 @@
-<div>
-  <ngx-datatable
-    (page)='load($event)'
-    class="material expandable app-data-table-style"
-    [rows]="rows"
-    [columns]="columnNames"
-    [loadingIndicator]="isLoading"
-    [footerHeight]="50"
-    [columnMode]="'force'"
-    [rowHeight]="50"
-    [externalPaging]="true"
-    [count]="page.totalElements"
-    [offset]="page.pageNumber"
-    [limit]="page.size">
-  </ngx-datatable>
-</div>
+<ngx-datatable
+  (page)='load($event)'
+
+  [selectionType]="'single'"
+  (select)="select($event)"
+
+  class="material expandable app-data-table-style"
+
+
+  [rows]="rows"
+  [columns]="columnNames"
+  [loadingIndicator]="isLoading"
+  [footerHeight]="50"
+  [columnMode]="'force'"
+  [rowHeight]="50"
+  [externalPaging]="true"
+
+  [count]="page.totalElements"
+  [offset]="page.pageNumber"
+  [limit]="page.size">
+</ngx-datatable>

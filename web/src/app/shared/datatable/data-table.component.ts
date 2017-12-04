@@ -5,6 +5,7 @@ import {PagedData} from "./model/paged-data";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {ModalComponent} from "../modals/modal.component";
 import {HttpErrorResponse} from "@angular/common/http";
+import {DataTableService} from "./data-table.service";
 
 /**
  *  ngx-datatable wrapper component
@@ -14,41 +15,69 @@ import {HttpErrorResponse} from "@angular/common/http";
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss']
 })
-export class DataTableComponent<T> implements OnInit {
+export class DataTableComponent implements OnInit {
 
   /**
-   *  Column names
+   * Column names, are a list of object like: {name: 'column-name'}
    */
   @Input('columnNames') columnNames: Array<any>;
 
   /**
-   *  A service function that return an observable with the paged data
+   * A service function that return an observable with the paged data
    */
-  @Input('getData') getData: (params: any) => Observable<any>;
+  @Input('getData') getData: (params: Page) => Observable<PagedData<any>>;
 
   /**
-   *  Number of record for each page
+   * Item selection handler
+   */
+  @Input('select') select: (selected: any) => void;
+
+  /**
+   * Number of record for each page
    */
   @Input('pageSize') pageSize: number;
 
-  private bsModalRef: BsModalRef;
-
+  /**
+   * Page model
+   * @type {Page}
+   */
   page = new Page();
-  rows = new Array<T>();
+
+  /**
+   * Where the data is stored
+   * @type {any[]}
+   */
+  rows = [];
+
+  /**
+   * Loading flag
+   * @type {boolean}
+   */
   isLoading = false;
 
-  constructor(private bsModalService: BsModalService) {
+  private bsModalRef: BsModalRef;
+
+  constructor(
+    private bsModalService: BsModalService,
+    private dataTableService: DataTableService) {
+
     this.page.pageNumber = 0;
+
+    // Edit the row in the table
+    this.dataTableService.rowEdited$.subscribe( row => {
+      // Reload the page
+      this.load({offset: this.page.pageNumber});
+    });
   }
 
   ngOnInit() {
-    // Init load
+    // Initial load
     this.page.size = this.pageSize;
     this.load({offset: 0});
   }
 
   /**
-   * datatable callback to retrieve data
+   * datatable callback to retrieve data from server
    * @param pageInfo
    */
   load(pageInfo) {
@@ -56,14 +85,17 @@ export class DataTableComponent<T> implements OnInit {
     this.isLoading = true;
     this.page.pageNumber = pageInfo.offset;
 
-    this.getData(this.page).subscribe((pagedData: PagedData<T>) => {
+    this.getData(this.page).subscribe((pagedData: PagedData<any>) => {
       this.page = pagedData.page;
       this.rows = pagedData.data;
-        this.isLoading = false;
+      this.isLoading = false;
     },
       (error: HttpErrorResponse) => {
         this.isLoading = false;
-        this.openModal('Error', `${error.statusText}: ${error.message}`, 'modal-danger');
+        const errorDetails = error.error && error.error.Message ?
+          error.error.Message :
+          error.message;
+        this.openModal('Error', `${error.statusText}: ${errorDetails}`, 'modal-danger');
       });
   }
 

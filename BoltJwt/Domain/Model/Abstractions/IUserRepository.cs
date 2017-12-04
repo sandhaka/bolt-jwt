@@ -28,7 +28,7 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <param name="userEditDto">User info</param>
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">User not found</exception>
-        Task UpdateAsync(UserEditDto userEditDto);
+        Task<User> UpdateAsync(UserEditDto userEditDto);
 
         /// <summary>
         /// Mark a user as deleted

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
-import {AuthenticationService} from './authentication.service';
+import {SecurityService} from './security.service';
 
 /**
  * General guard to protect routes
@@ -23,7 +23,7 @@ export class AuthGuardService implements CanActivate {
     return false;
   }
 
-  constructor(router: Router, authService: AuthenticationService) {
+  constructor(router: Router, authService: SecurityService) {
     this.router = router;
     this.authService = authService;
   }
