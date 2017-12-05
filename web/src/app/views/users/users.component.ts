@@ -81,18 +81,17 @@ export class UsersComponent implements OnInit {
   }
 
   /**
-   * Update the table when the user edit a record
-   * @param editedInfo
+   * Update the table after a edit
    */
-  onUserEdit(editedInfo: any) {
-    const editedRow = {
-      id: editedInfo.id,
-      name: editedInfo.command.name,
-      surname: editedInfo.command.surname,
-      username: editedInfo.command.userName,
-      email: this.selectedUser.Email
-    };
-    this.dataTableService.invokeRowEdit(editedRow);
+  onUserEdit() {
+    this.dataTableService.invokeRowEdit();
+  }
+
+  /**
+   * Update the table after a user deletion
+   */
+  onUserDelete() {
+    this.dataTableService.invokeRowDelete();
   }
 
   /**

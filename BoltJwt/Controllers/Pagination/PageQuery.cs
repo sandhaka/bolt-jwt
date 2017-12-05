@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using BoltJwt.Controllers.Filters;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace BoltJwt.Controllers.Pagination
 {

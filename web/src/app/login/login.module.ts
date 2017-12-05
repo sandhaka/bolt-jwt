@@ -6,7 +6,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {SharedModule} from "../shared/shared.module";
 import {ModalModule} from "ngx-bootstrap/modal";
-import {ModalComponent} from "../shared/modals/modal.component";
+import {GenericModalComponent} from "../shared/modals";
 
 @NgModule({
   imports: [
@@ -17,6 +17,6 @@ import {ModalComponent} from "../shared/modals/modal.component";
     SharedModule
   ],
   declarations: [LoginComponent],
-  entryComponents: [ModalComponent]
+  entryComponents: [GenericModalComponent]
 })
 export class LoginModule { }

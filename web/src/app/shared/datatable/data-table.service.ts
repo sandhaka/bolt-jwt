@@ -5,18 +5,18 @@ import {Subject} from "rxjs/Subject";
 export class DataTableService {
 
   private rowEdit = new Subject<any>();
-
   private applyFilters = new Subject<any>();
+  private rowDelete = new Subject<any>();
 
   rowEdited$ = this.rowEdit.asObservable();
   applyFilters$ = this.applyFilters.asObservable();
+  rowDelete$ = this.rowDelete.asObservable();
 
   /**
    * Notify to the subscribers that a row has been edited
-   * @param row: edited object
    */
-  invokeRowEdit(row) {
-    this.rowEdit.next(row);
+  invokeRowEdit() {
+    this.rowEdit.next();
   }
 
   /**
@@ -25,5 +25,12 @@ export class DataTableService {
    */
   invokeApplyFilters(filters: any[]) {
     this.applyFilters.next(filters);
+  }
+
+  /**
+   * Notify to the subscribers a item delete request
+   */
+  invokeRowDelete() {
+    this.rowDelete.next();
   }
 }

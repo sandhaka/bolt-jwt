@@ -76,7 +76,7 @@ namespace BoltJwt.Controllers
         [Authorize(Policy = "bJwtAdmins")]
         [ProducesResponseType((int) HttpStatusCode.OK)]
         [ProducesResponseType((int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> DeleteAsync([FromBody] UserDeleteCommand userDeleteCommand)
+        public async Task<IActionResult> DeleteAsync([FromQuery] UserDeleteCommand userDeleteCommand)
         {
             var result = await _mediator.Send(userDeleteCommand);
 

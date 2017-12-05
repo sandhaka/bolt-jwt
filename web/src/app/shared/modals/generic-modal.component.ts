@@ -3,9 +3,9 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-modal',
-  templateUrl: './modal.component.html'
+  templateUrl: './generic-modal.component.html'
 })
-export class ModalComponent {
+export class GenericModalComponent {
 
   modalText: string;
   modalTitle: string;

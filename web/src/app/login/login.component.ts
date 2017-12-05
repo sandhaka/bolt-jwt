@@ -4,7 +4,7 @@ import {SecurityService} from '../security/security.service';
 import {Router} from '@angular/router';
 import {HttpErrorResponse} from "@angular/common/http";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
-import {ModalComponent} from "../shared/modals/modal.component";
+import {GenericModalComponent} from "../shared/modals/generic-modal.component";
 import {ReactiveFormComponent} from "../shared/base/reactiveForm.component";
 
 @Component({
@@ -110,7 +110,7 @@ export class LoginComponent extends ReactiveFormComponent implements OnInit {
    * @param {string} cssClass
    */
   private openModal(title: string, body: string, cssClass: string) {
-    this.bsModalRef = this.bsModalService.show(ModalComponent);
+    this.bsModalRef = this.bsModalService.show(GenericModalComponent);
     this.bsModalRef.content.modalTitle = title;
     this.bsModalRef.content.modalClass = cssClass;
     this.bsModalRef.content.modalText = body;

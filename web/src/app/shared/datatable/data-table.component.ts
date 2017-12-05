@@ -3,7 +3,7 @@ import {Page} from "./model/page";
 import {Observable} from "rxjs/Observable";
 import {PagedData} from "./model/paged-data";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
-import {ModalComponent} from "../modals/modal.component";
+import {GenericModalComponent} from "../modals/generic-modal.component";
 import {HttpErrorResponse} from "@angular/common/http";
 import {DataTableService} from "./data-table.service";
 
@@ -98,7 +98,7 @@ export class DataTableComponent implements OnInit {
   }
 
   private openModal(title: string, body: string, cssClass: string) {
-    this.bsModalRef = this.bsModalService.show(ModalComponent);
+    this.bsModalRef = this.bsModalService.show(GenericModalComponent);
     this.bsModalRef.content.modalTitle = title;
     this.bsModalRef.content.modalClass = cssClass;
     this.bsModalRef.content.modalText = body;
@@ -106,9 +106,14 @@ export class DataTableComponent implements OnInit {
 
   private subscribeToTableEvents() {
 
-    // Edit the row in the table
-    this.dataTableService.rowEdited$.subscribe( row => {
+    // Row edited
+    this.dataTableService.rowEdited$.subscribe(() => {
       // Reload the page
+      this.load({offset: this.page.pageNumber});
+    });
+
+    // Row deleted
+    this.dataTableService.rowDelete$.subscribe(() => {
       this.load({offset: this.page.pageNumber});
     });
 

@@ -29,7 +29,8 @@
       <!-- User details form -->
       <app-user-details
         [user]="selectedUser"
-        (editedUserInfo)="onUserEdit($event)">
+        (editedUserInfo)="onUserEdit()"
+        (deletedUser)="onUserDelete()">
       </app-user-details>
     </div>
     <div class="col-sm-6">

@@ -10,7 +10,7 @@ export class UsersService {
   constructor(private httpClient: HttpClient) { }
 
   /**
-   * Get users
+   * Get paged users
    * @param {Page} params Pagination and filters parameters
    * @returns {Observable<PagedData<any>>}
    */
@@ -30,11 +30,20 @@ export class UsersService {
   }
 
   /**
-   * Send a user edit command
-   * @param dto command
+   * User edit
+   * @param editCommand command
    * @returns {Observable<any>}
    */
-  saveUserDetails(dto: any): Observable<any> {
-    return this.httpClient.post('/api/v1/user/update', dto);
+  edit(editCommand: any): Observable<any> {
+    return this.httpClient.post('/api/v1/user/update', editCommand);
+  }
+
+  /**
+   * Delete a user
+   * @param deleteCommand
+   * @returns {Observable<any>}
+   */
+  delete(deleteCommand: any): Observable<any> {
+    return this.httpClient.delete(`/api/v1/user?id=${deleteCommand.Id}`);
   }
 }
