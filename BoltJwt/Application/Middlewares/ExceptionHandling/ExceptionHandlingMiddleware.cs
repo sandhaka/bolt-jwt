@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using BoltJwt.Application.Queries.QueryUtils;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -69,6 +70,17 @@ namespace BoltJwt.Application.Middlewares.ExceptionHandling
                     jsonResponse.Message = propertyIndexExistsException.Message +
                                            $" - Property: {propertyIndexExistsException.PropertyIndexName}";
                     jsonResponse.StatusCode = (int) HttpStatusCode.Conflict;
+                    break;
+                }
+                case QueryFiltersFormatException queryFiltersFormatException:
+                {
+                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+
+                    jsonResponse.Message = queryFiltersFormatException.Message +
+                                           $" - Filters: {queryFiltersFormatException.Filters}" +
+                                           $", Details: {queryFiltersFormatException.InnerException?.Message}";
+
+                    jsonResponse.StatusCode = (int) HttpStatusCode.BadRequest;
                     break;
                 }
                 default:

@@ -4,8 +4,11 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using BoltJwt.Application.Queries.QueryUtils;
+using BoltJwt.Controllers.Filters;
 using BoltJwt.Controllers.Pagination;
 using Dapper;
+using Newtonsoft.Json;
 
 namespace BoltJwt.Application.Queries
 {
@@ -57,14 +60,18 @@ namespace BoltJwt.Application.Queries
             {
                 connection.Open();
 
-                var count = await connection.QueryAsync<int>("SELECT COUNT(*) FROM IdentityContext.users WHERE Root = 0");
+                string sqlFilters = SqlCommandsFactory.BuildSqlFilterCommands(query.Filters);
+
+                var count = await connection.QueryAsync<int>(
+                    "SELECT COUNT(*) FROM IdentityContext.users WHERE Root = 0" + sqlFilters);
 
                 var startRow = query.PageNumber > 0 ? (query.Size * query.PageNumber) + 1 : 1;
                 var endRow = startRow + query.Size;
 
                 var queryResult = await connection.QueryAsync<dynamic>(
                     "SELECT * FROM ( " +
-                        "SELECT ROW_NUMBER() OVER ( ORDER BY Email ) AS RowNum, * FROM IdentityContext.users WHERE Root = 0" +
+                    "SELECT ROW_NUMBER() OVER ( ORDER BY Email ) AS RowNum, * FROM IdentityContext.users WHERE Root = 0" +
+                     sqlFilters +
                     $") AS RowConstrainedResult WHERE RowNum >= ${startRow} AND RowNum < ${endRow} ORDER BY RowNum");
 
                 // Update pagination data

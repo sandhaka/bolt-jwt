@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using BoltJwt.Application.Commands.Users;
 using BoltJwt.Application.Queries;
+using BoltJwt.Controllers.Filters;
 using BoltJwt.Controllers.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BoltJwt.Controllers
 {
