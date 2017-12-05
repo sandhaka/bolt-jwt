@@ -55,6 +55,7 @@ export class DataTableComponent implements OnInit {
    */
   isLoading = false;
 
+  private filters: any[];
   private bsModalRef: BsModalRef;
 
   constructor(
@@ -62,18 +63,13 @@ export class DataTableComponent implements OnInit {
     private dataTableService: DataTableService) {
 
     this.page.pageNumber = 0;
-
-    // Edit the row in the table
-    this.dataTableService.rowEdited$.subscribe( row => {
-      // Reload the page
-      this.load({offset: this.page.pageNumber});
-    });
+    this.subscribeToTableEvents();
   }
 
   ngOnInit() {
     // Initial load
     this.page.size = this.pageSize;
-    this.load({offset: 0});
+    this.load({ offset: 0 });
   }
 
   /**
@@ -84,11 +80,13 @@ export class DataTableComponent implements OnInit {
 
     this.isLoading = true;
     this.page.pageNumber = pageInfo.offset;
+    this.page.filters = this.filters;
 
-    this.getData(this.page).subscribe((pagedData: PagedData<any>) => {
-      this.page = pagedData.page;
-      this.rows = pagedData.data;
-      this.isLoading = false;
+    this.getData(this.page).subscribe(
+      (pagedData: PagedData<any>) => {
+        this.page = pagedData.page;
+        this.rows = pagedData.data;
+        this.isLoading = false;
     },
       (error: HttpErrorResponse) => {
         this.isLoading = false;
@@ -99,16 +97,25 @@ export class DataTableComponent implements OnInit {
       });
   }
 
-  /**
-   * Open a modal dialog
-   * @param {string} title
-   * @param {string} body
-   * @param {string} cssClass
-   */
   private openModal(title: string, body: string, cssClass: string) {
     this.bsModalRef = this.bsModalService.show(ModalComponent);
     this.bsModalRef.content.modalTitle = title;
     this.bsModalRef.content.modalClass = cssClass;
     this.bsModalRef.content.modalText = body;
+  }
+
+  private subscribeToTableEvents() {
+
+    // Edit the row in the table
+    this.dataTableService.rowEdited$.subscribe( row => {
+      // Reload the page
+      this.load({offset: this.page.pageNumber});
+    });
+
+    // Apply filters
+    this.dataTableService.applyFilters$.subscribe(filters => {
+      this.filters = filters;
+      this.load({ offset: 0 });
+    });
   }
 }

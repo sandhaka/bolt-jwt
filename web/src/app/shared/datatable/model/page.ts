@@ -11,5 +11,5 @@ export class Page {
   // The current page number
   pageNumber: number = 0;
   // Server side filter
-  filters: any[] = [];
+  filters: any;
 }

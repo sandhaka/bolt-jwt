@@ -1,0 +1,31 @@
+<form [formGroup]="form" (ngSubmit)="applyFilters()" novalidate>
+  <div class="card-body">
+    <div class="row">
+      <div *ngFor="let filter of filters" class="{{ filter.cssClass }}">
+          <div class="form-group" [ngSwitch]="filter.type">
+            <app-data-table-filters-string
+              *ngSwitchCase="'string'"
+              [filter]="filter"
+              [form]="form">
+            </app-data-table-filters-string>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+
+    <button [disabled]="!form.dirty"
+            type="submit"
+            [ngClass]="{'btn-default': !form.dirty, 'btn-primary' : form.dirty}"
+            class="btn btn-sm">
+      <i class="fa fa-dot-circle-o"></i> Apply
+    </button>
+    <button [disabled]="!form.dirty"
+            type="reset"
+            (click)="reset()"
+            class="btn btn-sm btn-primary">
+      <i class="fa fa-dot-circle-o"></i> Reset
+    </button>
+
+  </div>
+</form>

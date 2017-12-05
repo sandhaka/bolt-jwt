@@ -9,6 +9,7 @@ import {Page} from "../../shared/datatable/model/page";
 @Component({
   templateUrl: 'users.component.html',
   styleUrls: ['users.component.scss'],
+  // Provide the data table service for this component and his children
   providers: [DataTableService]
 })
 export class UsersComponent implements OnInit {
@@ -18,6 +19,17 @@ export class UsersComponent implements OnInit {
     {name: 'Surname'},
     {name: 'Username'},
     {name: 'Email'}
+  ];
+
+  /**
+   * Filters object for data table component
+   * @type {any[]}
+   */
+  filters = [
+    {label:'Name', type: 'string', name: 'name', cssClass: 'col-sm-3'},
+    {label:'Surname', type: 'string', name: 'surname', cssClass: 'col-sm-3'},
+    {label:'Username', type: 'string', name: 'username', cssClass: 'col-sm-3'},
+    {label:'Email', type: 'string', name: 'email', cssClass: 'col-sm-3'}
   ];
 
   filtersAccordionOpened = false;
@@ -35,8 +47,7 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private usersService: UsersService,
-    private dataTableService: DataTableService) {
-  }
+    private dataTableService: DataTableService) {  }
 
   ngOnInit(): void {
     // Bind
@@ -55,7 +66,8 @@ export class UsersComponent implements OnInit {
   }
 
   /**
-   * Copy the selected user into dto
+   * User selection handler
+   * Copy the selected user into a local dto
    * @param {any} selected
    */
   onSelect({selected}) {
@@ -80,7 +92,7 @@ export class UsersComponent implements OnInit {
       username: editedInfo.command.userName,
       email: this.selectedUser.Email
     };
-    this.dataTableService.editRow(editedRow);
+    this.dataTableService.invokeRowEdit(editedRow);
   }
 
   /**

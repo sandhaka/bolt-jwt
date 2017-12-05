@@ -5,8 +5,11 @@
         <div class="card-header">
           <a (click)="toggleAccordion()">Filters</a>
         </div>
-        <div *ngIf="filtersAccordionOpened" class="card-body">
-          TODO: filter form component
+        <div *ngIf="filtersAccordionOpened">
+          <!-- Users table server-side filters -->
+          <app-data-table-filters
+            [filters]="filters">
+          </app-data-table-filters>
         </div>
       </div>
     </div>
@@ -23,6 +26,7 @@
   </div>
   <div class="row" *ngIf="selectedUser">
     <div class="col-sm-6">
+      <!-- User details form -->
       <app-user-details
         [user]="selectedUser"
         (editedUserInfo)="onUserEdit($event)">
