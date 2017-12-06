@@ -1,11 +1,11 @@
 packages/
 .idea/
-BoltJwt/bin/*
-BoltJwt/obj/*
-BoltJwt/wwwroot/*
 
-# Include binaries for docker build automation
+BoltJwt/bin
+BoltJwt/obj
 !BoltJwt/obj/docker/release.tar
+
+BoltJwt/wwwroot/*
 
 # Certificates:
 *.key
@@ -24,8 +24,8 @@ docker-compose.dev.local.yml
 db-testing/
 
 # Unit test project
-BoltJwtUnitTest/bin/*
-BoltJwtUnitTest/obj/*
+BoltJwtUnitTest/bin
+BoltJwtUnitTest/obj
 
 # Gimp project
 *.xcf
