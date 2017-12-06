@@ -42,9 +42,9 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// Assign an authorization directly
         /// </summary>
         /// <param name="userId">User id</param>
-        /// <param name="authName">Authorization name</param>
+        /// <param name="authId">Authorization id</param>
         /// <returns>Task</returns>
-        Task AssignAuthorizationAsync(int userId, string authName);
+        Task AssignAuthorizationAsync(int userId, int authId);
 
         /// <summary>
         /// Assign a role

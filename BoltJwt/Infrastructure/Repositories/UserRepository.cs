@@ -102,11 +102,11 @@ namespace BoltJwt.Infrastructure.Repositories
         /// Assign an authorization directly
         /// </summary>
         /// <param name="userId">User id</param>
-        /// <param name="authName">Authorization name</param>
+        /// <param name="authId">Authorization Id</param>
         /// <returns>Task</returns>
-        public async Task AssignAuthorizationAsync(int userId, string authName)
+        public async Task AssignAuthorizationAsync(int userId, int authId)
         {
-            var authorization = await _context.Authorizations.FirstAsync(i => i.Name == authName) ??
+            var authorization = await _context.Authorizations.FirstAsync(i => i.Id == authId) ??
                                 throw new EntityNotFoundException(nameof(DefinedAuthorization));
 
             var user = await _context.Users.FindAsync(userId) ?? throw new EntityNotFoundException(nameof(User));

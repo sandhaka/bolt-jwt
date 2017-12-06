@@ -36,7 +36,9 @@ namespace BoltJwt.Application.Queries
             {
                 connection.Open();
 
-                var result = await connection.QueryAsync<dynamic>(@"SELECT * FROM IdentityContext.users WHERE Id = @id and Root = 0", new {id});
+                var result =
+                    await connection.QueryAsync<dynamic>(
+                        @"SELECT * FROM IdentityContext.users WHERE Id = @id and Root = 0", new {id});
 
                 var resultAsArray = result.ToArray();
 
@@ -44,6 +46,27 @@ namespace BoltJwt.Application.Queries
                     throw new KeyNotFoundException();
 
                 return MapUserObject(resultAsArray.First());
+            }
+        }
+
+        /// <summary>
+        /// Retrieve the user authorizations list
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>Authorizations list</returns>
+        public async Task<dynamic> GetAuthAsync(int id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                var result = await connection.QueryAsync<dynamic>(
+                    "SELECT def_authorizations.Id AS id, Name AS name FROM IdentityContext.def_authorizations " +
+                    "LEFT JOIN IdentityContext.user_authorizations ON " +
+                        "def_authorizations.Id = user_authorizations.DefAuthorizationId " +
+                    $"WHERE user_authorizations.UserId = {id}");
+
+                return MapUserAuthorizations(result);
             }
         }
 
@@ -93,6 +116,23 @@ namespace BoltJwt.Application.Queries
             dto.name = user.Name;
             dto.surname = user.Surname;
             dto.username = user.UserName;
+
+            return dto;
+        }
+
+        private IEnumerable<dynamic> MapUserAuthorizations(IEnumerable<dynamic> authorizations)
+        {
+            var dto = new List<dynamic>();
+
+            foreach (var auth in authorizations)
+            {
+                dynamic item = new ExpandoObject();
+
+                item.authId = auth.id;
+                item.name = auth.name;
+
+                dto.Add(item);
+            }
 
             return dto;
         }

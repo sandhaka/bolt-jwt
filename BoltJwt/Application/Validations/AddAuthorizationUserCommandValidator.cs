@@ -7,7 +7,7 @@ namespace BoltJwt.Application.Validations
     {
         public AddAuthorizationUserCommandValidator()
         {
-            RuleFor(command => command.AuthorizationName).NotEmpty();
+            RuleFor(command => command.AuthorizationId).NotNull();
             RuleFor(command => command.UserId).NotNull();
         }
     }

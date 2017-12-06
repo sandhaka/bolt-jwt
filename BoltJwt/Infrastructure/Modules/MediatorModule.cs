@@ -2,7 +2,6 @@
 using BoltJwt.Application.Commands.Users;
 using System.Reflection;
 using Autofac;
-using BoltJwt.Application.Commands;
 using BoltJwt.Application.Commands.Authorizations;
 using BoltJwt.Application.Commands.Roles;
 using BoltJwt.Application.Validations;

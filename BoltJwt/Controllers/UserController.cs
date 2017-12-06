@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using BoltJwt.Application.Commands.Users;
 using BoltJwt.Application.Queries;
-using BoltJwt.Controllers.Filters;
 using BoltJwt.Controllers.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace BoltJwt.Controllers
 {
@@ -46,6 +44,18 @@ namespace BoltJwt.Controllers
 
             return Ok(result);
         }
+
+        [Route("authorizations")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetAuthAsync([FromUri] int id)
+        {
+            var result = await _userQueries.GetAuthAsync(id);
+
+            return Ok(result);
+        }
+
+        #region [ Commands ]
 
         [Route("")]
         [HttpPost]
@@ -106,5 +116,7 @@ namespace BoltJwt.Controllers
 
             return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
+
+        #endregion
     }
 }
