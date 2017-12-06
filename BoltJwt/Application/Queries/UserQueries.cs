@@ -5,10 +5,8 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using BoltJwt.Application.Queries.QueryUtils;
-using BoltJwt.Controllers.Filters;
 using BoltJwt.Controllers.Pagination;
 using Dapper;
-using Newtonsoft.Json;
 
 namespace BoltJwt.Application.Queries
 {

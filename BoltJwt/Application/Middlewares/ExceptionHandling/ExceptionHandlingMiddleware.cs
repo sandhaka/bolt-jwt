@@ -87,13 +87,25 @@ namespace BoltJwt.Application.Middlewares.ExceptionHandling
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
-                    jsonResponse.Message = exception.Message;
+                    jsonResponse.Message = ParseExceptionMessages(exception);
                     jsonResponse.StatusCode = (int) HttpStatusCode.InternalServerError;
                     break;
                 }
             }
 
             await context.Response.WriteAsync(JsonConvert.SerializeObject(jsonResponse), Encoding.UTF8);
+        }
+
+        private static string ParseExceptionMessages(Exception e)
+        {
+            var ret = e.Message + Environment.NewLine;
+
+            if(e.InnerException != null)
+            {
+                ret += ParseExceptionMessages(e.InnerException);
+            }
+
+            return ret;
         }
     }
 }

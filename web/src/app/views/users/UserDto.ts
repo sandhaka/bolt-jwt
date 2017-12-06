@@ -4,4 +4,5 @@ export class UserDto {
   Surname: string;
   Email: string;
   Username: string;
+  AuthorizationsList: string[];
 }

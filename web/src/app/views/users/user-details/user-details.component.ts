@@ -90,7 +90,10 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
     this.onDataChanged();
   }
 
-  onNgSubmit() {
+  /**
+   * Save user details
+   */
+  saveUserDetails() {
 
     const formValue = this.form.value;
 
