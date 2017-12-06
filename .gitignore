@@ -5,7 +5,7 @@ BoltJwt/obj/*
 BoltJwt/wwwroot/*
 
 # Include binaries for docker build automation
-!BoltJwt/obj/docker/
+!BoltJwt/obj/docker/release.tar
 
 # Certificates:
 *.key

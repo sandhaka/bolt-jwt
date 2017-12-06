@@ -1,4 +1,4 @@
 *
-!obj/docker/
+!obj/docker/release.tar
 !certs/
 certs/README.md

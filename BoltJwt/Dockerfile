@@ -1,7 +1,8 @@
-FROM microsoft/aspnetcore:2.0.0
+FROM microsoft/aspnetcore:2.0.3
 WORKDIR /app
 EXPOSE 80
 
-COPY obj/docker /app
+COPY obj/docker/release.tar /app
+RUN tar -xf release.tar
 
 ENTRYPOINT /bin/bash -c "dotnet BoltJwt.dll"
