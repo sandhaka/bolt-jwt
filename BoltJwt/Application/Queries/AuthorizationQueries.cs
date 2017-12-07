@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
-using BoltJwt.Domain.Model;
 using Dapper;
 
 namespace BoltJwt.Application.Queries
@@ -30,8 +29,7 @@ namespace BoltJwt.Application.Queries
                 connection.Open();
 
                 var result = await connection.QueryAsync<dynamic>(
-                    $@"SELECT Id as id, Name as auth FROM IdentityContext.def_authorizations
-                        WHERE Name <> '{Constants.AdministrativeAuth}'");
+                    $@"SELECT Id as id, Name as name FROM IdentityContext.def_authorizations");
 
                 return result.AsList().Select(r => MapAuthResult(r)).ToList();
             }
@@ -42,7 +40,7 @@ namespace BoltJwt.Application.Queries
             dynamic dto = new ExpandoObject();
 
             dto.id = result.id;
-            dto.authorization = result.auth;
+            dto.name = result.name;
 
             return dto;
         }

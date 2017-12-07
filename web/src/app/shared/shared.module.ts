@@ -1,22 +1,26 @@
 
 import {NgModule} from "@angular/core";
-import {GenericModalComponent} from "./modals/generic-modal.component";
 import {ModalModule} from "ngx-bootstrap/modal";
 import {CommonModule} from "@angular/common";
 import { DataTableComponent } from './datatable/data-table.component';
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ReactiveFormComponent} from "./base/reactiveForm.component";
 import {DataTableFiltersComponent} from "./datatable/filters/data-table-filters.component";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {DataTableFiltersStringComponent} from "./datatable/filters/fields";
-import {ConfirmModalComponent} from "./modals/confirm-modal.component";
+import {GenericModalComponent, ConfirmModalComponent} from "./modals";
+import {AuthorizationsManagerComponent} from "./components/authorizations-manager/authorizations-manager.component";
+import {UtilityService} from "./utils.service";
+import {LoadingModule} from "ngx-loading";
 
 @NgModule({
   imports: [
     ModalModule,
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    LoadingModule
   ],
   declarations: [
     GenericModalComponent,
@@ -24,14 +28,19 @@ import {ConfirmModalComponent} from "./modals/confirm-modal.component";
     DataTableComponent,
     DataTableFiltersComponent,
     DataTableFiltersStringComponent,
-    ReactiveFormComponent
+    ReactiveFormComponent,
+    AuthorizationsManagerComponent
   ],
   exports: [
     GenericModalComponent,
     ConfirmModalComponent,
     DataTableComponent,
     DataTableFiltersComponent,
-    ReactiveFormComponent
+    ReactiveFormComponent,
+    AuthorizationsManagerComponent
+  ],
+  providers: [
+    UtilityService
   ]
 })
 export class SharedModule { }

@@ -102,13 +102,10 @@ namespace BoltJwt.Infrastructure.Repositories
         /// Assign an authorization directly
         /// </summary>
         /// <param name="userId">User id</param>
-        /// <param name="authId">Authorization Id</param>
+        /// <param name="authorizationsId">Authorizations Id</param>
         /// <returns>Task</returns>
-        public async Task AssignAuthorizationAsync(int userId, int authId)
+        public async Task AssignAuthorizationAsync(int userId, IEnumerable<int> authorizationsId)
         {
-            var authorization = await _context.Authorizations.FirstAsync(i => i.Id == authId) ??
-                                throw new EntityNotFoundException(nameof(DefinedAuthorization));
-
             var user = await _context.Users.FindAsync(userId) ?? throw new EntityNotFoundException(nameof(User));
 
             if (user.Root)
@@ -116,12 +113,45 @@ namespace BoltJwt.Infrastructure.Repositories
                 throw new NotEditableEntityException("Root user");
             }
 
-            user.Authorizations.Add(
-                new UserAuthorization
+            foreach (var id in authorizationsId)
+            {
+                user.Authorizations.Add(
+                    new UserAuthorization
+                    {
+                        DefAuthorizationId = id,
+                        UserId = user.Id
+                    });
+            }
+        }
+
+        /// <summary>
+        /// Remove authorizations
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <param name="authorizationsId">User authorization id</param>
+        /// <returns></returns>
+        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
+        public async Task RemoveAuthorizationAsync(int userId, IEnumerable<int> authorizationsId)
+        {
+            var user = await _context.Users
+                           .Include(i => i.Authorizations)
+                           .FirstAsync(i => i.Id == userId) ??
+                       throw new EntityNotFoundException(nameof(User));
+
+            if (user.Root)
+            {
+                throw new NotEditableEntityException("Root user");
+            }
+
+            foreach (var id in authorizationsId)
+            {
+                var authorizationtoRemove = user.Authorizations.FirstOrDefault(i => i.Id == id);
+
+                if (authorizationtoRemove != null)
                 {
-                    DefAuthorizationId = authorization.Id,
-                    UserId = user.Id
-                });
+                    _context.Entry(authorizationtoRemove).State = EntityState.Deleted;
+                }
+            }
         }
 
         /// <summary>

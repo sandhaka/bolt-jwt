@@ -24,6 +24,8 @@ namespace BoltJwt.Controllers
             _userQueries = userQueries ?? throw new ArgumentNullException(nameof(userQueries));
         }
 
+        #region [ Queries ]
+
         [Route("")]
         [HttpGet]
         [Authorize(Policy = "bJwtAdmins")]
@@ -54,6 +56,8 @@ namespace BoltJwt.Controllers
 
             return Ok(result);
         }
+
+        #endregion
 
         #region [ Commands ]
 
@@ -101,6 +105,18 @@ namespace BoltJwt.Controllers
         public async Task<IActionResult> AddAuthAsync([FromBody] AddAuthorizationUserCommand addAuthorizationUserCommand)
         {
             var result = await _mediator.Send(addAuthorizationUserCommand);
+
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
+        }
+
+        [Route("rm.auth")]
+        [HttpDelete]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> RemoveAuthAsync([FromQuery] RemoveAuthorizationUserCommand removeAuthorizationUserCommand)
+        {
+            var result = await _mediator.Send(removeAuthorizationUserCommand);
 
             return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }

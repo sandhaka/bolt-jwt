@@ -61,7 +61,8 @@ namespace BoltJwt.Application.Queries
                 connection.Open();
 
                 var result = await connection.QueryAsync<dynamic>(
-                    "SELECT def_authorizations.Id AS id, Name AS name FROM IdentityContext.def_authorizations " +
+                    "SELECT def_authorizations.Id as authId, user_authorizations.Id AS id, Name AS name " +
+                    "FROM IdentityContext.def_authorizations " +
                     "LEFT JOIN IdentityContext.user_authorizations ON " +
                         "def_authorizations.Id = user_authorizations.DefAuthorizationId " +
                     $"WHERE user_authorizations.UserId = {id}");
@@ -128,7 +129,8 @@ namespace BoltJwt.Application.Queries
             {
                 dynamic item = new ExpandoObject();
 
-                item.authId = auth.id;
+                item.entityAuthId = auth.id;
+                item.authId = auth.authId;
                 item.name = auth.name;
 
                 dto.Add(item);

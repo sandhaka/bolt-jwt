@@ -5,6 +5,7 @@ import {UsersService} from "./users.service";
 import {UserDto} from "./UserDto";
 import {DataTableService} from "../../shared/datatable/data-table.service";
 import {Page} from "../../shared/datatable/model/page";
+import {AppEntity} from "../../shared/common";
 
 @Component({
   templateUrl: 'users.component.html',
@@ -44,6 +45,11 @@ export class UsersComponent implements OnInit {
    * Keep a copy of the item to working on
    */
   selectedUser: UserDto;
+
+  /**
+   * Type entity
+   */
+  userEntity: AppEntity = AppEntity.User;
 
   constructor(
     private usersService: UsersService,

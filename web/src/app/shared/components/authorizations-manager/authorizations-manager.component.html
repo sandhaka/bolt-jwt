@@ -1,0 +1,53 @@
+<div class="card">
+  <ngx-loading [show]="isOnProcessing" [config]="loadingConfig"></ngx-loading>
+  <div class="card-header">
+    <strong>User</strong>
+    <small>Authorizations</small>
+    <button *ngIf="addingDialog"
+            type="button"
+            class="btn btn-sm btn-primary float-right"
+            (click)="addingDialog = false">
+      <i class="fa fa-dot-circle-o"></i>Cancel
+    </button>
+    <button *ngIf="!addingDialog"
+            type="button"
+            [disabled]="addingDialog ||
+                          (entityData.AuthorizationsList === null &&
+                          entityData.AuthorizationsList.length === 0)"
+            style="margin-right: 3px;"
+            class="btn btn-sm btn-danger float-right"
+            (click)="removeAuthorizations()">Remove
+    </button>
+    <button type="button"
+            [disabled]="addingDialog && availableAuthorizations.length === 0"
+            class="btn btn-sm btn-primary float-right"
+            style="margin-right: 3px;"
+            (click)="adding()">
+      <i class="fa fa-crosshairs"></i>{{addingDialog ? 'Save' : 'Add'}}
+    </button>
+  </div>
+  <div class="card-body">
+    <!-- Assigned authorizations list -->
+    <div *ngIf="!addingDialog">
+      <div *ngFor="let auth of entityData.AuthorizationsList" class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label>{{auth.name}}</label>
+            <input type="checkbox" [(ngModel)]="auth.checked" class="float-right">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Available authorizations list -->
+    <div *ngIf="addingDialog">
+      <div *ngFor="let auth of availableAuthorizations" class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label>{{auth.name}}</label>
+            <input type="checkbox" [(ngModel)]="auth.checked" class="float-right">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

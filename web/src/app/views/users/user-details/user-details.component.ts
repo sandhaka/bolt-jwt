@@ -4,8 +4,8 @@ import {ReactiveFormComponent} from "../../../shared/base/reactiveForm.component
 import {UserDto} from "../UserDto";
 import {UsersService} from "../users.service";
 import {HttpErrorResponse} from "@angular/common/http";
-import {GenericModalComponent, ConfirmModalComponent} from '../../../shared/modals';
-import {BsModalRef, BsModalService} from "ngx-bootstrap";
+import {BsModalService} from "ngx-bootstrap";
+import {UtilityService} from "../../../shared/utils.service";
 
 @Component({
   selector: 'app-user-details',
@@ -31,9 +31,6 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
    */
   @Output('deletedUser') deletedUser: EventEmitter<number> = new EventEmitter();
 
-  private bsModalRef: BsModalRef;
-  private bsConfirmModalRef: BsModalRef;
-
   /**
    * Form model
    */
@@ -42,7 +39,8 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
   constructor(
     private formBuilder: FormBuilder,
     private userService: UsersService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private utils: UtilityService
   ) {
 
     super();
@@ -108,7 +106,7 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
       response => {
         this.editedUserInfo.emit(response.result);
     },
-      (errorResponse: HttpErrorResponse) => this.handleHttpError(errorResponse));
+      (errorResponse: HttpErrorResponse) => this.utils.handleHttpError(errorResponse));
   }
 
   /**
@@ -126,13 +124,13 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
         () => {
           this.deletedUser.emit();
         },
-        (errorResponse: HttpErrorResponse) => this.handleHttpError(errorResponse)
+        (errorResponse: HttpErrorResponse) => this.utils.handleHttpError(errorResponse)
       );
     }
     .bind(this);
 
     // Call the delete service after confirmation
-    this.openConfirmModal(
+    this.utils.openConfirmModal(
       "Delete confirmation",
       `Are you sure to delete the user with id: ${this.user.Id}?`, "modal-warning",
       deleteUserCallback
@@ -147,32 +145,6 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
    */
   ngOnChanges(changes: SimpleChanges): void {
     this.resetForm();
-  }
-
-  private openModal(title: string, body: string, cssClass: string) {
-    this.bsModalRef = this.modalService.show(GenericModalComponent);
-    this.bsModalRef.content.modalTitle = title;
-    this.bsModalRef.content.modalClass = cssClass;
-    this.bsModalRef.content.modalText = body;
-  }
-
-  private handleHttpError(errorResponse: HttpErrorResponse) {
-    const errorDetails = errorResponse.error && errorResponse.error.Message ?
-      errorResponse.error.Message :
-      errorResponse.message;
-    this.openModal('Error', `${errorResponse.statusText}: ${errorDetails}`, 'modal-danger');
-  }
-
-  private openConfirmModal(title: string, body: string, cssClass: string, callback: () => void) {
-    this.bsConfirmModalRef = this.modalService.show(ConfirmModalComponent);
-    this.bsConfirmModalRef.content.modalTitle = title;
-    this.bsConfirmModalRef.content.modalClass = cssClass;
-    this.bsConfirmModalRef.content.modalText = body;
-    this.bsConfirmModalRef.content.onClose.subscribe(result => {
-      if(result === true) {
-        callback();
-      }
-    });
   }
 
   private resetForm() {

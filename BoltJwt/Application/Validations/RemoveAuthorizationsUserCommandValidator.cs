@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace BoltJwt.Application.Validations
 {
-    public class AddAuthorizationUserCommandValidator : AbstractValidator<AddAuthorizationUserCommand>
+    public class RemoveAuthorizationsUserCommandValidator : AbstractValidator<RemoveAuthorizationUserCommand>
     {
-        public AddAuthorizationUserCommandValidator()
+        public RemoveAuthorizationsUserCommandValidator()
         {
             RuleFor(command => command.Authorizations).NotNull();
             RuleFor(command => command.UserId).NotNull();

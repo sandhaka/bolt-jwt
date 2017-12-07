@@ -33,5 +33,14 @@
         (deletedUser)="onUserDelete()">
       </app-user-details>
     </div>
+    <div class="col-sm-6">
+      <div class="animated fadeIn">
+        <!-- User authorizations -->
+        <app-authorizations-manager
+          [entity]="userEntity"
+          [entityData]="selectedUser">
+        </app-authorizations-manager>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
 
@@ -42,9 +43,18 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// Assign an authorization directly
         /// </summary>
         /// <param name="userId">User id</param>
-        /// <param name="authId">Authorization id</param>
+        /// <param name="authorizationsId">Authorizations id</param>
         /// <returns>Task</returns>
-        Task AssignAuthorizationAsync(int userId, int authId);
+        Task AssignAuthorizationAsync(int userId, IEnumerable<int> authorizationsId);
+
+        /// <summary>
+        /// Remove authorizations
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <param name="authorizationsId">User authorization id</param>
+        /// <returns></returns>
+        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
+        Task RemoveAuthorizationAsync(int userId, IEnumerable<int> authorizationsId);
 
         /// <summary>
         /// Assign a role
