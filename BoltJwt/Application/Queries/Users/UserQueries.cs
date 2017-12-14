@@ -8,7 +8,7 @@ using BoltJwt.Application.Queries.QueryUtils;
 using BoltJwt.Controllers.Pagination;
 using Dapper;
 
-namespace BoltJwt.Application.Queries
+namespace BoltJwt.Application.Queries.Users
 {
     /// <summary>
     /// Queries for the 'User' entity
@@ -65,7 +65,7 @@ namespace BoltJwt.Application.Queries
                     "FROM IdentityContext.def_authorizations " +
                     "LEFT JOIN IdentityContext.user_authorizations ON " +
                         "def_authorizations.Id = user_authorizations.DefAuthorizationId " +
-                    $"WHERE user_authorizations.UserId = {id}");
+                    @"WHERE user_authorizations.UserId = @id", new { id });
 
                 return MapUserAuthorizations(result);
             }
@@ -75,26 +75,58 @@ namespace BoltJwt.Application.Queries
         /// Retrieve users list with pagination
         /// </summary>
         /// <param name="query">Query page parameters</param>
-        /// <returns></returns>
+        /// <returns>Paged users data</returns>
         public async Task<PagedData<dynamic>> GetAsync(PageQuery query)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                string sqlFilters = SqlCommandsFactory.BuildSqlFilterCommands(query.Filters);
+                // Getting filters values
+                var sqlFilters = FiltersFactory.ConvertColumnFilters(query.Filters);
 
+                // Configuring filters with wildcards to match substrings also
+                var nameValue = $"%{sqlFilters.FirstOrDefault(i => i.Name == "name")?.Value}%";
+                var surnameValue = $"%{sqlFilters.FirstOrDefault(i => i.Name == "surname")?.Value}%";
+                var usernameValue = $"%{sqlFilters.FirstOrDefault(i => i.Name == "username")?.Value}%";
+                var emailValue = $"%{sqlFilters.FirstOrDefault(i => i.Name == "email")?.Value}%";
+
+                // Get the total rows count
                 var count = await connection.QueryAsync<int>(
-                    "SELECT COUNT(*) FROM IdentityContext.users WHERE Root = 0" + sqlFilters);
+                    "SELECT COUNT(*) FROM IdentityContext.users WHERE Root = 0 " +
+                    ((!string.IsNullOrEmpty(nameValue)) ? "AND name LIKE @nameValue " : "") +
+                    ((!string.IsNullOrEmpty(surnameValue)) ? "AND surname LIKE @surnameValue " : "") +
+                    ((!string.IsNullOrEmpty(usernameValue)) ? "AND username LIKE @usernameValue " : "") +
+                    ((!string.IsNullOrEmpty(emailValue)) ? "AND email LIKE @emailValue " : ""),
+                    new
+                    {
+                        nameValue,
+                        surnameValue,
+                        usernameValue,
+                        emailValue,
+                    });
 
                 var startRow = query.PageNumber > 0 ? (query.Size * query.PageNumber) + 1 : 1;
                 var endRow = startRow + query.Size;
 
+                // Get the paged users data
                 var queryResult = await connection.QueryAsync<dynamic>(
                     "SELECT * FROM ( " +
-                    "SELECT ROW_NUMBER() OVER ( ORDER BY Email ) AS RowNum, * FROM IdentityContext.users WHERE Root = 0" +
-                     sqlFilters +
-                    $") AS RowConstrainedResult WHERE RowNum >= ${startRow} AND RowNum < ${endRow} ORDER BY RowNum");
+                    "SELECT ROW_NUMBER() OVER ( ORDER BY Email ) AS RowNum, * FROM IdentityContext.users WHERE Root = 0 " +
+                    ((!string.IsNullOrEmpty(nameValue)) ? "AND name LIKE @nameValue " : "") +
+                    ((!string.IsNullOrEmpty(surnameValue)) ? "AND surname LIKE @surnameValue " : "") +
+                    ((!string.IsNullOrEmpty(usernameValue)) ? "AND username LIKE @usernameValue " : "") +
+                    ((!string.IsNullOrEmpty(emailValue)) ? "AND email LIKE @emailValue " : "") +
+                    ") AS RowConstrainedResult WHERE RowNum >= @startRow AND RowNum < @endRow ORDER BY RowNum",
+                    new
+                    {
+                        nameValue,
+                        surnameValue,
+                        usernameValue,
+                        emailValue,
+                        startRow,
+                        endRow
+                    });
 
                 // Update pagination data
                 query.TotalElements = count.First();

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace BoltJwt.Application.Queries
+namespace BoltJwt.Application.Queries.Roles
 {
     public interface IRoleQueries
     {

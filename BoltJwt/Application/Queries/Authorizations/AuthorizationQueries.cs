@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 
-namespace BoltJwt.Application.Queries
+namespace BoltJwt.Application.Queries.Authorizations
 {
     /// <summary>
     /// Queries for the 'DefAuthorization' entity

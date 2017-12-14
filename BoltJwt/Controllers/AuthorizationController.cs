@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using BoltJwt.Application.Commands.Authorizations;
 using BoltJwt.Application.Queries;
+using BoltJwt.Application.Queries.Authorizations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -5,7 +5,7 @@ using System.Dynamic;
 using System.Threading.Tasks;
 using Dapper;
 
-namespace BoltJwt.Application.Queries
+namespace BoltJwt.Application.Queries.Roles
 {
     /// <summary>
     /// Queries for the 'Role' entity

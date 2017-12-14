@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using BoltJwt.Application.Commands.Users;
 using BoltJwt.Application.Queries;
+using BoltJwt.Application.Queries.Users;
 using BoltJwt.Controllers.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

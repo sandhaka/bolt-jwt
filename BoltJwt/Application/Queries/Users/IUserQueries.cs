@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using BoltJwt.Controllers.Pagination;
 
-namespace BoltJwt.Application.Queries
+namespace BoltJwt.Application.Queries.Users
 {
     public interface IUserQueries
     {

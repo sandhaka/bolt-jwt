@@ -1,5 +1,8 @@
 ﻿using Autofac;
 using BoltJwt.Application.Queries;
+using BoltJwt.Application.Queries.Authorizations;
+using BoltJwt.Application.Queries.Roles;
+using BoltJwt.Application.Queries.Users;
 using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.Repositories;
 using BoltJwt.Infrastructure.Security;
