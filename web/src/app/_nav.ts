@@ -8,5 +8,10 @@ export const navigation = [
     name: 'Users',
     url: '/users',
     icon: 'icon-user'
+  },
+  {
+    name: 'Authorizations',
+    url: '/authorizations',
+    icon: ''
   }
 ];

@@ -74,6 +74,8 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import {environment} from "../environments/environment";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MockHttpInterceptor} from "./mockServices/mock-http.interceptor";
+
+// Imports for authentication management
 import {AppHttpInterceptor} from "./security/http.interceptor";
 
 let mockBackendProviders = [];

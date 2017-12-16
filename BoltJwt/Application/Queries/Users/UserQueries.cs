@@ -86,10 +86,17 @@ namespace BoltJwt.Application.Queries.Users
                 var sqlFilters = FiltersFactory.ConvertColumnFilters(query.Filters);
 
                 // Configuring filters with wildcards to match substrings also
-                var nameValue = $"%{sqlFilters.FirstOrDefault(i => i.Name == "name")?.Value}%";
-                var surnameValue = $"%{sqlFilters.FirstOrDefault(i => i.Name == "surname")?.Value}%";
-                var usernameValue = $"%{sqlFilters.FirstOrDefault(i => i.Name == "username")?.Value}%";
-                var emailValue = $"%{sqlFilters.FirstOrDefault(i => i.Name == "email")?.Value}%";
+                var name = sqlFilters.FirstOrDefault(i => i.Name == "name")?.Value;
+                var nameValue = string.IsNullOrEmpty(name) ? string.Empty : $"%{name}%";
+
+                var surname = sqlFilters.FirstOrDefault(i => i.Name == "surname")?.Value;
+                var surnameValue = string.IsNullOrEmpty(surname) ? string.Empty : $"%{surname}%";
+
+                var username = sqlFilters.FirstOrDefault(i => i.Name == "username")?.Value;
+                var usernameValue = string.IsNullOrEmpty(username) ? string.Empty : $"%{username}%";
+
+                var email = sqlFilters.FirstOrDefault(i => i.Name == "email")?.Value;
+                var emailValue = string.IsNullOrEmpty(email) ? string.Empty : $"%{email}%";
 
                 // Get the total rows count
                 var count = await connection.QueryAsync<int>(

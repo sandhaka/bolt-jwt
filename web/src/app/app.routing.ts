@@ -30,6 +30,10 @@ export const routes: Routes = [
       {
         path: 'users',
         loadChildren: './views/users/users.module#UsersModule'
+      },
+      {
+        path: 'authorizations',
+        loadChildren: './views/authorizations/authorizations.module#AuthorizationsModule'
       }
     ]
   },
