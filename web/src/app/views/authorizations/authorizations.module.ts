@@ -5,6 +5,8 @@ import {AuthorizationsRoutingModule} from "./authorizations.routing";
 import {SharedModule} from "../../shared/shared.module";
 import {AuthorizationsComponent} from "./authorizations.component";
 import {GenericModalComponent} from "../../shared/modals";
+import {AuthorizationsService} from "./authorizations.service";
+import { AuthorizationDetailsComponent } from './authorization-details/authorization-details.component';
 
 @NgModule({
   imports: [
@@ -14,10 +16,14 @@ import {GenericModalComponent} from "../../shared/modals";
     SharedModule
   ],
   declarations: [
-    AuthorizationsComponent
+    AuthorizationsComponent,
+    AuthorizationDetailsComponent
   ],
   entryComponents: [
     GenericModalComponent
+  ],
+  providers: [
+    AuthorizationsService
   ]
 })
 export class AuthorizationsModule { }

@@ -1,3 +1,31 @@
-<p>
-  authorizations works!
-</p>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <a (click)="toggleAccordion()">Filters</a>
+        </div>
+        <div *ngIf="filtersAccordionOpened">
+          <app-data-table-filters
+            [filters]="filters">
+          </app-data-table-filters>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-bottom: 25px;">
+    <div class="col-sm-12">
+      <app-data-table
+        [pageSize]="8"
+        [columnNames]="columnNames"
+        [getData]="getDataFunc"
+        [select]="onSelectFunc">
+      </app-data-table>
+    </div>
+  </div>
+  <div class="row" *ngIf="selectedAuth">
+    <div class="col-sm-6">
+
+    </div>
+  </div>
+</div>
