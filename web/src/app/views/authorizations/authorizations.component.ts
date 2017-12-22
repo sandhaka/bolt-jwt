@@ -74,4 +74,12 @@ export class AuthorizationsComponent implements OnInit {
   toggleAccordion() {
     this.filtersAccordionOpened = !this.filtersAccordionOpened
   }
+
+  delete() {
+
+  }
+
+  addNew() {
+
+  }
 }

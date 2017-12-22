@@ -12,6 +12,6 @@ export const navigation = [
   {
     name: 'Authorizations',
     url: '/authorizations',
-    icon: ''
+    icon: 'icon-key'
   }
 ];
