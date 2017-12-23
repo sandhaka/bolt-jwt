@@ -65,7 +65,8 @@ namespace BoltJwt.Infrastructure.Context
                 Surname = "Root",
                 UserName = "root",
                 Email = "root@system.local",
-                Password = sBuilder.ToString()
+                Password = sBuilder.ToString(),
+                Disabled = false
             };
 
             return user;

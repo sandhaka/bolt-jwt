@@ -17,6 +17,7 @@ namespace BoltJwt.Infrastructure.Context
         public DbSet<Group> Groups { get; set; }
         public DbSet<DefinedAuthorization> Authorizations { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<UserActivationCode> UserActivationCodes { get; set; }
 
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) { }
 
@@ -46,6 +47,7 @@ namespace BoltJwt.Infrastructure.Context
 
             modelBuilder.Entity<DefinedAuthorization>(ConfigureAuth);
             modelBuilder.Entity<UserAuthorization>(ConfigureUserAuth);
+            modelBuilder.Entity<UserActivationCode>(ConfigureUserActivationCodes);
             modelBuilder.Entity<RoleAuthorization>(ConfigureRoleAuth);
             modelBuilder.Entity<Group>(ConfigureGroups);
             modelBuilder.Entity<User>(ConfigureUsers);
@@ -122,6 +124,15 @@ namespace BoltJwt.Infrastructure.Context
             userAuthConfig.HasKey(a => a.Id);
 
             userAuthConfig.HasIndex(i => new {i.DefAuthorizationId, i.UserId}).IsUnique();
+        }
+
+        private void ConfigureUserActivationCodes(EntityTypeBuilder<UserActivationCode> userActivationCodeConfig)
+        {
+            userActivationCodeConfig.ToTable("user_activation_codes", DefaultSchema);
+            userActivationCodeConfig.HasKey(a => a.Id);
+            userActivationCodeConfig.Property<int>("UserId").IsRequired();
+            userActivationCodeConfig.Property<long>("Timestamp").IsRequired();
+            userActivationCodeConfig.Property<string>("Code").IsRequired();
         }
 
         private void ConfigureRoleAuth(EntityTypeBuilder<RoleAuthorization> roleAuthConfig)
