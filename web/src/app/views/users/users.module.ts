@@ -25,7 +25,8 @@ import { CreateUserModalComponent } from './create-user-modal/create-user-modal.
   ],
   entryComponents: [
     GenericModalComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    CreateUserModalComponent
   ],
   providers: [
     UsersService

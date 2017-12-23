@@ -1,3 +1,64 @@
-<p>
-  create-user-modal works!
-</p>
+<div [ngClass]="modalClass">
+  <div class="modal-content">
+    <form [formGroup]="form" novalidate (ngSubmit)="submit()">
+      <div class="modal-header">
+        <h4 class="modal-title">{{modalTitle}}</h4>
+        <button type="button" class="close" (click)="bsModalRef.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control" formControlName="name">
+            </div>
+            <span style="color: red" *ngIf="formErrors.name">{{formErrors.name}}</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label>Surname</label>
+              <input type="text" class="form-control" formControlName="surname">
+            </div>
+            <span style="color: red" *ngIf="formErrors.surname">{{formErrors.surname}}</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label>Username</label>
+              <input type="text" class="form-control" formControlName="username">
+            </div>
+            <span style="color: red" *ngIf="formErrors.username">{{formErrors.username}}</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="text" class="form-control" formControlName="email">
+            </div>
+            <span style="color: red" *ngIf="formErrors.email">{{formErrors.email}}</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit"
+                class="btn"
+                [ngClass]="{'btn-default': form.invalid || !form.dirty, 'btn-primary' : !form.invalid && form.dirty}"
+                [disabled]="form.invalid || !form.dirty">
+          Create
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -6,6 +6,8 @@ import {UserDto} from "./UserDto";
 import {DataTableService} from "../../shared/datatable/data-table.service";
 import {Page} from "../../shared/datatable/model/page";
 import {AppEntity} from "../../shared/common";
+import {BsModalService} from "ngx-bootstrap";
+import {CreateUserModalComponent} from "./create-user-modal/create-user-modal.component";
 
 @Component({
   templateUrl: 'users.component.html',
@@ -53,6 +55,7 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private usersService: UsersService,
+    private modalService: BsModalService,
     private dataTableService: DataTableService) {  }
 
   ngOnInit(): void {
@@ -105,5 +108,21 @@ export class UsersComponent implements OnInit {
    */
   toggleAccordion() {
     this.filtersAccordionOpened = !this.filtersAccordionOpened
+  }
+
+  /**
+   * Open a modal to add a new user,
+   * on submit send the creation command and handle the response
+   */
+  addNew() {
+    const bsUserCreationModal = this.modalService.show(CreateUserModalComponent);
+    bsUserCreationModal.content.modalTitle = "New user";
+    bsUserCreationModal.content.modalCss = "modal-info";
+    bsUserCreationModal.content.onCreate.subscribe(
+      (dto) => {
+        bsUserCreationModal.hide();
+        //this.dataTableService.invokeReload();
+      }
+    );
   }
 }
