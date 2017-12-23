@@ -180,6 +180,7 @@ namespace BoltJwt.Infrastructure.Context
             usersConfig.Property<string>("Password").IsRequired();
             usersConfig.Property<string>("Email").IsRequired();
             usersConfig.Property<bool>("Root").HasDefaultValue(false);
+            usersConfig.Property<bool>("Disabled").HasDefaultValue(true);
 
             usersConfig.HasIndex(u => u.UserName).IsUnique();
             usersConfig.HasIndex(u => u.Email).IsUnique();

@@ -18,6 +18,8 @@ namespace BoltJwt.Domain.Model
 
         public string Email { get; set; }
 
+        public bool Disabled { get; set; }
+
         /// <summary>
         /// Root user is the default BoltJwt admin
         /// </summary>
