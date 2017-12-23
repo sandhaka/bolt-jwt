@@ -1,0 +1,26 @@
+<div [ngClass]="modalClass">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{modalTitle}}</h4>
+      <button type="button" class="close" (click)="bsModalRef.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Name: </label>
+        <input type="text" class="form-control" [(ngModel)]="authorizationName">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button"
+              class="btn"
+              [ngClass]="{'btn-default': authorizationName.match(pattern) === null, 'btn-primary' : authorizationName.match(pattern) !== null}"
+              (click)="submit()"
+              [disabled]="authorizationName.match(pattern) === null">
+        Create
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()">Cancel</button>
+    </div>
+  </div>
+</div>

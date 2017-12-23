@@ -3,7 +3,7 @@ import {Page} from "./model/page";
 import {Observable} from "rxjs/Observable";
 import {PagedData} from "./model/paged-data";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
-import {GenericModalComponent} from "../modals/generic-modal.component";
+import {GenericModalComponent} from "../modals";
 import {HttpErrorResponse} from "@angular/common/http";
 import {DataTableService} from "./data-table.service";
 
@@ -114,6 +114,11 @@ export class DataTableComponent implements OnInit {
 
     // Row deleted
     this.dataTableService.rowDelete$.subscribe(() => {
+      this.load({offset: this.page.pageNumber});
+    });
+
+    // Row deleted
+    this.dataTableService.reload$.subscribe(() => {
       this.load({offset: this.page.pageNumber});
     });
 

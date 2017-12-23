@@ -29,4 +29,30 @@ export class AuthorizationsService {
     return this.httpClient.get<PagedData<any>>(url);
   }
 
+  /**
+   *
+   * @param {number} id
+   * @returns {Observable<any>}
+   */
+  delete(id: number): Observable<any> {
+    return this.httpClient.delete(`/api/v1/authorization?id=${id}`);
+  }
+
+  /**
+   *
+   * @param authInsertCommand
+   * @returns {Observable<any>}
+   */
+  create(authInsertCommand: any): Observable<any> {
+    return this.httpClient.post('/api/v1/authorization', authInsertCommand);
+  }
+
+  /**
+   * Return a list of users and roles that use the authorization
+   * @param {number} id
+   * @returns {Observable<any>}
+   */
+  getUsage(id: number): Observable<any> {
+    return this.httpClient.get(`/api/v1/authorization/usage?id=${id}`);
+  }
 }

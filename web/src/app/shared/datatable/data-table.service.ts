@@ -7,10 +7,12 @@ export class DataTableService {
   private rowEdit = new Subject<any>();
   private applyFilters = new Subject<any>();
   private rowDelete = new Subject<any>();
+  private reload = new Subject<any>();
 
   rowEdited$ = this.rowEdit.asObservable();
   applyFilters$ = this.applyFilters.asObservable();
   rowDelete$ = this.rowDelete.asObservable();
+  reload$ = this.reload.asObservable();
 
   /**
    * Notify to the subscribers that a row has been edited
@@ -32,5 +34,12 @@ export class DataTableService {
    */
   invokeRowDelete() {
     this.rowDelete.next();
+  }
+
+  /**
+   * Invoke a generic reload
+   */
+  invokeReload() {
+    this.reload.next();
   }
 }

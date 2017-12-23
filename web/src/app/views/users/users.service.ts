@@ -40,10 +40,10 @@ export class UsersService {
 
   /**
    * Delete a user
-   * @param deleteCommand
+   * @param id
    * @returns {Observable<any>}
    */
-  delete(deleteCommand: any): Observable<any> {
-    return this.httpClient.delete(`/api/v1/user?id=${deleteCommand.Id}`);
+  delete(id: number): Observable<any> {
+    return this.httpClient.delete(`/api/v1/user?id=${id}`);
   }
 }

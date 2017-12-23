@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {BsModalRef} from "ngx-bootstrap/modal";
-import {GenericModalComponent} from "./generic-modal.component";
+import {GenericModalComponent} from "../generic/generic-modal.component";
 import {Subject} from "rxjs/Subject";
 
 @Component({

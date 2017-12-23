@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BoltJwt.Application.Queries.QueryUtils;
 using BoltJwt.Controllers.Pagination;
+using BoltJwt.Domain.Model;
 using Dapper;
 
 namespace BoltJwt.Application.Queries.Authorizations
@@ -22,6 +23,24 @@ namespace BoltJwt.Application.Queries.Authorizations
             _connectionString = !string.IsNullOrWhiteSpace(connectionString)
                 ? connectionString
                 : throw new ArgumentNullException(nameof(connectionString));
+        }
+
+        /// <summary>
+        /// Retrieve the authorizations definition list
+        /// </summary>
+        /// <returns>Authorizations list</returns>
+        public async Task<IEnumerable<dynamic>> GetAsync()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                var result = await connection.QueryAsync<dynamic>(
+                    $@"SELECT Id, Name FROM IdentityContext.def_authorizations
+                        WHERE Name <> '{Constants.AdministrativeAuth}'");
+
+                return result.AsList().Select(r => MapAuthResult(r)).ToList();
+            }
         }
 
         /// <summary>
@@ -43,7 +62,7 @@ namespace BoltJwt.Application.Queries.Authorizations
                 var nameValue = string.IsNullOrEmpty(name) ? string.Empty : $"%{name}%";
 
                 var count = await connection.QueryAsync<int>(
-                    "SELECT COUNT(*) FROM IdentityContext.def_authorizations WHERE Name <> 'administrative'" +
+                    $"SELECT COUNT(*) FROM IdentityContext.def_authorizations WHERE Name <> '{Constants.AdministrativeAuth}'" +
                     ((!string.IsNullOrEmpty(nameValue)) ? "AND Name like @nameValue " : ""),
                     new
                     {
@@ -56,7 +75,7 @@ namespace BoltJwt.Application.Queries.Authorizations
 
                 var result = await connection.QueryAsync<dynamic>(
                     $@"SELECT * FROM ( " +
-                    "SELECT ROW_NUMBER() OVER ( ORDER BY Name ) AS RowNum, * FROM IdentityContext.def_authorizations WHERE Name <> 'administrative' " +
+                    $"SELECT ROW_NUMBER() OVER ( ORDER BY Name ) AS RowNum, * FROM IdentityContext.def_authorizations WHERE Name <> '{Constants.AdministrativeAuth}' " +
                     ((!string.IsNullOrEmpty(nameValue)) ? "AND name like @nameValue " : "") +
                     ") AS RowConstrainedResult WHERE RowNum >= @startRow AND RowNum < @endRow ORDER BY RowNum",
                     new
@@ -79,6 +98,33 @@ namespace BoltJwt.Application.Queries.Authorizations
             }
         }
 
+        /// <summary>
+        /// Return authorization usage
+        /// </summary>
+        /// <param name="id">Authorization id</param>
+        /// <returns>Lists of user and group names</returns>
+        public async Task<dynamic> GetUsageAsync(int id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                var roles = await connection.QueryAsync<dynamic>(
+                    @"SELECT Description as roleDescr FROM IdentityContext.roles
+                        JOIN IdentityContext.role_authorizations on roles.Id = role_authorizations.RoleId
+                    WHERE DefAuthorizationId = @id", new { id }
+                );
+
+                var users = await connection.QueryAsync<dynamic>(
+                    @"SELECT UserName FROM IdentityContext.users
+                        JOIN IdentityContext.user_authorizations on users.Id = user_authorizations.UserId
+                    WHERE DefAuthorizationId = @id", new { id }
+                );
+
+                return CombineUsageResults(users, roles);
+            }
+        }
+
         private dynamic MapAuthResult(dynamic result)
         {
             dynamic dto = new ExpandoObject();
@@ -87,6 +133,16 @@ namespace BoltJwt.Application.Queries.Authorizations
             dto.name = result.Name;
 
             return dto;
+        }
+
+        private dynamic CombineUsageResults(IEnumerable<dynamic> users, IEnumerable<dynamic> roles)
+        {
+            dynamic result = new ExpandoObject();
+
+            result.roles = roles.Select(i => i.roleDescr);
+            result.users = users.Select(i => i.UserName);
+
+            return result;
         }
     }
 }

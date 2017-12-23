@@ -7,7 +7,9 @@ namespace BoltJwt.Application.Validations
     {
         public AuthorizationInsertCommandValidator()
         {
-            RuleFor(command => command.Name).NotEmpty();
+            RuleFor(command => command.Name)
+                .NotEmpty()
+                .Matches("[a-zA-Z]{3,12}");
         }
     }
 }

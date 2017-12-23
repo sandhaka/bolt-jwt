@@ -1,2 +1,2 @@
-export * from './generic-modal.component';
-export * from './confirm-modal.component';
+export * from './generic/generic-modal.component';
+export * from './confirmation/confirm-modal.component';

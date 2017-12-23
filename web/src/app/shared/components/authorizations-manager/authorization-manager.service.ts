@@ -23,7 +23,7 @@ export class AuthorizationManagerService {
    * @returns {Observable<any>}
    */
   getAuthorizationsDefinition(): Observable<any> {
-    return this.httpClient.get<AuthorizationDefinition[]>('/api/v1/authorization/all');
+    return this.httpClient.get<AuthorizationDefinition[]>('/api/v1/authorization');
   }
 
   /**

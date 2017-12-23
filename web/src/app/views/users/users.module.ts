@@ -8,6 +8,7 @@ import {UsersRoutingModule} from "./users.routing";
 import {UsersService} from "./users.service";
 import {UsersComponent} from "./users.component";
 import {UserDetailsComponent} from "./user-details/user-details.component";
+import { CreateUserModalComponent } from './create-user-modal/create-user-modal.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {UserDetailsComponent} from "./user-details/user-details.component";
   ],
   declarations: [
     UsersComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    CreateUserModalComponent
   ],
   entryComponents: [
     GenericModalComponent,

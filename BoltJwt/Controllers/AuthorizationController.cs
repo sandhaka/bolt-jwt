@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web.Http;
 using BoltJwt.Application.Commands.Authorizations;
 using BoltJwt.Application.Queries.Authorizations;
 using BoltJwt.Controllers.Pagination;
@@ -24,6 +25,16 @@ namespace BoltJwt.Controllers
                 authorizationQueries ?? throw new ArgumentNullException(nameof(authorizationQueries));
         }
 
+        [Route("")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetAsync()
+        {
+            var result = await _authorizationQueries.GetAsync();
+
+            return Ok(result);
+        }
+
         [Route("all")]
         [HttpGet]
         [Authorize(Policy = "bJwtAdmins")]
@@ -31,6 +42,17 @@ namespace BoltJwt.Controllers
         public async Task<IActionResult> GetAsync([FromQuery] PageQuery query)
         {
             var result = await _authorizationQueries.GetAsync(query);
+
+            return Ok(result);
+        }
+
+        [Route("usage")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType(typeof(object), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetUsageAsync([FromUri] int id)
+        {
+            var result = await _authorizationQueries.GetUsageAsync(id);
 
             return Ok(result);
         }
@@ -52,7 +74,7 @@ namespace BoltJwt.Controllers
         [Authorize(Policy = "bJwtAdmins")]
         [ProducesResponseType((int) HttpStatusCode.OK)]
         [ProducesResponseType((int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> DeleteAsync(AuthorizationDeleteCommand authorizationDeleteCommand)
+        public async Task<IActionResult> DeleteAsync([FromQuery] AuthorizationDeleteCommand authorizationDeleteCommand)
         {
             var result = await _mediator.Send(authorizationDeleteCommand);
 

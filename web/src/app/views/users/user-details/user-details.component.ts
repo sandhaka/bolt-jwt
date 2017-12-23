@@ -116,11 +116,7 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
 
     const deleteUserCallback = function() {
 
-      const deleteCommand = {
-        Id: this.user.Id
-      };
-
-      this.userService.delete(deleteCommand).subscribe(
+      this.userService.delete(this.user.Id).subscribe(
         () => {
           this.deletedUser.emit();
         },

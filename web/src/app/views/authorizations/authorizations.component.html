@@ -28,6 +28,13 @@
       <button
         style="margin-right: 3px;"
         *ngIf="selectedAuth"
+        class="pull-right btn btn-primary"
+        (click)="viewUsage()">
+        View usage
+      </button>
+      <button
+        style="margin-right: 3px;"
+        *ngIf="selectedAuth"
         class="pull-right btn btn-danger"
         (click)="delete()">
         Delete

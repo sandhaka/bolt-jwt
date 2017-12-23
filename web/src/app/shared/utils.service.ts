@@ -22,6 +22,10 @@ export class UtilityService {
 
   constructor(private modalService: BsModalService) { }
 
+  /**
+   * Handle a http error
+   * @param {HttpErrorResponse} errorResponse
+   */
   handleHttpError(errorResponse: HttpErrorResponse) {
     const errorDetails = errorResponse.error && errorResponse.error.Message ?
       errorResponse.error.Message :
@@ -29,6 +33,13 @@ export class UtilityService {
     this.openModal('Error', `${errorResponse.statusText}: ${errorDetails}`, 'modal-danger');
   }
 
+  /**
+   * Open a confirmation modal
+   * @param {string} title
+   * @param {string} body
+   * @param {string} cssClass
+   * @param {() => void} callback
+   */
   openConfirmModal(title: string, body: string, cssClass: string, callback: () => void) {
     const bsConfirmModalRef = this.modalService.show(ConfirmModalComponent);
     bsConfirmModalRef.content.modalTitle = title;
@@ -41,6 +52,12 @@ export class UtilityService {
     });
   }
 
+  /**
+   * Open a generic modal
+   * @param {string} title
+   * @param {string} body
+   * @param {string} cssClass
+   */
   openModal(title: string, body: string, cssClass: string) {
     const bsModalRef = this.modalService.show(GenericModalComponent);
     bsModalRef.content.modalTitle = title;
