@@ -4,7 +4,7 @@ import {SecurityService} from '../security/security.service';
 import {Router} from '@angular/router';
 import {HttpErrorResponse} from "@angular/common/http";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
-import {GenericModalComponent} from "../shared/modals/generic/generic-modal.component";
+import {GenericModalComponent} from "../shared/modals";
 import {ReactiveFormComponent} from "../shared/base/reactiveForm.component";
 
 @Component({

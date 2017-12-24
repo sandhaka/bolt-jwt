@@ -1,0 +1,35 @@
+<div class="app flex-row align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card mx-4">
+          <div class="card-body p-4">
+            <form [formGroup]="form" novalidate (ngSubmit)="submit()">
+              <h1>Account activation</h1>
+              <p class="text-muted">Customize your password to activate</p>
+
+              <div class="input-group mb-3">
+                <span class="input-group-addon"><i class="icon-lock"></i></span>
+                <input type="password" class="form-control" placeholder="Password" formControlName="password">
+              </div>
+              <span style="color: red" *ngIf="formErrors.password">{{formErrors.password}}</span>
+
+              <div class="input-group mb-4">
+                <span class="input-group-addon"><i class="icon-lock"></i></span>
+                <input type="password" class="form-control" placeholder="Repeat password" formControlName="confirmPassword">
+              </div>
+              <span style="color: red" *ngIf="formErrors.confirmPassword">{{formErrors.confirmPassword}}</span>
+
+              <button type="submit"
+                      [disabled]="form.invalid || !form.dirty"
+                      [ngClass]="{'btn-default': form.invalid || !form.dirty, 'btn-success' : !form.invalid && form.dirty}"
+                      class="btn btn-block">
+                Activate account
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
