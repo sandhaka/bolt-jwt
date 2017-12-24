@@ -48,7 +48,8 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <returns>User added</returns>
         public User Add(User user)
         {
-            _context.Entry(user).State = EntityState.Added;
+            _context.Users.Add(user);
+
             return user;
         }
 

@@ -100,7 +100,7 @@ namespace BoltJwt.Application.Queries.Users
 
                 // Get the total rows count
                 var count = await connection.QueryAsync<int>(
-                    "SELECT COUNT(*) FROM IdentityContext.users WHERE Root = 0 " +
+                    "SELECT COUNT(*) FROM IdentityContext.users WHERE Root = 0 AND Disabled = 0 " +
                     ((!string.IsNullOrEmpty(nameValue)) ? "AND name LIKE @nameValue " : "") +
                     ((!string.IsNullOrEmpty(surnameValue)) ? "AND surname LIKE @surnameValue " : "") +
                     ((!string.IsNullOrEmpty(usernameValue)) ? "AND username LIKE @usernameValue " : "") +
@@ -119,7 +119,7 @@ namespace BoltJwt.Application.Queries.Users
                 // Get the paged users data
                 var queryResult = await connection.QueryAsync<dynamic>(
                     "SELECT * FROM ( " +
-                    "SELECT ROW_NUMBER() OVER ( ORDER BY Email ) AS RowNum, * FROM IdentityContext.users WHERE Root = 0 " +
+                    "SELECT ROW_NUMBER() OVER ( ORDER BY Email ) AS RowNum, * FROM IdentityContext.users WHERE Root = 0 AND Disabled = 0 " +
                     ((!string.IsNullOrEmpty(nameValue)) ? "AND name LIKE @nameValue " : "") +
                     ((!string.IsNullOrEmpty(surnameValue)) ? "AND surname LIKE @surnameValue " : "") +
                     ((!string.IsNullOrEmpty(usernameValue)) ? "AND username LIKE @usernameValue " : "") +

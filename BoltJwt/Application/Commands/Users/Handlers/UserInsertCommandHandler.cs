@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
@@ -20,14 +21,22 @@ namespace BoltJwt.Application.Commands.Users.Handlers
             await _userRepository.UserNameExistsAsync(userInsertCommand.UserName);
             await _userRepository.EmailExistsAsync(userInsertCommand.Email);
 
-            var newUser = new User
-            {
-                Email = userInsertCommand.Email,
-                Name = userInsertCommand.Name,
-                Surname = userInsertCommand.Surname,
-                UserName = userInsertCommand.UserName,
-                Password = User.PasswordEncrypt(userInsertCommand.Password)
-            };
+            var newUser = new User(
+                userInsertCommand.Name,
+                userInsertCommand.Surname,
+                userInsertCommand.UserName,
+                userInsertCommand.Email,
+
+                // Create a code to activate
+                new UserActivationCode
+                {
+                    Code = Guid.NewGuid().ToString(),
+                    Timestamp = DateTime.Now.Ticks
+                },
+
+                // Insert with a temporary password
+                User.PasswordEncrypt(Guid.NewGuid().ToString())
+            );
 
             _userRepository.Add(newUser);
 

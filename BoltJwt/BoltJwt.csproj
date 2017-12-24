@@ -8,6 +8,7 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
     <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="7.2.1" />
+    <PackageReference Include="MailKit" Version="2.0.0" />
     <PackageReference Include="MediatR" Version="4.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="4.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
@@ -21,9 +22,6 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Domain" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="wwwroot\**" />

@@ -10,7 +10,6 @@ namespace BoltJwt.Application.Validations
             RuleFor(command => command.Email).EmailAddress();
             RuleFor(command => command.Name).NotEmpty();
             RuleFor(command => command.UserName).NotEmpty();
-            RuleFor(command => command.Password).MinimumLength(6);
         }
     }
 }

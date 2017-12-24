@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using BoltJwt.Domain.Events;
 using BoltJwt.Domain.Model.Abstractions;
 
 namespace BoltJwt.Domain.Model
@@ -40,11 +41,50 @@ namespace BoltJwt.Domain.Model
         /// </summary>
         public List<UserAuthorization> Authorizations { get; set; }
 
+        /// <summary>
+        /// Temporary activation code
+        /// </summary>
+        public UserActivationCode ActivationCode { get; set; }
+
+        /// <summary>
+        /// Default ctor
+        /// </summary>
         public User()
         {
             Authorizations = new List<UserAuthorization>();
             UserGroups = new List<UserGroup>();
             UserRoles = new List<UserRole>();
+        }
+
+        /// <summary>
+        /// Parameterized ctor
+        /// Init fields and create the domain event. Use this in the business logic
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="surname"></param>
+        /// <param name="username"></param>
+        /// <param name="email"></param>
+        /// <param name="activationcode"></param>
+        /// <param name="password"></param>
+        public User(
+            string name, string surname, string username,
+            string email, UserActivationCode activationcode,
+            string password)
+        {
+            Name = name;
+            Surname = surname;
+            UserName = username;
+            Email = email;
+            ActivationCode = activationcode;
+            Password = password;
+
+            this.AddDomainEvent(new UserCreatedDomainEvent
+            {
+                ActivationCode = ActivationCode.Code,
+                Email = Email,
+                Name = Name,
+                Surname = Surname
+            });
         }
 
         /// <summary>

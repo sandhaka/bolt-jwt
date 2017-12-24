@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using BoltJwt.Application.Commands.Authorizations;
 using BoltJwt.Application.Commands.Roles;
+using BoltJwt.Application.DomainEventHandlers;
 using BoltJwt.Application.Validations;
 using FluentValidation;
 using MediatR;
@@ -19,7 +20,7 @@ namespace BoltJwt.Infrastructure.Modules
                 .AsImplementedInterfaces();
 
             /**
-             * Register all the Command classes (they implement IRequestHandler) in assembly holding the Commands
+             * Register all the Command classes (they implement IRequestHandler or INotificationHandler) in assembly
              */
 
             #region [Users]
@@ -53,6 +54,9 @@ namespace BoltJwt.Infrastructure.Modules
                 .RegisterAssemblyTypes(typeof(RemoveAuthorizationUserCommand).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(typeof(SendEmailToActivateUserCreatedDomainEventHandler).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(INotificationHandler<>));
 
             #endregion
 

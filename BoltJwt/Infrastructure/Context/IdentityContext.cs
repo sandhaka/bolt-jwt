@@ -1,7 +1,10 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Infrastructure.Extensions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,7 +22,12 @@ namespace BoltJwt.Infrastructure.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserActivationCode> UserActivationCodes { get; set; }
 
-        public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) { }
+        private readonly IMediator _mediator;
+
+        public IdentityContext(DbContextOptions<IdentityContext> options, IMediator mediator) : base(options)
+        {
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        }
 
         /// <summary>
         /// Save the current context
@@ -28,6 +36,16 @@ namespace BoltJwt.Infrastructure.Context
         /// <returns>Save result</returns>
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            // Dispatch Domain Events collection.
+            // Choices:
+            // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including
+            // side effects from the domain event handlers which are using the same DbContext with
+            // "InstancePerLifetimeScope" or "scoped" lifetime
+            // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions.
+            // You will need to handle eventual consistency and compensatory actions in case of failures in
+            // any of the Handlers.
+            await _mediator.DispatchDomainEventsAsync(this);
+
             var result = await base.SaveChangesAsync(cancellationToken);
 
             return true;
@@ -199,6 +217,11 @@ namespace BoltJwt.Infrastructure.Context
             usersConfig.HasMany(i => i.Authorizations)
                 .WithOne()
                 .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            usersConfig.HasOne(p => p.ActivationCode)
+                .WithOne(i => i.User)
+                .HasForeignKey<UserActivationCode>(b => b.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

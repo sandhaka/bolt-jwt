@@ -43,7 +43,6 @@ namespace BoltJwtUnitTest.Application.Commands
             {
                 Email = "xxx",
                 Name = "xxx",
-                Password = "xxx",
                 Surname = "xxx",
                 UserName = "xxx"
             }, CancellationToken.None);
