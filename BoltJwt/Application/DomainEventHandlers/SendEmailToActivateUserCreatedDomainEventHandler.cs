@@ -1,20 +1,27 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Events;
-using MailKit.Net.Smtp;
-using MailKit.Security;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 
 namespace BoltJwt.Application.DomainEventHandlers
 {
     public class SendEmailToActivateUserCreatedDomainEventHandler : INotificationHandler<UserCreatedDomainEvent>
     {
+        private ILogger<SendEmailToActivateUserCreatedDomainEventHandler> _logger;
+
+        public SendEmailToActivateUserCreatedDomainEventHandler(ILogger<SendEmailToActivateUserCreatedDomainEventHandler> logger)
+        {
+            _logger = logger;
+        }
+
         public async Task Handle(UserCreatedDomainEvent notification, CancellationToken cancellationToken)
         {
             var message = new MimeMessage
             {
-                From = {new MailboxAddress("", "")},
+                From = {new MailboxAddress("pippo", "piipo@pippo.it")},
                 To = {new MailboxAddress("", "")},
                 Subject = "",
                 Body = new TextPart("plain")
@@ -23,21 +30,9 @@ namespace BoltJwt.Application.DomainEventHandlers
                 }
             };
 
-            using (var client = new SmtpClient())
-            {
-                // Accept all SSL certificates (in case the server supports STARTTLS)
-                client.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true;
+            _logger.LogInformation($"Sending an email to {message.To.Mailboxes.First().Address}");
 
-                await client.ConnectAsync("", 00, SecureSocketOptions.None, cancellationToken);
-
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
-
-                await client.AuthenticateAsync("", "", cancellationToken);
-
-                await client.SendAsync(message, cancellationToken);
-
-                await client.DisconnectAsync(true, cancellationToken);
-            }
+            // TODO
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using Autofac;
-using BoltJwt.Application.Queries;
 using BoltJwt.Application.Queries.Authorizations;
 using BoltJwt.Application.Queries.Roles;
 using BoltJwt.Application.Queries.Users;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Infrastructure.AppConfigurations;
 using BoltJwt.Infrastructure.Repositories;
 using BoltJwt.Infrastructure.Security;
+using MailKit;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BoltJwt.Infrastructure.Modules
@@ -45,8 +46,16 @@ namespace BoltJwt.Infrastructure.Modules
                 .As<IAuthorizationRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<ConfigurationRepository>()
+                .As<IConfigurationRepository>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<AuthorizationsHandler>()
                 .As<IAuthorizationHandler>()
+                .SingleInstance();
+
+            builder.RegisterType<MailService>()
+                .As<IMailService>()
                 .SingleInstance();
         }
     }

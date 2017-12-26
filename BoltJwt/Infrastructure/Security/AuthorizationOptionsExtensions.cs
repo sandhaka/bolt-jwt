@@ -16,6 +16,10 @@ namespace BoltJwt.Infrastructure.Security
             authOptions.AddPolicy("bJwtAdmins", policyBuilder => policyBuilder.AddRequirements(
                 new AuthorizationsRequirement(Constants.AdministrativeAuth)));
 
+            // Authorize only root
+            authOptions.AddPolicy("bJwtRoot", policyBuilder => policyBuilder.AddRequirements(
+                new AuthorizationsRequirement()));
+
             return authOptions;
         }
     }

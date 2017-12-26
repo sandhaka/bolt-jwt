@@ -38,6 +38,13 @@ namespace BoltJwt.Infrastructure.Context
 
                         await context.SaveChangesAsync();
                     }
+
+                    if (!context.Configuration.Any())
+                    {
+                        context.Configuration.Add(CreateDefaultConfig());
+
+                        await context.SaveChangesAsync();
+                    }
                 }
             }
             catch (Exception e)
@@ -70,6 +77,14 @@ namespace BoltJwt.Infrastructure.Context
             };
 
             return user;
+        }
+
+        private static AppConfigurations.Configuration CreateDefaultConfig()
+        {
+            return new AppConfigurations.Configuration
+            {
+
+            };
         }
     }
 }

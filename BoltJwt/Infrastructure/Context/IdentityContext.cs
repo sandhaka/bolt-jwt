@@ -21,6 +21,7 @@ namespace BoltJwt.Infrastructure.Context
         public DbSet<DefinedAuthorization> Authorizations { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserActivationCode> UserActivationCodes { get; set; }
+        public DbSet<AppConfigurations.Configuration> Configuration { get; set; }
 
         private readonly IMediator _mediator;
 
@@ -70,6 +71,7 @@ namespace BoltJwt.Infrastructure.Context
             modelBuilder.Entity<Group>(ConfigureGroups);
             modelBuilder.Entity<User>(ConfigureUsers);
             modelBuilder.Entity<Role>(ConfigureRoles);
+            modelBuilder.Entity<AppConfigurations.Configuration>(ConfigureConfiguration);
 
             /**
              * Configure join tables
@@ -223,6 +225,17 @@ namespace BoltJwt.Infrastructure.Context
                 .WithOne(i => i.User)
                 .HasForeignKey<UserActivationCode>(b => b.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+        }
+
+        private void ConfigureConfiguration(EntityTypeBuilder<AppConfigurations.Configuration> configurationConfig)
+        {
+            configurationConfig.ToTable("configuration", DefaultSchema);
+            configurationConfig.HasKey(i => i.Id);
+            configurationConfig.Property<int>("Id").HasDefaultValue(1);
+            configurationConfig.Property<string>("SmtpHostName");
+            configurationConfig.Property<int>("SmtpPort");
+            configurationConfig.Property<string>("SmtpUserName");
+            configurationConfig.Property<string>("SmtpPassword");
         }
     }
 }
