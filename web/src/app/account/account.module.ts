@@ -3,11 +3,12 @@ import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
 import {ModalModule} from "ngx-bootstrap";
 import {SharedModule} from "../shared/shared.module";
-import {AccountActivationComponent} from "./account-activation/account-activation.component";
+import {AccountActivationComponent} from "./activation/account-activation.component";
 import {AccountRoutingModule} from "./account.routing";
 import {AccountService} from "./account.service";
 import {GenericModalComponent} from "../shared/modals";
 import {LaddaModule} from "angular2-ladda";
+import {AccountActivatedConfirmationComponent} from "./confirmed/account-activated-confirmation.component";
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {LaddaModule} from "angular2-ladda";
     LaddaModule
   ],
   declarations: [
-    AccountActivationComponent
+    AccountActivationComponent,
+    AccountActivatedConfirmationComponent
   ],
   entryComponents: [
     GenericModalComponent

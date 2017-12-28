@@ -1,13 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {AccountActivationComponent} from "./account-activation/account-activation.component";
+import {AccountActivationComponent} from "./activation/account-activation.component";
+import {AccountActivatedConfirmationComponent} from "./confirmed/account-activated-confirmation.component";
 
 const routes: Routes = [
   {
     path: 'activation/:code',
     component: AccountActivationComponent,
     data: {
-      title: 'activation'
+      title: 'Activation'
+    }
+  },
+  {
+    path: 'confirmed',
+    component: AccountActivatedConfirmationComponent,
+    data: {
+      title: 'Confirmed'
     }
   }
 ];

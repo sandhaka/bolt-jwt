@@ -6,7 +6,6 @@ import {UtilityService} from "../../shared/utils.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AccountService} from "../account.service";
 import {HttpErrorResponse} from "@angular/common/http";
-import {isPending} from "q";
 
 @Component({
   selector: 'app-account-activation',
