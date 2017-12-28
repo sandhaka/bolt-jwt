@@ -116,7 +116,7 @@ export class AuthorizationsComponent implements OnInit {
     const bsAuthCreationModal = this.modalService.show(CreateAuthModalComponent);
     bsAuthCreationModal.content.modalTitle = "New authorization";
     bsAuthCreationModal.content.modalCss = "modal-info";
-    bsAuthCreationModal.content.onCreate.subscribe(name => {
+    bsAuthCreationModal.content.onCreated.subscribe(name => {
       const authInsertCommand = {
         Name: name
       };

@@ -153,6 +153,8 @@ namespace BoltJwt.Infrastructure.Context
             userActivationCodeConfig.Property<int>("UserId").IsRequired();
             userActivationCodeConfig.Property<long>("Timestamp").IsRequired();
             userActivationCodeConfig.Property<string>("Code").IsRequired();
+
+            userActivationCodeConfig.HasIndex(i => i.Code).IsUnique();
         }
 
         private void ConfigureRoleAuth(EntityTypeBuilder<RoleAuthorization> roleAuthConfig)
@@ -235,7 +237,9 @@ namespace BoltJwt.Infrastructure.Context
             configurationConfig.Property<string>("SmtpHostName");
             configurationConfig.Property<int>("SmtpPort");
             configurationConfig.Property<string>("SmtpUserName");
+            configurationConfig.Property<string>("SmtpEmail");
             configurationConfig.Property<string>("SmtpPassword");
+            configurationConfig.Property<string>("EndpointFqdn");
         }
     }
 }

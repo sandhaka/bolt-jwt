@@ -64,6 +64,14 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <returns>Task</returns>
         Task AssignRoleAsync(int userId, int roleId);
 
+        /// <summary>
+        /// Activate user, customize password on activation
+        /// </summary>
+        /// <param name="code">Activation code</param>
+        /// <param name="password">New Password</param>
+        /// <returns></returns>
+        Task ActivateUserAsync(string code, string password);
+
         Task UserNameExistsAsync(string username);
         Task EmailExistsAsync(string email);
     }

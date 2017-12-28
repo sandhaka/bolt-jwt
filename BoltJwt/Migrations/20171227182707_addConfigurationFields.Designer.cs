@@ -11,9 +11,10 @@ using System;
 namespace BoltJwt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20171227182707_addConfigurationFields")]
+    partial class addConfigurationFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,9 +146,6 @@ namespace BoltJwt.Migrations
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();

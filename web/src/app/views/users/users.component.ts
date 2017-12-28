@@ -8,6 +8,7 @@ import {Page} from "../../shared/datatable/model/page";
 import {AppEntity} from "../../shared/common";
 import {BsModalService} from "ngx-bootstrap";
 import {CreateUserModalComponent} from "./create-user-modal/create-user-modal.component";
+import {GenericModalComponent} from "../../shared/modals";
 
 @Component({
   templateUrl: 'users.component.html',
@@ -111,17 +112,22 @@ export class UsersComponent implements OnInit {
   }
 
   /**
-   * Open a modal to add a new user,
-   * on submit send the creation command and handle the response
+   * Open a modal to add a new user
    */
   addNew() {
     const bsUserCreationModal = this.modalService.show(CreateUserModalComponent);
     bsUserCreationModal.content.modalTitle = "New user";
     bsUserCreationModal.content.modalCss = "modal-info";
-    bsUserCreationModal.content.onCreate.subscribe(
-      (dto) => {
+    bsUserCreationModal.content.onCreated.subscribe(
+      (email) => {
+
         bsUserCreationModal.hide();
-        //this.dataTableService.invokeReload();
+
+        // Success modal
+        const bsUserCreatedModal = this.modalService.show(GenericModalComponent);
+        bsUserCreatedModal.content.modalTitle = "Created successfully";
+        bsUserCreatedModal.content.modalClass = "modal-success";
+        bsUserCreatedModal.content.modalText = `The new account needs to be activate. An email has been sent to ${email}`;
       }
     );
   }

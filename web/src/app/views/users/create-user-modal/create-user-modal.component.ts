@@ -3,6 +3,10 @@ import {GenericModalComponent} from "../../../shared/modals";
 import {BsModalRef} from "ngx-bootstrap/modal";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subject} from "rxjs/Subject";
+import {ANIMATION_TYPES} from "ngx-loading";
+import {HttpErrorResponse} from "@angular/common/http";
+import {UsersService} from "../users.service";
+import {UtilityService} from "../../../shared/utils.service";
 
 @Component({
   selector: 'app-create-user-modal',
@@ -11,7 +15,16 @@ import {Subject} from "rxjs/Subject";
 })
 export class CreateUserModalComponent extends GenericModalComponent {
 
-  onCreate = new Subject<UserCreateDto>();
+  // On success user created event
+  onCreated = new Subject<string>();
+
+  // loading splash screen configuration
+  loadingConfig = {
+    backdropBorderRadius: '14px',
+    animationType: ANIMATION_TYPES.wanderingCubes
+  };
+
+  isOnProcessing = false;
 
   //#region [ Form variables ]
 
@@ -70,7 +83,9 @@ export class CreateUserModalComponent extends GenericModalComponent {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private usersService: UsersService,
+    private utils: UtilityService,
   ) {
     super(bsModalRef);
 
@@ -104,23 +119,31 @@ export class CreateUserModalComponent extends GenericModalComponent {
     this.onDataChanged();
   }
 
+  /**
+   * Send the insert user command and handle the result
+   */
   submit() {
-    console.log(this.form.value);
 
-    const dto = new UserCreateDto();
-    dto.email = this.form.value.email;
-    dto.surname = this.form.value.surname;
-    dto.username = this.form.value.username;
-    dto.name = this.form.value.name;
+    this.isOnProcessing = true;
 
-    this.onCreate.next(dto);
+    // Compose the insert command
+    const command = {
+      Name: this.form.value.name,
+      Surname: this.form.value.surname,
+      UserName: this.form.value.username,
+      Email: this.form.value.email
+    };
+
+    // Send the command
+    this.usersService.add(command).subscribe(
+      () => {
+        this.onCreated.next(command.Email);
+        this.isOnProcessing = false;
+      },
+      (error: HttpErrorResponse) => {
+        this.utils.handleHttpError(error);
+        this.isOnProcessing = false;
+      }
+    );
   }
-
-}
-
-class UserCreateDto {
-  name: string;
-  surname: string;
-  username: string;
-  email: string;
 }

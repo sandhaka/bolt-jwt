@@ -21,6 +21,7 @@
               <span style="color: red" *ngIf="formErrors.confirmPassword">{{formErrors.confirmPassword}}</span>
 
               <button type="submit"
+                      [ladda]="isPending"
                       [disabled]="form.invalid || !form.dirty"
                       [ngClass]="{'btn-default': form.invalid || !form.dirty, 'btn-success' : !form.invalid && form.dirty}"
                       class="btn btn-block">

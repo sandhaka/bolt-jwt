@@ -1,5 +1,6 @@
 <div [ngClass]="modalClass">
   <div class="modal-content">
+    <ngx-loading [show]="isOnProcessing" [config]="loadingConfig"></ngx-loading>
     <form [formGroup]="form" novalidate (ngSubmit)="submit()">
       <div class="modal-header">
         <h4 class="modal-title">{{modalTitle}}</h4>

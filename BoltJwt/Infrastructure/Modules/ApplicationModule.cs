@@ -2,11 +2,11 @@
 using BoltJwt.Application.Queries.Authorizations;
 using BoltJwt.Application.Queries.Roles;
 using BoltJwt.Application.Queries.Users;
+using BoltJwt.Application.Services;
 using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.AppConfigurations;
 using BoltJwt.Infrastructure.Repositories;
 using BoltJwt.Infrastructure.Security;
-using MailKit;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BoltJwt.Infrastructure.Modules

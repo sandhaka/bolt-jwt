@@ -81,7 +81,7 @@ export class SecurityService {
 
       // If the token is going to expire in less of a day renew it
       if (tokenData.exp > Date.now() &&
-        tokenData.exp < Date.now() + 86400) {
+        tokenData.exp < (Date.now() + 86400)) {
 
         this.tokenRenew().subscribe(
           (result) => {

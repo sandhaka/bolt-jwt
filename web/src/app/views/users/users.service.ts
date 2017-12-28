@@ -30,6 +30,15 @@ export class UsersService {
   }
 
   /**
+   * Create a new user
+   * @param insertCommand
+   * @returns {Observable<any>}
+   */
+  add(insertCommand: any): Observable<any> {
+    return this.httpClient.post('/api/v1/user', insertCommand);
+  }
+
+  /**
    * User edit
    * @param editCommand command
    * @returns {Observable<any>}

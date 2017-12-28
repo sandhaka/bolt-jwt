@@ -3,6 +3,10 @@ import {ReactiveFormComponent} from "../../shared/base/reactiveForm.component";
 import {BsModalService} from "ngx-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UtilityService} from "../../shared/utils.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {AccountService} from "../account.service";
+import {HttpErrorResponse} from "@angular/common/http";
+import {isPending} from "q";
 
 @Component({
   selector: 'app-account-activation',
@@ -11,18 +15,25 @@ import {UtilityService} from "../../shared/utils.service";
 })
 export class AccountActivationComponent extends ReactiveFormComponent implements OnInit {
 
+  private activationCode: string;
+
+  isPending = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private modalService: BsModalService,
-    private utils: UtilityService
+    private utils: UtilityService,
+    private route: ActivatedRoute,
+    private accountService: AccountService,
+    private router: Router
   ) {
     super();
 
+    // Form setup
     this.formErrors = {
       'password': '',
       'confirmPassword': ''
     };
-
     this.validationMessages = {
       'password': {
         'required': 'Required'
@@ -31,7 +42,6 @@ export class AccountActivationComponent extends ReactiveFormComponent implements
         'required': 'Required'
       }
     };
-
     this.form = this.formBuilder.group({
       'password': [
         '',
@@ -52,11 +62,37 @@ export class AccountActivationComponent extends ReactiveFormComponent implements
   }
 
   ngOnInit() {
-
+    this.route.params.subscribe(params => {
+      this.activationCode = params['code'];
+      if((/^$/).test(this.activationCode || '')) {
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   submit() {
 
+    this.isPending = true;
+
+    const formValue = this.form.value;
+
+    const command = {
+      code: this.activationCode,
+      password: formValue.password,
+      confirmPassword: formValue.confirmPassword
+    };
+
+    this.accountService.activate(command).subscribe(
+      () => {
+        this.isPending = false;
+        // TODO: Navigate to confirmed page
+        this.router.navigate(['/login']);
+      },
+      (error: HttpErrorResponse) => {
+        this.isPending = false;
+        this.utils.handleHttpError(error);
+      }
+    )
   }
 
   matchingPassword(group: FormGroup) {

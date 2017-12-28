@@ -9,6 +9,8 @@ import {UsersService} from "./users.service";
 import {UsersComponent} from "./users.component";
 import {UserDetailsComponent} from "./user-details/user-details.component";
 import { CreateUserModalComponent } from './create-user-modal/create-user-modal.component';
+import {LoadingModule} from "ngx-loading";
+import {LaddaModule} from "angular2-ladda";
 
 @NgModule({
   imports: [
@@ -16,7 +18,9 @@ import { CreateUserModalComponent } from './create-user-modal/create-user-modal.
     ReactiveFormsModule,
     ModalModule.forRoot(),
     UsersRoutingModule,
-    SharedModule
+    SharedModule,
+    LoadingModule,
+    LaddaModule
   ],
   declarations: [
     UsersComponent,

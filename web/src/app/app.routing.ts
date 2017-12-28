@@ -25,15 +25,23 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadChildren: './views/dashboard/dashboard.module#DashboardModule'
+        loadChildren: './views/dashboard/dashboard.module#DashboardModule',
+        canActivate: [AuthGuardService]
       },
       {
         path: 'users',
-        loadChildren: './views/users/users.module#UsersModule'
+        loadChildren: './views/users/users.module#UsersModule',
+        canActivate: [AuthGuardService]
       },
       {
         path: 'authorizations',
-        loadChildren: './views/authorizations/authorizations.module#AuthorizationsModule'
+        loadChildren: './views/authorizations/authorizations.module#AuthorizationsModule',
+        canActivate: [AuthGuardService]
+      },
+      {
+        path: 'configuration',
+        loadChildren: './views/configuration/configuration.module#ConfigurationModule',
+        canActivate: [AuthGuardService] //TODO: Only root
       }
     ]
   },

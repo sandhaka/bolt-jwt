@@ -4,7 +4,7 @@ import {AccountActivationComponent} from "./account-activation/account-activatio
 
 const routes: Routes = [
   {
-    path: 'activation',
+    path: 'activation/:code',
     component: AccountActivationComponent,
     data: {
       title: 'activation'

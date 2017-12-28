@@ -40,6 +40,7 @@
     </div>
     <div class="card-footer">
       <button [disabled]="form.invalid || !form.dirty"
+              [ladda]="isPending"
               type="submit"
               [ngClass]="{'btn-default': form.invalid || !form.dirty, 'btn-primary' : !form.invalid && form.dirty}"
               class="btn btn-sm">

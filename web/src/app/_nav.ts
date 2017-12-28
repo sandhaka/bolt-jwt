@@ -13,5 +13,10 @@ export const navigation = [
     name: 'Authorizations',
     url: '/authorizations',
     icon: 'icon-key'
+  },
+  {
+    name: 'Configuration',
+    url: '/configuration',
+    icon: 'icon-settings'
   }
 ];

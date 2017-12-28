@@ -25,6 +25,8 @@ namespace BoltJwt.Infrastructure.Modules
 
             #region [Users]
 
+            // Commands handlers
+
             builder.RegisterAssemblyTypes(typeof(UserInsertCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
@@ -40,6 +42,11 @@ namespace BoltJwt.Infrastructure.Modules
             builder.RegisterAssemblyTypes(typeof(RemoveAuthorizationUserCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
+            builder.RegisterAssemblyTypes(typeof(UserActivateCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
+
+            // Commands validation
+
             builder
                 .RegisterAssemblyTypes(typeof(UserInsertCommandValidator).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
@@ -54,6 +61,13 @@ namespace BoltJwt.Infrastructure.Modules
                 .RegisterAssemblyTypes(typeof(RemoveAuthorizationUserCommand).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
+
+            builder
+                .RegisterAssemblyTypes(typeof(UserActivateCommand).GetTypeInfo().Assembly)
+                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+                .AsImplementedInterfaces();
+
+            // Domain events handlers
 
             builder.RegisterAssemblyTypes(typeof(SendEmailToActivateUserCreatedDomainEventHandler).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(INotificationHandler<>));

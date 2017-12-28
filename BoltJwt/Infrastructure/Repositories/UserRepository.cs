@@ -182,6 +182,31 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Activate user, customize password on activation
+        /// </summary>
+        /// <param name="code">Activation code</param>
+        /// <param name="password">New Password</param>
+        /// <returns></returns>
+        public async Task ActivateUserAsync(string code, string password)
+        {
+            var userActivationCode = await _context.UserActivationCodes.FirstAsync(i => i.Code == code) ??
+                                     throw new EntityNotFoundException(nameof(UserActivationCode));
+
+            var user = await _context.Users.FindAsync(userActivationCode.UserId) ??
+                       throw new EntityNotFoundException(nameof(User));
+
+            // If the user exists and if it's wainting for activation, edit his password and activate
+            user.Password = User.PasswordEncrypt(password);
+
+            user.Disabled = false;
+
+            _context.Entry(user).State = EntityState.Modified;
+
+            // Delete the activation code
+            _context.Entry(userActivationCode).State = EntityState.Deleted;
+        }
+
+        /// <summary>
         /// Return the user identity claims
         /// </summary>
         /// <param name="context">DbContext</param>

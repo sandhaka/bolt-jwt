@@ -36,6 +36,8 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
    */
   userFormModel: UserDto;
 
+  isPending = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private userService: UsersService,
@@ -93,6 +95,8 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
    */
   saveUserDetails() {
 
+    this.isPending = true;
+
     const formValue = this.form.value;
 
     const editCommand = {
@@ -104,9 +108,13 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
 
     this.userService.edit(editCommand).subscribe(
       response => {
+        this.isPending = false;
         this.editedUserInfo.emit(response.result);
     },
-      (errorResponse: HttpErrorResponse) => this.utils.handleHttpError(errorResponse));
+      (errorResponse: HttpErrorResponse) => {
+        this.utils.handleHttpError(errorResponse);
+        this.isPending = false;
+      });
   }
 
   /**

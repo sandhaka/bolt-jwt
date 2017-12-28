@@ -10,7 +10,7 @@ import {Subject} from "rxjs/Subject";
 })
 export class CreateAuthModalComponent extends GenericModalComponent {
 
-  onCreate = new Subject<string>();
+  onCreated = new Subject<string>();
 
   authorizationName = '';
 
@@ -18,13 +18,13 @@ export class CreateAuthModalComponent extends GenericModalComponent {
    * A valid authorization name is 3 to 12 letters length
    * @type {string}
    */
-  private pattern = "[a-zA-Z]{3,12}";
+  pattern = "[a-zA-Z]{3,12}";
 
   constructor(public bsModalRef: BsModalRef) {
     super(bsModalRef);
   }
 
   submit() {
-    this.onCreate.next(this.authorizationName);
+    this.onCreated.next(this.authorizationName);
   }
 }

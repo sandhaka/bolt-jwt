@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
+using BoltJwt.Infrastructure.AppConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -79,11 +80,16 @@ namespace BoltJwt.Infrastructure.Context
             return user;
         }
 
-        private static AppConfigurations.Configuration CreateDefaultConfig()
+        private static Configuration CreateDefaultConfig()
         {
-            return new AppConfigurations.Configuration
+            return new Configuration
             {
-
+                SmtpHostName = "localhost",
+                SmtpUserName = "root",
+                SmtpEmail = "root@boltjwt.local",
+                SmtpPort = 25,
+                SmtpPassword = "myPassword",
+                EndpointFqdn = "localhost"
             };
         }
     }
