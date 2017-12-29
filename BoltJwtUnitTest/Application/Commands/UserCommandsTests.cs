@@ -73,7 +73,6 @@ namespace BoltJwtUnitTest.Application.Commands
             }, CancellationToken.None);
 
             // Verify
-            _userRepository.Verify(x => x.UserNameExistsAsync("xxx"), Times.Exactly(1));
             _userRepository.Verify(x => x.UpdateAsync(It.IsAny<UserEditDto>()), Times.Exactly(1));
             _unitOfwork.Verify(x => x.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Exactly(1));
         }

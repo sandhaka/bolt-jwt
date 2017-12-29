@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ReactiveFormComponent} from "../../shared/base/reactiveForm.component";
-import {BsModalService} from "ngx-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UtilityService} from "../../shared/utils.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -20,7 +19,6 @@ export class AccountActivationComponent extends ReactiveFormComponent implements
 
   constructor(
     private formBuilder: FormBuilder,
-    private modalService: BsModalService,
     private utils: UtilityService,
     private route: ActivatedRoute,
     private accountService: AccountService,
