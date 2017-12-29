@@ -35,20 +35,28 @@ export class AccountActivationComponent extends ReactiveFormComponent implements
     };
     this.validationMessages = {
       'password': {
-        'required': 'Required'
+        'required': 'Required',
+        'minlength': 'Minimum 6 character length'
       },
       'confirmPassword': {
-        'required': 'Required'
+        'required': 'Required',
+        'minlength': 'Minimum 6 character length'
       }
     };
     this.form = this.formBuilder.group({
       'password': [
         '',
-        Validators.required
+        [
+          Validators.required,
+          Validators.minLength(6)
+        ]
       ],
       'confirmPassword': [
         '',
-        Validators.required
+        [
+          Validators.required,
+          Validators.minLength(6)
+        ]
       ]
     }, {validator: this.matchingPassword});
 
@@ -69,12 +77,16 @@ export class AccountActivationComponent extends ReactiveFormComponent implements
     });
   }
 
+  /**
+   * Send the activation request with the new password
+   */
   submit() {
 
     this.isPending = true;
 
     const formValue = this.form.value;
 
+    // Build the command
     const command = {
       code: this.activationCode,
       password: formValue.password,
@@ -84,8 +96,7 @@ export class AccountActivationComponent extends ReactiveFormComponent implements
     this.accountService.activate(command).subscribe(
       () => {
         this.isPending = false;
-        // TODO: Navigate to confirmed page
-        this.router.navigate(['/login']);
+        this.router.navigate(['/account/confirmed']);
       },
       (error: HttpErrorResponse) => {
         this.isPending = false;
