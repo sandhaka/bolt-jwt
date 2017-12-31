@@ -17,6 +17,13 @@ namespace BoltJwt.Domain.Model.Abstractions
         Task<User> GetAsync(int id);
 
         /// <summary>
+        /// Get a user by email
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <returns>User entity</returns>
+        Task<User> GetUserByEmailAsync(string email);
+
+        /// <summary>
         /// Add a new user
         /// </summary>
         /// <param name="user">User</param>
@@ -71,6 +78,13 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <param name="password">New Password</param>
         /// <returns></returns>
         Task ActivateUserAsync(string code, string password);
+
+        /// <summary>
+        /// Generate an authorization code to recover the password
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>Auth code</returns>
+        Task<string> GenerateForgotPasswordAuthorizationCodeAsync(int id);
 
         Task UserNameExistsAsync(string username);
         Task EmailExistsAsync(string email);

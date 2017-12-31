@@ -11,9 +11,10 @@ using System;
 namespace BoltJwt.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20171231101218_AddForgotPasswordCodeToUserEntity")]
+    partial class AddForgotPasswordCodeToUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

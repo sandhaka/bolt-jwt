@@ -42,6 +42,17 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Get a user by email
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <returns>User entity</returns>
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(i => i.Email == email) ??
+                   throw new EntityNotFoundException(nameof(User));
+        }
+
+        /// <summary>
         /// Add a new user
         /// </summary>
         /// <param name="user">User</param>
@@ -204,6 +215,22 @@ namespace BoltJwt.Infrastructure.Repositories
 
             // Delete the activation code
             _context.Entry(userActivationCode).State = EntityState.Deleted;
+        }
+
+        /// <summary>
+        /// Generate an authorization code to recover the password
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <returns>Auth code</returns>
+        public async Task<string> GenerateForgotPasswordAuthorizationCodeAsync(int id)
+        {
+            var user = await GetAsync(id);
+
+            user.ForgotPasswordAuthCode = Guid.NewGuid().ToString();
+
+            _context.Entry(user).State = EntityState.Modified;
+
+            return user.ForgotPasswordAuthCode;
         }
 
         /// <summary>

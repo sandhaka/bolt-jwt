@@ -27,5 +27,16 @@ namespace BoltJwt.Controllers
 
             return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
+
+        [Route("")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> PasswordRecoveryAsync([FromBody] PasswordRecoveryCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
+        }
     }
 }

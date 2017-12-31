@@ -27,6 +27,11 @@ namespace BoltJwt.Domain.Model
         public bool Root { get; set; }
 
         /// <summary>
+        /// Forgot password auth code
+        /// </summary>
+        public string ForgotPasswordAuthCode { get; set; }
+
+        /// <summary>
         /// Roles of the user
         /// </summary>
         public List<UserRole> UserRoles { get; }

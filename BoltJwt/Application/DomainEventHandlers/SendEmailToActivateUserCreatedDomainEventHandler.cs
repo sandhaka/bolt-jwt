@@ -41,10 +41,10 @@ namespace BoltJwt.Application.DomainEventHandlers
                 From = {new MailboxAddress("Boltjwt automation", config.SmtpEmail)},
                 To = {new MailboxAddress(notification.Name + " " + notification.Surname, notification.Email)},
                 Subject = "Activate your account",
-                Body = new TextPart("plain")// TODO: configurable message
+                Body = new TextPart("plain")
                 {
                     Text = "Account creation confirmation" + Environment.NewLine +
-                           "--------------------------------------" + Environment.NewLine + Environment.NewLine +
+                           "-----------------------------" + Environment.NewLine + Environment.NewLine +
                            "Customize yuor password and activate your account. " + Environment.NewLine +
                            $"http://{config.EndpointFqdn}:4200/#/account/activation/{notification.ActivationCode}"
                 }
