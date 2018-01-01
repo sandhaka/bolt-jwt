@@ -10,4 +10,8 @@ export class AccountService {
   activate(activateCommand: any): Observable<any> {
     return this.httpClient.post('/api/v1/account', activateCommand);
   }
+
+  forgotPassword(passwordRecoveryCommand: any): Observable<any> {
+    return this.httpClient.post('/api/v1/account/password-recovery', passwordRecoveryCommand);
+  }
 }

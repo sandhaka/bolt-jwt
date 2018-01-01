@@ -9,6 +9,7 @@ import {AccountService} from "./account.service";
 import {GenericModalComponent} from "../shared/modals";
 import {LaddaModule} from "angular2-ladda";
 import {AccountActivatedConfirmationComponent} from "./confirmed/account-activated-confirmation.component";
+import {ForgotPasswordComponent} from "./forgot-password/forgot-password.component";
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import {AccountActivatedConfirmationComponent} from "./confirmed/account-activat
   ],
   declarations: [
     AccountActivationComponent,
-    AccountActivatedConfirmationComponent
+    AccountActivatedConfirmationComponent,
+    ForgotPasswordComponent
   ],
   entryComponents: [
     GenericModalComponent

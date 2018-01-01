@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {AccountActivationComponent} from "./activation/account-activation.component";
 import {AccountActivatedConfirmationComponent} from "./confirmed/account-activated-confirmation.component";
+import {ForgotPasswordComponent} from "./forgot-password/forgot-password.component";
 
 const routes: Routes = [
   {
@@ -16,6 +17,13 @@ const routes: Routes = [
     component: AccountActivatedConfirmationComponent,
     data: {
       title: 'Confirmed'
+    }
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
+    data: {
+      title: 'Password recovery'
     }
   }
 ];

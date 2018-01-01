@@ -30,7 +30,7 @@ export class UtilityService {
     const errorDetails = errorResponse.error && errorResponse.error.Message ?
       errorResponse.error.Message :
       errorResponse.message;
-    this.openModal('Error', `${errorResponse.statusText}: ${errorDetails}`, 'modal-danger');
+    this.openCustomModal('Error', `${errorResponse.statusText}: ${errorDetails}`, 'modal-danger');
   }
 
   /**
@@ -58,7 +58,7 @@ export class UtilityService {
    * @param {string} body
    * @param {string} cssClass
    */
-  openModal(title: string, body: string, cssClass: string) {
+  openCustomModal(title: string, body: string, cssClass: string) {
     const bsModalRef = this.modalService.show(GenericModalComponent);
     bsModalRef.content.modalTitle = title;
     bsModalRef.content.modalClass = cssClass;

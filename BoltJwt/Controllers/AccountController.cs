@@ -28,7 +28,7 @@ namespace BoltJwt.Controllers
             return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
 
-        [Route("")]
+        [Route("password-recovery")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
