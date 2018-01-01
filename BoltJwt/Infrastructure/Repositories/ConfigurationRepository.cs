@@ -45,6 +45,9 @@ namespace BoltJwt.Infrastructure.Repositories
             c.SmtpPort = dto?.SmtpPort ?? c.SmtpPort;
             c.SmtpUserName = dto?.SmtpUserName ?? c.SmtpUserName;
 
+            c.EndpointFqdn = dto?.EndpointFqdn ?? c.EndpointFqdn;
+            c.EndpointPort = dto?.EndpointPort ?? c.EndpointPort;
+
             _context.Entry(c).State = EntityState.Modified;
 
             return c;

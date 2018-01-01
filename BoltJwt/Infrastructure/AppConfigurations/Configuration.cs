@@ -24,5 +24,6 @@ namespace BoltJwt.Infrastructure.AppConfigurations
 
         // System
         public string EndpointFqdn { get; set; }
+        public int EndpointPort { get; set; }
     }
 }

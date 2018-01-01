@@ -46,7 +46,7 @@ namespace BoltJwt.Application.DomainEventHandlers
                     Text = "Account creation confirmation" + Environment.NewLine +
                            "-----------------------------" + Environment.NewLine + Environment.NewLine +
                            "Customize yuor password and activate your account. " + Environment.NewLine +
-                           $"http://{config.EndpointFqdn}:4200/#/account/activation/{notification.ActivationCode}"
+                           $"http://{config.EndpointFqdn}:{config.EndpointPort}/#/account/activation/{notification.ActivationCode}"
                 }
             };
 

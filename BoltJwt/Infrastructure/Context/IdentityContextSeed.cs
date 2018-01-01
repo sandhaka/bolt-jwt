@@ -89,7 +89,8 @@ namespace BoltJwt.Infrastructure.Context
                 SmtpEmail = "root@boltjwt.local",
                 SmtpPort = 25,
                 SmtpPassword = "myPassword",
-                EndpointFqdn = "localhost"
+                EndpointFqdn = "localhost",
+                EndpointPort = 80
             };
         }
     }

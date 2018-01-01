@@ -241,6 +241,7 @@ namespace BoltJwt.Infrastructure.Context
             configurationConfig.Property<string>("SmtpEmail");
             configurationConfig.Property<string>("SmtpPassword");
             configurationConfig.Property<string>("EndpointFqdn");
+            configurationConfig.Property<int>("EndpointPort");
         }
     }
 }

@@ -64,6 +64,13 @@
                 </div>
                 <span style="color: red" *ngIf="formErrors.endpointfqdn">{{formErrors.endpointfqdn}}</span>
               </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Service Port (public)</label>
+                  <input type="number" class="form-control" formControlName="endpointPort">
+                </div>
+                <span style="color: red" *ngIf="formErrors.endpointPort">{{formErrors.endpointPort}}</span>
+              </div>
             </div>
           </div>
         </div>

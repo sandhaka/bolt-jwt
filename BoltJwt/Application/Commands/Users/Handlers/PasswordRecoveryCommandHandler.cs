@@ -46,7 +46,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
                     Text = "Click on the following link to reset your password: " +
                            Environment.NewLine +
                            Environment.NewLine +
-                           $"http://{config.EndpointFqdn}:4200/#/account/password-recovery/{user.Id}/{authorizationCode}"
+                           $"http://{config.EndpointFqdn}:{config.EndpointPort}/#/account/password-recovery/{user.Id}/{authorizationCode}"
                 }
             };
 

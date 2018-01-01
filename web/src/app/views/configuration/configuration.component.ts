@@ -35,7 +35,8 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
       'username': '',
       'password': '',
       'email': '',
-      'endpointfqdn': ''
+      'endpointfqdn': '',
+      'endpointPort': ''
     };
 
     this.validationMessages = {
@@ -57,6 +58,9 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
       },
       'endpointfqdn': {
         'required': 'Required'
+      },
+      'endpointPort': {
+        'required': 'Required'
       }
     };
 
@@ -71,7 +75,8 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
           Validators.email
         ]
       ],
-      'endpointfqdn': ['', Validators.required]
+      'endpointfqdn': ['', Validators.required],
+      'endpointPort': ['', Validators.required],
     });
 
     // Trigger validation on form data change
@@ -96,7 +101,8 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
           username: data.config.smtpUserName,
           password: data.config.smtpPassword,
           email: data.config.smtpEmail,
-          endpointfqdn: data.config.endpointFqdn
+          endpointfqdn: data.config.endpointFqdn,
+          endpointPort: data.config.endpointPort
         });
 
         this.isLoading = false;
@@ -121,7 +127,9 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
       SmtpHostname: formValue.hostname,
       SmtpPort: formValue.port,
       SmtpUserName: formValue.username,
-      SmtpPassword: formValue.password
+      SmtpPassword: formValue.password,
+      EndpointFqdn: formValue.endpointfqdn,
+      EndpointPort: formValue.endpointPort
     };
 
     this.configurationService.post(configDto).subscribe(
