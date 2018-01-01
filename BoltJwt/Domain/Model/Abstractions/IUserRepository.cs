@@ -69,6 +69,7 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <param name="userId">User id</param>
         /// <param name="roleId">Role id</param>
         /// <returns>Task</returns>
+        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
         Task AssignRoleAsync(int userId, int roleId);
 
         /// <summary>
@@ -85,6 +86,16 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <param name="id">User id</param>
         /// <returns>Auth code</returns>
         Task<string> GenerateForgotPasswordAuthorizationCodeAsync(int id);
+
+        /// <summary>
+        /// Edit the user password
+        /// </summary>
+        /// <param name="userId">User Id</param>
+        /// <param name="authorizationcode">Authorization code</param>
+        /// <param name="newPassword">Password</param>
+        /// <returns>Task</returns>
+        /// <exception cref="AuthorizationCodeException">Authorization code is missing or wrong</exception>
+        Task EditPasswordAsync(int userId, string authorizationcode, string newPassword);
 
         Task UserNameExistsAsync(string username);
         Task EmailExistsAsync(string email);

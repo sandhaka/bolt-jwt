@@ -116,6 +116,7 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <param name="userId">User id</param>
         /// <param name="authorizationsId">Authorizations Id</param>
         /// <returns>Task</returns>
+        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
         public async Task AssignAuthorizationAsync(int userId, IEnumerable<int> authorizationsId)
         {
             var user = await _context.Users.FindAsync(userId) ?? throw new EntityNotFoundException(nameof(User));
@@ -172,6 +173,7 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <param name="userId">User id</param>
         /// <param name="roleId">Role id</param>
         /// <returns>Task</returns>
+        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
         public async Task AssignRoleAsync(int userId, int roleId)
         {
             var role = await _context.Roles.FindAsync(roleId) ??
@@ -231,6 +233,33 @@ namespace BoltJwt.Infrastructure.Repositories
             _context.Entry(user).State = EntityState.Modified;
 
             return user.ForgotPasswordAuthCode;
+        }
+
+        /// <summary>
+        /// Edit the user password
+        /// </summary>
+        /// <param name="userId">User Id</param>
+        /// <param name="authorizationcode">Authorization code</param>
+        /// <param name="newPassword">Password</param>
+        /// <returns>Task</returns>
+        /// <exception cref="AuthorizationCodeException">Authorization code is missing or wrong</exception>
+        public async Task EditPasswordAsync(int userId, string authorizationcode, string newPassword)
+        {
+            var user = await _context.Users.FindAsync(userId) ?? throw new EntityNotFoundException(nameof(User));
+
+            if (string.IsNullOrEmpty(user.ForgotPasswordAuthCode))
+            {
+                throw new AuthorizationCodeException("Illicit request. The user has never requested a password reset");
+            }
+
+            if (!user.ForgotPasswordAuthCode.Equals(authorizationcode))
+            {
+                throw new AuthorizationCodeException("Wrong authorization code");
+            }
+
+            user.Password = User.PasswordEncrypt(newPassword);
+
+            _context.Entry(user).State = EntityState.Modified;
         }
 
         /// <summary>

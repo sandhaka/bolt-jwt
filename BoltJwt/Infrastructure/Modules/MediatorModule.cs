@@ -48,6 +48,9 @@ namespace BoltJwt.Infrastructure.Modules
             builder.RegisterAssemblyTypes(typeof(PasswordRecoveryCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
+            builder.RegisterAssemblyTypes(typeof(ResetPasswordCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
+
             // Commands validation
 
             builder
@@ -72,6 +75,11 @@ namespace BoltJwt.Infrastructure.Modules
 
             builder
                 .RegisterAssemblyTypes(typeof(PasswordRecoveryCommand).GetTypeInfo().Assembly)
+                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+                .AsImplementedInterfaces();
+
+            builder
+                .RegisterAssemblyTypes(typeof(ResetPasswordCommand).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
 
