@@ -14,4 +14,8 @@ export class AccountService {
   forgotPassword(passwordRecoveryCommand: any): Observable<any> {
     return this.httpClient.post('/api/v1/account/password-recovery', passwordRecoveryCommand);
   }
+
+  resetPassword(resetPasswordCommand: any) {
+    return this.httpClient.post('/api/v1/account/reset-password', resetPasswordCommand);
+  }
 }

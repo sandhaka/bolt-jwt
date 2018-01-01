@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import {AccountActivationComponent} from "./activation/account-activation.component";
 import {AccountActivatedConfirmationComponent} from "./confirmed/account-activated-confirmation.component";
 import {ForgotPasswordComponent} from "./forgot-password/forgot-password.component";
+import {PasswordRecoveryComponent} from "./password-recovery/password-recovery.component";
 
 const routes: Routes = [
   {
@@ -22,6 +23,13 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     component: ForgotPasswordComponent,
+    data: {
+      title: 'Password recovery'
+    }
+  },
+  {
+    path: 'password-recovery/:userId/:code',
+    component: PasswordRecoveryComponent,
     data: {
       title: 'Password recovery'
     }
