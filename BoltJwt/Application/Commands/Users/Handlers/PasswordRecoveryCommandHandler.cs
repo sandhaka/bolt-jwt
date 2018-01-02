@@ -38,7 +38,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
             // Create the message
             var message = new MimeMessage
             {
-                From = {new MailboxAddress("Boltjwt automation", config.SmtpEmail)},
+                From = {new MailboxAddress("Boltjwt automation - authentication service", config.SmtpEmail)},
                 To = {new MailboxAddress($"{user.Name} {user.Surname}", user.Email)},
                 Subject = "Password recovery",
                 Body = new TextPart("plain")

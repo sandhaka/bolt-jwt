@@ -36,8 +36,7 @@ namespace BoltJwt.Application.Queries.Authorizations
                 connection.Open();
 
                 var result = await connection.QueryAsync<dynamic>(
-                    $@"SELECT Id, Name FROM IdentityContext.def_authorizations
-                        WHERE Name <> '{Constants.AdministrativeAuth}'");
+                    $@"SELECT Id, Name FROM IdentityContext.def_authorizations");
 
                 return result.AsList().Select(r => MapAuthResult(r)).ToList();
             }
@@ -62,7 +61,7 @@ namespace BoltJwt.Application.Queries.Authorizations
                 var nameValue = string.IsNullOrEmpty(name) ? string.Empty : $"%{name}%";
 
                 var count = await connection.QueryAsync<int>(
-                    $"SELECT COUNT(*) FROM IdentityContext.def_authorizations WHERE Name <> '{Constants.AdministrativeAuth}'" +
+                    $"SELECT COUNT(*) FROM IdentityContext.def_authorizations " +
                     ((!string.IsNullOrEmpty(nameValue)) ? "AND Name like @nameValue " : ""),
                     new
                     {
@@ -75,7 +74,7 @@ namespace BoltJwt.Application.Queries.Authorizations
 
                 var result = await connection.QueryAsync<dynamic>(
                     $@"SELECT * FROM ( " +
-                    $"SELECT ROW_NUMBER() OVER ( ORDER BY Name ) AS RowNum, * FROM IdentityContext.def_authorizations WHERE Name <> '{Constants.AdministrativeAuth}' " +
+                    $"SELECT ROW_NUMBER() OVER ( ORDER BY Name ) AS RowNum, * FROM IdentityContext.def_authorizations " +
                     ((!string.IsNullOrEmpty(nameValue)) ? "AND name like @nameValue " : "") +
                     ") AS RowConstrainedResult WHERE RowNum >= @startRow AND RowNum < @endRow ORDER BY RowNum",
                     new

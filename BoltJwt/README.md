@@ -3,7 +3,7 @@
 *Work in progress*
 
 ### Availables tags
-0.1-dev [(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
+1.0 [(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
 
 ### Usage
 
@@ -43,6 +43,11 @@ Specify the connection string for a MS SQL Server instance.
 /api/token
 ```
 Retrieve the token
+
+```text
+/api/tokenrenew
+```
+Renew the token
 
 Example:
 

@@ -38,7 +38,7 @@ namespace BoltJwt.Application.DomainEventHandlers
 
             var message = new MimeMessage
             {
-                From = {new MailboxAddress("Boltjwt automation", config.SmtpEmail)},
+                From = {new MailboxAddress("Boltjwt automation - authentication service", config.SmtpEmail)},
                 To = {new MailboxAddress(notification.Name + " " + notification.Surname, notification.Email)},
                 Subject = "Activate your account",
                 Body = new TextPart("plain")
