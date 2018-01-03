@@ -9,6 +9,7 @@ import {AuthorizationsService} from "./authorizations.service";
 import { CreateAuthModalComponent } from './create-auth-modal/create-auth-modal.component';
 import {FormsModule} from "@angular/forms";
 import { ViewAuthUsageModalComponent } from './view-auth-usage-modal/view-auth-usage-modal.component';
+import {ErrorModalComponent} from "../../shared/modals/error/error-modal.component";
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { ViewAuthUsageModalComponent } from './view-auth-usage-modal/view-auth-u
   ],
   entryComponents: [
     GenericModalComponent,
+    ErrorModalComponent,
     CreateAuthModalComponent,
     ViewAuthUsageModalComponent,
     ConfirmModalComponent

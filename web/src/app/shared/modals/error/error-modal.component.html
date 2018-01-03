@@ -1,0 +1,26 @@
+<div class="modal-danger">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">Error: {{errorCode}}</h4>
+      <button type="button" class="close" (click)="bsModalRef.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <p>
+          {{errorDescr}}
+        </p>
+      </div>
+      <div>
+        <a style="color: #5b06f6; cursor: pointer;" (click)="toggleAccordion()">Details</a>
+      </div>
+      <div *ngIf="errorDetailsAccordionOpened">
+        <small>{{detailedErrorDescr}}</small>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()">Close</button>
+    </div>
+  </div>
+</div>

@@ -2,10 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Page} from "./model/page";
 import {Observable} from "rxjs/Observable";
 import {PagedData} from "./model/paged-data";
-import {BsModalRef, BsModalService} from "ngx-bootstrap";
-import {GenericModalComponent} from "../modals";
 import {HttpErrorResponse} from "@angular/common/http";
 import {DataTableService} from "./data-table.service";
+import {UtilityService} from "../utils.service";
 
 /**
  *  ngx-datatable wrapper component
@@ -56,10 +55,9 @@ export class DataTableComponent implements OnInit {
   isLoading = false;
 
   private filters: any[];
-  private bsModalRef: BsModalRef;
 
   constructor(
-    private bsModalService: BsModalService,
+    private utils: UtilityService,
     private dataTableService: DataTableService) {
 
     this.page.pageNumber = 0;
@@ -90,18 +88,8 @@ export class DataTableComponent implements OnInit {
     },
       (error: HttpErrorResponse) => {
         this.isLoading = false;
-        const errorDetails = error.error && error.error.Message ?
-          error.error.Message :
-          error.message;
-        this.openModal('Error', `${error.statusText}: ${errorDetails}`, 'modal-danger');
+        this.utils.handleHttpError(error);
       });
-  }
-
-  private openModal(title: string, body: string, cssClass: string) {
-    this.bsModalRef = this.bsModalService.show(GenericModalComponent);
-    this.bsModalRef.content.modalTitle = title;
-    this.bsModalRef.content.modalClass = cssClass;
-    this.bsModalRef.content.modalText = body;
   }
 
   private subscribeToTableEvents() {
@@ -117,7 +105,7 @@ export class DataTableComponent implements OnInit {
       this.load({offset: this.page.pageNumber});
     });
 
-    // Row deleted
+    // Reload request
     this.dataTableService.reload$.subscribe(() => {
       this.load({offset: this.page.pageNumber});
     });

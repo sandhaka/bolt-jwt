@@ -25,8 +25,6 @@ namespace BoltJwtUnitTest.Application.Commands
 
             _userRepository.Setup(x => x.UnitOfWork).Returns(_unitOfwork.Object);
             _unitOfwork.Setup(x => x.SaveEntitiesAsync(new CancellationToken())).Returns(Task.FromResult(true));
-            _userRepository.Setup(x => x.UserNameExistsAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
-            _userRepository.Setup(x => x.EmailExistsAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
         }
 
         [Fact]
@@ -48,8 +46,6 @@ namespace BoltJwtUnitTest.Application.Commands
             }, CancellationToken.None);
 
             // Verify
-            _userRepository.Verify(x => x.UserNameExistsAsync("xxx"), Times.Exactly(1));
-            _userRepository.Verify(x => x.EmailExistsAsync("xxx"), Times.Exactly(1));
             _userRepository.Verify(x => x.Add(It.IsAny<User>()), Times.Exactly(1));
             _unitOfwork.Verify(x => x.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Exactly(1));
         }

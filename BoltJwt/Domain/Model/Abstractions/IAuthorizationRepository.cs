@@ -26,12 +26,5 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <param name="name">Authorization name</param>
         /// <returns>Authorization definition</returns>
         Task<DefinedAuthorization> GetByNameAsync(string name);
-
-        /// <summary>
-        /// Check if the authorization name has a definition
-        /// </summary>
-        /// <param name="name">Authorization name</param>
-        /// <returns>Authorization is valid</returns>
-        bool ContainsAuthorization(string name);
     }
 }

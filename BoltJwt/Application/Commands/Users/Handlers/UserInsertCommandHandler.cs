@@ -18,9 +18,6 @@ namespace BoltJwt.Application.Commands.Users.Handlers
 
         public async Task<bool> Handle(UserInsertCommand userInsertCommand, CancellationToken cancellationToken)
         {
-            await _userRepository.UserNameExistsAsync(userInsertCommand.UserName);
-            await _userRepository.EmailExistsAsync(userInsertCommand.Email);
-
             var newUser = new User(
                 userInsertCommand.Name,
                 userInsertCommand.Surname,

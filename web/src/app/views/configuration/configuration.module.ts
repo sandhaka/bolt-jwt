@@ -8,6 +8,7 @@ import {ConfigurationComponent} from "./configuration.component";
 import {GenericModalComponent} from "../../shared/modals";
 import {ConfigurationRoutingModule} from "./configuration.routing";
 import {ConfigurationService} from "./configuration.service";
+import {ErrorModalComponent} from "../../shared/modals/error/error-modal.component";
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import {ConfigurationService} from "./configuration.service";
     ConfigurationComponent
   ],
   entryComponents: [
-    GenericModalComponent
+    GenericModalComponent,
+    ErrorModalComponent
   ],
   providers: [
     ConfigurationService

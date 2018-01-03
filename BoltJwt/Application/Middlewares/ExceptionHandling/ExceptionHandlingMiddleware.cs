@@ -42,7 +42,8 @@ namespace BoltJwt.Application.Middlewares.ExceptionHandling
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.NotFound;
 
-                    jsonResponse.Message = entityNotFoundException.Message +
+                    jsonResponse.Message = $"The object {entityNotFoundException.EntityTypeName} has not been found";
+                    jsonResponse.Details = entityNotFoundException.Message +
                                            $" - Entity: {entityNotFoundException.EntityTypeName}";
                     jsonResponse.StatusCode = (int) HttpStatusCode.NotFound;
                     break;
@@ -51,7 +52,8 @@ namespace BoltJwt.Application.Middlewares.ExceptionHandling
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.Forbidden;
 
-                    jsonResponse.Message = notEditableEntityException.Message;
+                    jsonResponse.Message = "The builtin object is not editable";
+                    jsonResponse.Details = notEditableEntityException.Message;
                     jsonResponse.StatusCode = (int) HttpStatusCode.Forbidden;
                     break;
                 }
@@ -59,16 +61,20 @@ namespace BoltJwt.Application.Middlewares.ExceptionHandling
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.Forbidden;
 
-                    jsonResponse.Message = wrongCredentialsException.Message;
+                    jsonResponse.Message = "Insufficient permissions";
+                    jsonResponse.Details = wrongCredentialsException.Message;
                     jsonResponse.StatusCode = (int) HttpStatusCode.Forbidden;
                     break;
                 }
-                case PropertyIndexExistsException propertyIndexExistsException:
+                case DuplicatedIndexException duplicatedIndexException:
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.Conflict;
 
-                    jsonResponse.Message = propertyIndexExistsException.Message +
-                                           $" - Property: {propertyIndexExistsException.PropertyIndexName}";
+                    jsonResponse.Message = "There is another object with the same index. " +
+                                           "The element can not be duplicated. " +
+                                           $"Duplicated value: {duplicatedIndexException.DuplicatedValue}";
+                    jsonResponse.Details = duplicatedIndexException.Message +
+                                           $" - Property: {duplicatedIndexException.DuplicatedValue}";
                     jsonResponse.StatusCode = (int) HttpStatusCode.Conflict;
                     break;
                 }
@@ -76,7 +82,8 @@ namespace BoltJwt.Application.Middlewares.ExceptionHandling
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
 
-                    jsonResponse.Message = queryFiltersFormatException.Message +
+                    jsonResponse.Message = "Bad filters format";
+                    jsonResponse.Details = queryFiltersFormatException.Message +
                                            $" - Filters: {queryFiltersFormatException.Filters}" +
                                            $", Details: {queryFiltersFormatException.InnerException?.Message}";
 
@@ -87,7 +94,8 @@ namespace BoltJwt.Application.Middlewares.ExceptionHandling
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
-                    jsonResponse.Message = ParseExceptionMessages(exception);
+                    jsonResponse.Message = "Unrecognized error. See the error details for more info";
+                    jsonResponse.Details = ParseExceptionMessages(exception);
                     jsonResponse.StatusCode = (int) HttpStatusCode.InternalServerError;
                     break;
                 }

@@ -59,6 +59,16 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <returns>User added</returns>
         public User Add(User user)
         {
+            if (_context.Users.Any(i => i.UserName == user.UserName))
+            {
+                throw new DuplicatedIndexException(user.UserName);
+            }
+
+            if (_context.Users.Any(i => i.Email == user.Email))
+            {
+                throw new DuplicatedIndexException(user.Email);
+            }
+
             _context.Users.Add(user);
 
             return user;
@@ -78,6 +88,11 @@ namespace BoltJwt.Infrastructure.Repositories
             if (userToUpdate.Root)
             {
                 throw new NotEditableEntityException("Root user");
+            }
+
+            if (_context.Users.Any(i => i.UserName == userEditDto.UserName))
+            {
+                throw new DuplicatedIndexException(userEditDto.UserName);
             }
 
             userToUpdate.Name = userEditDto.Name;
@@ -128,6 +143,12 @@ namespace BoltJwt.Infrastructure.Repositories
 
             foreach (var id in authorizationsId)
             {
+                // Skip already added authorizations
+                if(user.Authorizations.Any(i => i.DefAuthorizationId == id))
+                {
+                    continue;
+                }
+
                 user.Authorizations.Add(
                     new UserAuthorization
                     {
@@ -184,6 +205,11 @@ namespace BoltJwt.Infrastructure.Repositories
             if (user.Root)
             {
                 throw new NotEditableEntityException("Root user");
+            }
+
+            if (user.UserRoles.Any(i => i.RoleId == roleId))
+            {
+                return;
             }
 
             user.UserRoles.Add(
@@ -338,25 +364,5 @@ namespace BoltJwt.Infrastructure.Repositories
 
             return authorizationSet.Select(i => i.Name).ToArray();
         }
-
-        #region [Helpers]
-
-        public async Task UserNameExistsAsync(string username)
-        {
-            if (await _context.Users.AnyAsync(i => i.UserName.Equals(username)))
-            {
-                throw new PropertyIndexExistsException("UserName");
-            }
-        }
-
-        public async Task EmailExistsAsync(string email)
-        {
-            if (await _context.Users.AnyAsync(i => i.Email.Equals(email)))
-            {
-                throw new PropertyIndexExistsException("Email");
-            }
-        }
-
-        #endregion
     }
 }

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpErrorResponse} from "@angular/common/http";
 import {ConfirmModalComponent, GenericModalComponent} from "./modals";
 import {BsModalService} from "ngx-bootstrap";
+import {ErrorModalComponent} from "./modals/error/error-modal.component";
 
 @Injectable()
 export class UtilityService {
@@ -27,10 +28,22 @@ export class UtilityService {
    * @param {HttpErrorResponse} errorResponse
    */
   handleHttpError(errorResponse: HttpErrorResponse) {
-    const errorDetails = errorResponse.error && errorResponse.error.Message ?
-      errorResponse.error.Message :
-      errorResponse.message;
-    this.openCustomModal('Error', `${errorResponse.statusText}: ${errorDetails}`, 'modal-danger');
+    if(typeof(errorResponse.error) !== "object") {
+      const descr = errorResponse.statusText != null ? errorResponse.statusText : errorResponse.message;
+      const detailedDescr = errorResponse.statusText + '\n\n' + errorResponse.message;
+      this.openErrorModal(errorResponse.status, descr, detailedDescr);
+    } else {
+      const descr = errorResponse.error.Message;
+      const detailedDescr = errorResponse.error.Details + '\n\n' + "StackTrace:" + '\n' + errorResponse.error.StackTrace;
+      this.openErrorModal(errorResponse.error.StatusCode, descr, detailedDescr);
+    }
+  }
+
+  openErrorModal(errorCode: number, errorDescr: string, detailedErrorDescr: string) {
+    const bsErrorModalRef = this.modalService.show(ErrorModalComponent);
+    bsErrorModalRef.content.errorDescr = errorDescr;
+    bsErrorModalRef.content.detailedErrorDescr = detailedErrorDescr;
+    bsErrorModalRef.content.errorCode = errorCode;
   }
 
   /**

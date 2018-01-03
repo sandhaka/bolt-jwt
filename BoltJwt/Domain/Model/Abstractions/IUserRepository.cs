@@ -96,8 +96,5 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <returns>Task</returns>
         /// <exception cref="AuthorizationCodeException">Authorization code is missing or wrong</exception>
         Task EditPasswordAsync(int userId, string authorizationcode, string newPassword);
-
-        Task UserNameExistsAsync(string username);
-        Task EmailExistsAsync(string email);
     }
 }

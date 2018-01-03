@@ -11,6 +11,7 @@ import {UserDetailsComponent} from "./user-details/user-details.component";
 import { CreateUserModalComponent } from './create-user-modal/create-user-modal.component';
 import {LoadingModule} from "ngx-loading";
 import {LaddaModule} from "angular2-ladda";
+import {ErrorModalComponent} from "../../shared/modals/error/error-modal.component";
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import {LaddaModule} from "angular2-ladda";
   ],
   entryComponents: [
     GenericModalComponent,
+    ErrorModalComponent,
     ConfirmModalComponent,
     CreateUserModalComponent
   ],

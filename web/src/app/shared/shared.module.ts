@@ -12,6 +12,7 @@ import {GenericModalComponent, ConfirmModalComponent} from "./modals";
 import {AuthorizationsManagerComponent} from "./components/authorizations-manager/authorizations-manager.component";
 import {UtilityService} from "./utils.service";
 import {LoadingModule} from "ngx-loading";
+import {ErrorModalComponent} from "./modals/error/error-modal.component";
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import {LoadingModule} from "ngx-loading";
   declarations: [
     GenericModalComponent,
     ConfirmModalComponent,
+    ErrorModalComponent,
     DataTableComponent,
     DataTableFiltersComponent,
     DataTableFiltersStringComponent,
@@ -34,6 +36,7 @@ import {LoadingModule} from "ngx-loading";
   exports: [
     GenericModalComponent,
     ConfirmModalComponent,
+    ErrorModalComponent,
     DataTableComponent,
     DataTableFiltersComponent,
     ReactiveFormComponent,

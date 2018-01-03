@@ -33,6 +33,11 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <returns>Authorization definition</returns>
         public DefinedAuthorization Add(DefinedAuthorization definedAuthorization)
         {
+            if (_context.Authorizations.Any(i => i.Name == definedAuthorization.Name))
+            {
+                throw new DuplicatedIndexException(definedAuthorization.Name);
+            }
+
             _context.Add(definedAuthorization).State = EntityState.Added;
             return definedAuthorization;
         }
@@ -62,16 +67,6 @@ namespace BoltJwt.Infrastructure.Repositories
         public async Task<DefinedAuthorization> GetByNameAsync(string name)
         {
             return await _context.Authorizations.FirstAsync(i => i.Name == name);
-        }
-
-        /// <summary>
-        /// Check if the authorization name has a definition
-        /// </summary>
-        /// <param name="name">Authorization name</param>
-        /// <returns>Authorization is valid</returns>
-        public bool ContainsAuthorization(string name)
-        {
-            return _context.Authorizations.Any(i => i.Name.Equals(name));
         }
     }
 }

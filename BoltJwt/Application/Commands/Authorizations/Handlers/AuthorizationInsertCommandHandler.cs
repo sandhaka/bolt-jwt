@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
-using BoltJwt.Infrastructure.Repositories.Exceptions;
 using MediatR;
 
 namespace BoltJwt.Application.Commands.Authorizations.Handlers
@@ -21,11 +20,6 @@ namespace BoltJwt.Application.Commands.Authorizations.Handlers
         public async Task<bool> Handle(AuthorizationInsertCommand authorizationInsertCommand, CancellationToken cancellationToken)
         {
             var auth = new DefinedAuthorization(authorizationInsertCommand.Name);
-
-            if (_authorizationRepository.ContainsAuthorization(authorizationInsertCommand.Name))
-            {
-                throw new PropertyIndexExistsException(nameof(auth.Name));
-            }
 
             _authorizationRepository.Add(auth);
 
