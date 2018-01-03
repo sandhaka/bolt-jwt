@@ -104,7 +104,7 @@ services.AddAuthorization(options =>
 public static AuthorizationOptions AddCustomPolicies(this AuthorizationOptions authOptions)
 {
     authOptions.AddPolicy("yourPolicy", policyBuilder => policyBuilder.AddRequirements(
-        new AuthorizationsRequirement(Constants.AdministrativeAuth)));
+        new AuthorizationsRequirement("yourPolicyName")));
     
     // Others ...
     
@@ -141,7 +141,7 @@ public class AuthorizationsHandler : AuthorizationHandler<AuthorizationsRequirem
             JsonConvert.DeserializeObject<string[]>(
                 authorizationsList?.Value ?? throw new NullReferenceException("Authorizations claim"));
 
-        // Check is the user is authorized to access the resources
+        // Check if the user is authorized to access the resources
         foreach (var authorization in authorizations)
         {
             if (requirement.Authorizations.Contains(authorization))

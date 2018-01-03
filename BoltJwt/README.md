@@ -84,3 +84,7 @@ On windows system the above command become:
 ```sh
 curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"root\",\"password\":\"root\"}" -v http://127.0.0.1:5000/api/token
 ```
+
+#### Management:
+Manage from the web interface administration, default is http://localhost/#/login
+Default root user password: 'root'
