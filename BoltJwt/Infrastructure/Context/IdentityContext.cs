@@ -22,6 +22,7 @@ namespace BoltJwt.Infrastructure.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserActivationCode> UserActivationCodes { get; set; }
         public DbSet<AppConfigurations.Configuration> Configuration { get; set; }
+        public DbSet<TokenLog> TokenLogs { get; set; }
 
         private readonly IMediator _mediator;
 
@@ -72,6 +73,7 @@ namespace BoltJwt.Infrastructure.Context
             modelBuilder.Entity<User>(ConfigureUsers);
             modelBuilder.Entity<Role>(ConfigureRoles);
             modelBuilder.Entity<AppConfigurations.Configuration>(ConfigureConfiguration);
+            modelBuilder.Entity<TokenLog>(ConfigureTokenLogs);
 
             /**
              * Configure join tables
@@ -242,6 +244,14 @@ namespace BoltJwt.Infrastructure.Context
             configurationConfig.Property<string>("SmtpPassword");
             configurationConfig.Property<string>("EndpointFqdn");
             configurationConfig.Property<int>("EndpointPort");
+        }
+
+        private void ConfigureTokenLogs(EntityTypeBuilder<TokenLog> tokenLogConfig)
+        {
+            tokenLogConfig.ToTable("tokenlogs", DefaultSchema);
+            tokenLogConfig.HasKey(i => i.Id);
+            tokenLogConfig.Property<DateTime>("Timestamp").IsRequired();
+            tokenLogConfig.Property<string>("Value").IsRequired();
         }
     }
 }
