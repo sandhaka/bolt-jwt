@@ -1,3 +1,35 @@
 <div class="animated fadeIn">
-  Hello World!
+  <div class="card">
+    <div class="card-header">
+      JWT Tokens
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="chart-wrapper">
+          <canvas baseChart class="chart"
+                  [datasets]="barChartData"
+                  [labels]="barChartLabels"
+                  [options]="barChartOptions"
+                  [legend]="true"
+                  [chartType]="'bar'">
+          </canvas>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom: 25px;">
+        <div class="col-sm-12">
+          <app-data-table
+            [pageSize]="numberOfElements"
+            [columnNames]="columnNames"
+            [getData]="getDataFunc"
+            [select]="onSelectFunc">
+          </app-data-table>
+          <ng-template #dateCol let-value="value">
+           {{value | date:'short'}}
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+

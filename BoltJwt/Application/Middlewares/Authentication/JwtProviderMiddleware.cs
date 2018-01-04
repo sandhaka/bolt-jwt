@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BoltJwt.Application.Services;
+using BoltJwt.Domain.Model;
+using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -15,8 +19,19 @@ namespace BoltJwt.Application.Middlewares.Authentication
 {
     public class JwtProviderMiddleware : AuthenticationJwtMiddleware
     {
-        public JwtProviderMiddleware(RequestDelegate next, IOptions<TokenOptions> options) : base(next, options)
+        private readonly ITokenLogsRepository _tokenLogsRepository;
+        private readonly ILogger<JwtProviderMiddleware> _logger;
+
+        public JwtProviderMiddleware(
+            RequestDelegate next,
+            IOptions<TokenOptions> options,
+            ITokenLogsRepository tokenLogsRepository,
+            ILogger<JwtProviderMiddleware> logger
+            ) : base(next, options)
         {
+            _tokenLogsRepository = tokenLogsRepository ?? throw new ArgumentNullException(nameof(tokenLogsRepository));
+            _logger = logger;
+
             ThrowIfInvalidOptions(Options);
         }
 
@@ -58,6 +73,27 @@ namespace BoltJwt.Application.Middlewares.Authentication
                 access_token = encodedJwt,
                 expires_in = (int)opts.Expiration.TotalSeconds
             };
+
+            try
+            {
+                // Log the created token
+                var userId = int.Parse(identity.Claims.First(i => i.Type == "userId")?.Value ??
+                                       throw new NullReferenceException("userId claim"));
+
+                await _tokenLogsRepository.AddAsync(new TokenLog
+                {
+                    Timestamp = DateTime.Now,
+                    UserId = userId,
+                    Value = encodedJwt
+                });
+
+                await _tokenLogsRepository.UnitOfWork.SaveEntitiesAsync();
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on token logs creation");
+            }
 
             // Serialize and return
             httpContext.Response.ContentType = "application/json";

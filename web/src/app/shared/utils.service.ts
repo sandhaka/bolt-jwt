@@ -29,10 +29,12 @@ export class UtilityService {
    */
   handleHttpError(errorResponse: HttpErrorResponse) {
     if(typeof(errorResponse.error) !== "object") {
+      // Not managed exception
       const descr = errorResponse.statusText != null ? errorResponse.statusText : errorResponse.message;
       const detailedDescr = errorResponse.statusText + '\n\n' + errorResponse.message;
       this.openErrorModal(errorResponse.status, descr, detailedDescr);
     } else {
+      // Managed exception
       const descr = errorResponse.error.Message;
       const detailedDescr = errorResponse.error.Details + '\n\n' + "StackTrace:" + '\n' + errorResponse.error.StackTrace;
       this.openErrorModal(errorResponse.error.StatusCode, descr, detailedDescr);

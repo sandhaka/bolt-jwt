@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using BoltJwt.Application.Queries.Authorizations;
+using BoltJwt.Application.Queries.Logs;
 using BoltJwt.Application.Queries.Roles;
 using BoltJwt.Application.Queries.Users;
 using BoltJwt.Application.Services;
@@ -34,6 +35,10 @@ namespace BoltJwt.Infrastructure.Modules
                 .As<IAuthorizationQueries>()
                 .InstancePerLifetimeScope();
 
+            builder.Register(compContext => new TokenLogsQueries(ConnectionString))
+                .As<ITokenLogsQueries>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<UserRepository>()
                 .As<IUserRepository>()
                 .InstancePerLifetimeScope();
@@ -48,6 +53,10 @@ namespace BoltJwt.Infrastructure.Modules
 
             builder.RegisterType<ConfigurationRepository>()
                 .As<IConfigurationRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<TokenLogsRepository>()
+                .As<ITokenLogsRepository>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<AuthorizationsHandler>()
