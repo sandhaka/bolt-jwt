@@ -65,8 +65,8 @@ export class DashboardComponent implements OnInit {
   onSelectFunc: Function;
 
   constructor(private tokenLogsService: TokenLogsService) {
-    this.numberOfElements = 8;      // Get last 8 token logs
-    this.numberOfDisplayedDays = 15;// Display the tokens in a 15 days range
+    this.numberOfElements = 16;
+    this.numberOfDisplayedDays = 30;
   }
 
   ngOnInit() {

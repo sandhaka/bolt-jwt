@@ -90,6 +90,16 @@ namespace BoltJwt.Application.Middlewares.ExceptionHandling
                     jsonResponse.StatusCode = (int) HttpStatusCode.BadRequest;
                     break;
                 }
+                case EntityInUseException entityInUseException:
+                {
+                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+
+                    jsonResponse.Message = $"Entity '{entityInUseException.Value}' is in use";
+                    jsonResponse.Details = entityInUseException.Message;
+
+                    jsonResponse.StatusCode = (int) HttpStatusCode.BadRequest;
+                    break;
+                }
                 default:
                 {
                     context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;

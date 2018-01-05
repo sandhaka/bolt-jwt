@@ -56,6 +56,11 @@ namespace BoltJwt.Infrastructure.Repositories
                 throw new NotEditableEntityException($"Authorization definition: {Constants.AdministrativeAuth}");
             }
 
+            if (IsInUse(id))
+            {
+                throw new EntityInUseException(authToDelete.Name);
+            }
+
             _context.Entry(authToDelete).State = EntityState.Deleted;
         }
 
@@ -67,6 +72,17 @@ namespace BoltJwt.Infrastructure.Repositories
         public async Task<DefinedAuthorization> GetByNameAsync(string name)
         {
             return await _context.Authorizations.FirstAsync(i => i.Name == name);
+        }
+
+        /// <summary>
+        /// Check authorization usage
+        /// </summary>
+        /// <param name="authId">Authorization Id</param>
+        /// <returns></returns>
+        private bool IsInUse(int authId)
+        {
+            return _context.Roles.Any(i => i.Authorizations.Any(j => j.DefAuthorizationId == authId)) &&
+                   _context.Users.Any(i => i.Authorizations.Any(j => j.DefAuthorizationId == authId));
         }
     }
 }
