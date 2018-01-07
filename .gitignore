@@ -19,6 +19,7 @@ BoltJwt/wwwroot/*
 
 # Local configurations
 docker-compose.dev.local.yml
+docker-compose.release-test.yml
 
 # sql scripts for testing
 db-testing/
