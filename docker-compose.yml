@@ -13,7 +13,6 @@ services:
 
   boltjwt:
     image: sandhaka/bolt-jwt:0.1-dev
-    build: ./BoltJwt/
     ports:
       - "80:80"
     depends_on:
