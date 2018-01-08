@@ -9,4 +9,4 @@ branches:
 before_script:
   - sudo chmod +x build/build.sh
 script:
-  - ./build/build.sh
+  - (cd build/ && ./build.sh)
