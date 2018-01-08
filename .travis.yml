@@ -9,6 +9,7 @@ branches:
 before_script:
   - sudo chmod +x build/build.sh
   - npm install -g @angular/cli@1.6.3
+  - (cd web/ && npm install)
 script:
   - (cd build/ && ./build.sh)
   - dotnet test ./BoltJwtUnitTest/
