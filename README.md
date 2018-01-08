@@ -2,6 +2,8 @@ BoltJwt - Json Web Token provider
 ---
 *Simplified authentication service based on JWT.*
 
+[![Build Status](https://travis-ci.org/sandhaka/bolt-jwt.svg?branch=master)](https://travis-ci.org/sandhaka/bolt-jwt)
+
 **...Work in progress!**
 
 #### What's is it?
