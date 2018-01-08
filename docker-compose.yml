@@ -12,7 +12,7 @@ services:
       - ${HOME}/data/mssql:/var/opt/mssql
 
   boltjwt:
-    image: sandhaka/bolt-jwt:0.1-dev
+    image: sandhaka/bolt-jwt:dev
     ports:
       - "80:80"
     depends_on:
