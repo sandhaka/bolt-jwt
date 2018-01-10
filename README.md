@@ -18,13 +18,18 @@ Every token contains the 'authorizations' private claim with the user configured
 #### How to start?
 ##### Build your key pair
 Creates a valid **key pair** used to generate the signed tokens. **There is a certificates example list 
-and a link with the detailed instructions in certs/README.md.**
+and a link with the detailed instructions in [BoltJwt/certs/README.md](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/certs/README.md).**
 
 ##### Run with docker-compose
 Run a Mssql instance and the BoltJwt container using the docker-compose file in the project folder. 
 
 Or create your compose file, 
-following the instruction in [BoltJwt/README.md](https://github.com/sandhaka/bolt-jwt/blob/master/README.md) file.
+following the instruction in [BoltJwt/README.md](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/README.md) file.
+
+Run
+```sh
+$ docker-compose -f docker-compose -f <your-compose-file-config> up --build -d
+```
 
 ##### Connect to the web app
 Connect to the web interface with the 'root' user (Default password: 'root'). (default: http://localhost/#/login)
@@ -44,7 +49,9 @@ Use yours authorizations in yours services. Authorizations are embedded in the T
 with the public key created bofore.**
 
 ##### TODO
-Roles and groups management aren't yet implemented.
+Root password management
+Users password management
+Roles and groups management
 
 #### Consumers setup example
 ##### ASP.Net Core implementation.
@@ -188,7 +195,7 @@ Renew the token
 Example:
 
 ```sh 
-curl -H "Content-Type: application/json" -X POST -d "{'username':'root','password':'root'}" -v http://127.0.0.1:5000/api/token
+$ curl -H "Content-Type: application/json" -X POST -d "{'username':'root','password':'root'}" -v http://127.0.0.1:5000/api/token
 ```
 Output:
 ```sh
@@ -218,7 +225,7 @@ Output:
 ```
 On windows system the above command become:
 ```sh
-curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"root\",\"password\":\"root\"}" -v http://127.0.0.1:5000/api/token
+$ curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"root\",\"password\":\"root\"}" -v http://127.0.0.1:5000/api/token
 ```
 
 #### Diagram
@@ -241,3 +248,11 @@ After these claims there are a list of "private claims" defined by the applicati
 - authorizations: That's the most important part. This is a json (string) that **contains a full list of the 
 authorizations of the user. The consumers services have to read this claim to determine the level of
 authorization of the request initiator.**
+
+#### Deployment
+You can deploy the project to a host by the following scripts, contained in the 'scripts' folder (you have to customize it partially and using your .pem identity file):
+```sh
+$ ./build.sh
+$ ./setup-deploy.sh
+$ ./deploy.sh
+```
