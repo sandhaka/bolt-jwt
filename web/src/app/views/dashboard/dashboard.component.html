@@ -5,14 +5,16 @@
     </div>
     <div class="card-body">
       <div class="row">
-        <div class="chart-wrapper">
-          <canvas baseChart class="chart"
-                  [datasets]="barChartData"
-                  [labels]="barChartLabels"
-                  [options]="barChartOptions"
-                  [legend]="true"
-                  [chartType]="'bar'">
-          </canvas>
+        <div class="col-sm-12">
+          <div class="chart-wrapper">
+            <canvas baseChart class="chart"
+                    [datasets]="barChartData"
+                    [labels]="barChartLabels"
+                    [options]="barChartOptions"
+                    [legend]="true"
+                    [chartType]="'bar'">
+            </canvas>
+          </div>
         </div>
       </div>
       <div class="row" style="margin-bottom: 25px;">
