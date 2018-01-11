@@ -37,6 +37,17 @@
           <span style="color: red" *ngIf="formErrors.username">{{formErrors.username}}</span>
         </div>
       </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <input
+              class="btn btn-sm btn-primary"
+              type="button"
+              value="Password reset request"
+              (click)="passwordResetRequest()">
+          </div>
+        </div>
+      </div>
     </div>
     <div class="card-footer">
       <button [disabled]="form.invalid || !form.dirty"

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
-using BoltJwt.Infrastructure.AppConfigurations;
+using BoltJwt.Domain.Model.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

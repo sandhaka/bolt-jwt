@@ -88,6 +88,9 @@ namespace BoltJwt.Infrastructure.Modules
             builder.RegisterAssemblyTypes(typeof(SendEmailToActivateUserCreatedDomainEventHandler).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(INotificationHandler<>));
 
+            builder.RegisterAssemblyTypes(typeof(RootPasswordChangedDomainEventHandler).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(INotificationHandler<>));
+
             #endregion
 
             #region [Roles]

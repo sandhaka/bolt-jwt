@@ -5,7 +5,6 @@ using BoltJwt.Application.Queries.Roles;
 using BoltJwt.Application.Queries.Users;
 using BoltJwt.Application.Services;
 using BoltJwt.Domain.Model.Abstractions;
-using BoltJwt.Infrastructure.AppConfigurations;
 using BoltJwt.Infrastructure.Repositories;
 using BoltJwt.Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;

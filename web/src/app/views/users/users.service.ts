@@ -55,4 +55,13 @@ export class UsersService {
   delete(id: number): Observable<any> {
     return this.httpClient.delete(`/api/v1/user?id=${id}`);
   }
+
+  /**
+   * Trigger a user password edit request
+   * @param passwordRecoveryCommand
+   * @returns {Observable<Object>}
+   */
+  triggerPasswordEdit(passwordRecoveryCommand: any) {
+    return this.httpClient.post('/api/v1/account/password-recovery', passwordRecoveryCommand);
+  }
 }

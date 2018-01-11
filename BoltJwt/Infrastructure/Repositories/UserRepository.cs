@@ -289,6 +289,18 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Edit the root password
+        /// </summary>
+        /// <param name="password">Passowrd</param>
+        /// <returns>Task</returns>
+        public async Task EditRootPasswordAsync(string password)
+        {
+            var user = await _context.Users.FirstAsync(i => i.Root);
+
+            user.Password = User.PasswordEncrypt(password);
+        }
+
+        /// <summary>
         /// Return the user identity claims
         /// </summary>
         /// <param name="context">DbContext</param>

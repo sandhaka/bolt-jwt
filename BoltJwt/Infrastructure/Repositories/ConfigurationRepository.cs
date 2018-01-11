@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
+using BoltJwt.Domain.Events;
+using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
-using BoltJwt.Infrastructure.AppConfigurations;
 using BoltJwt.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,6 +48,14 @@ namespace BoltJwt.Infrastructure.Repositories
 
             c.EndpointFqdn = dto?.EndpointFqdn ?? c.EndpointFqdn;
             c.EndpointPort = dto?.EndpointPort ?? c.EndpointPort;
+
+            if (string.CompareOrdinal(c.RootPassword,dto?.RootPassword) != 0)
+            {
+                c.RootPassword = dto?.RootPassword ?? c.RootPassword;
+
+                // Root password has changed
+                c.AddDomainEvent(new RootPasswordChangedDomainEvent { Password = c.RootPassword});
+            }
 
             _context.Entry(c).State = EntityState.Modified;
 

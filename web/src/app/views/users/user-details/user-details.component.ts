@@ -151,6 +151,35 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
     this.resetForm();
   }
 
+  passwordResetRequest() {
+
+    const rstPwdCallback = function() {
+
+      const command = {
+        Email: this.user.Email
+      };
+
+      this.userService.triggerPasswordEdit(command).subscribe(
+        () => {
+          this.utils.openCustomModal(
+            "Email sent",
+            `An email to reset the password has been sent to ${this.user.Email}`,
+            "modal-success");
+        },
+        (errorResponse: HttpErrorResponse) => this.utils.handleHttpError(errorResponse)
+      );
+    }
+      .bind(this);
+
+    // Call the delete service after confirmation
+    this.utils.openConfirmModal(
+      "Trigger reset password confirmation",
+      `Are you sure to send the reset password email to the user?`, "modal-warning",
+      rstPwdCallback
+    );
+
+  }
+
   private resetForm() {
     this.form.reset({
       surname: this.user.Surname,

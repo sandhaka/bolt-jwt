@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Application.Services;
 using BoltJwt.Domain.Events;
-using BoltJwt.Infrastructure.AppConfigurations;
+using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MimeKit;

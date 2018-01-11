@@ -75,9 +75,31 @@
           </div>
         </div>
         <div class="card">
+          <div class="card-header">
+            <strong>Root user</strong>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Root password</label>
+                  <input type="password" class="form-control" placeholder="Password" formControlName="rootPassword">
+                </div>
+                <span style="color: red" *ngIf="formErrors.rootPassword">{{formErrors.rootPassword}}</span>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Root password confirmation</label>
+                  <input type="password" class="form-control" placeholder="Password" formControlName="rootPasswordConfirmation">
+                </div>
+                <span style="color: red" *ngIf="formErrors.rootPasswordConfirmation">{{formErrors.rootPasswordConfirmation}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
           <div class="card-footer">
             <button [disabled]="form.invalid || !form.dirty"
-                    type="submit"
                     [ngClass]="{'btn-default': form.invalid || !form.dirty, 'btn-primary' : !form.invalid && form.dirty}"
                     class="btn btn-sm">
               <i class="fa fa-dot-circle-o"></i> Save

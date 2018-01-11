@@ -20,6 +20,33 @@ namespace BoltJwt.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("BoltJwt.Domain.Model.Configuration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("EndpointFqdn");
+
+                    b.Property<int>("EndpointPort");
+
+                    b.Property<string>("RootPassword");
+
+                    b.Property<string>("SmtpEmail");
+
+                    b.Property<string>("SmtpHostName");
+
+                    b.Property<string>("SmtpPassword");
+
+                    b.Property<int>("SmtpPort");
+
+                    b.Property<string>("SmtpUserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("configuration","IdentityContext");
+                });
+
             modelBuilder.Entity("BoltJwt.Domain.Model.DefinedAuthorization", b =>
                 {
                     b.Property<int>("Id")
@@ -217,31 +244,6 @@ namespace BoltJwt.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("user_role","IdentityContext");
-                });
-
-            modelBuilder.Entity("BoltJwt.Infrastructure.AppConfigurations.Configuration", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(1);
-
-                    b.Property<string>("EndpointFqdn");
-
-                    b.Property<int>("EndpointPort");
-
-                    b.Property<string>("SmtpEmail");
-
-                    b.Property<string>("SmtpHostName");
-
-                    b.Property<string>("SmtpPassword");
-
-                    b.Property<int>("SmtpPort");
-
-                    b.Property<string>("SmtpUserName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("configuration","IdentityContext");
                 });
 
             modelBuilder.Entity("BoltJwt.Domain.Model.GroupRole", b =>

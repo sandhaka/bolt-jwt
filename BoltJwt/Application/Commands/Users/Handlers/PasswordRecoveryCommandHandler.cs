@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Application.Services;
 using BoltJwt.Domain.Model.Abstractions;
-using BoltJwt.Infrastructure.AppConfigurations;
 using MediatR;
 using MimeKit;
 

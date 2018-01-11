@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
-using BoltJwt.Infrastructure.AppConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -57,15 +54,6 @@ namespace BoltJwt.Infrastructure.Context
 
         private static User CreateRoot()
         {
-            var md5Hascher = MD5.Create();
-            var passwordHash = md5Hascher.ComputeHash(Encoding.UTF8.GetBytes("root"));
-            var sBuilder = new StringBuilder();
-
-            foreach (var t in passwordHash)
-            {
-                sBuilder.Append(t.ToString("x2"));
-            }
-
             var user = new User()
             {
                 Root = true,
@@ -73,7 +61,7 @@ namespace BoltJwt.Infrastructure.Context
                 Surname = "Root",
                 UserName = "root",
                 Email = "root@system.local",
-                Password = sBuilder.ToString(),
+                Password = User.PasswordEncrypt("root"),
                 Disabled = false
             };
 
@@ -90,7 +78,8 @@ namespace BoltJwt.Infrastructure.Context
                 SmtpPort = 25,
                 SmtpPassword = "myPassword",
                 EndpointFqdn = "localhost",
-                EndpointPort = 80
+                EndpointPort = 80,
+                RootPassword = User.PasswordEncrypt("root")
             };
         }
     }

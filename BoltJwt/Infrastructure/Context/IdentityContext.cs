@@ -21,7 +21,7 @@ namespace BoltJwt.Infrastructure.Context
         public DbSet<DefinedAuthorization> Authorizations { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserActivationCode> UserActivationCodes { get; set; }
-        public DbSet<AppConfigurations.Configuration> Configuration { get; set; }
+        public DbSet<Configuration> Configuration { get; set; }
         public DbSet<TokenLog> TokenLogs { get; set; }
 
         private readonly IMediator _mediator;
@@ -72,7 +72,7 @@ namespace BoltJwt.Infrastructure.Context
             modelBuilder.Entity<Group>(ConfigureGroups);
             modelBuilder.Entity<User>(ConfigureUsers);
             modelBuilder.Entity<Role>(ConfigureRoles);
-            modelBuilder.Entity<AppConfigurations.Configuration>(ConfigureConfiguration);
+            modelBuilder.Entity<Configuration>(ConfigureConfiguration);
             modelBuilder.Entity<TokenLog>(ConfigureTokenLogs);
 
             /**
@@ -232,7 +232,7 @@ namespace BoltJwt.Infrastructure.Context
                 .OnDelete(DeleteBehavior.Cascade);
         }
 
-        private void ConfigureConfiguration(EntityTypeBuilder<AppConfigurations.Configuration> configurationConfig)
+        private void ConfigureConfiguration(EntityTypeBuilder<Configuration> configurationConfig)
         {
             configurationConfig.ToTable("configuration", DefaultSchema);
             configurationConfig.HasKey(i => i.Id);
@@ -244,6 +244,7 @@ namespace BoltJwt.Infrastructure.Context
             configurationConfig.Property<string>("SmtpPassword");
             configurationConfig.Property<string>("EndpointFqdn");
             configurationConfig.Property<int>("EndpointPort");
+            configurationConfig.Property<string>("RootPassword");
         }
 
         private void ConfigureTokenLogs(EntityTypeBuilder<TokenLog> tokenLogConfig)

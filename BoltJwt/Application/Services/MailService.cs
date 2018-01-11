@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using BoltJwt.Infrastructure.AppConfigurations;
+using BoltJwt.Domain.Model.Abstractions;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;

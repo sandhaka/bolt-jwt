@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ReactiveFormComponent} from "../../shared/base/reactiveForm.component";
-import {FormBuilder, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ConfigurationService} from "./configuration.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {UtilityService} from "../../shared/utils.service";
@@ -36,7 +36,9 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
       'password': '',
       'email': '',
       'endpointfqdn': '',
-      'endpointPort': ''
+      'endpointPort': '',
+      'rootPassword': '',
+      'rootPasswordConfirmation': ''
     };
 
     this.validationMessages = {
@@ -61,7 +63,15 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
       },
       'endpointPort': {
         'required': 'Required'
-      }
+      },
+      'rootPassword': {
+        'required': 'Required',
+        'minlength': 'Minimum 6 character length'
+      },
+      'rootPasswordConfirmation': {
+        'required': 'Required',
+        'minlength': 'Minimum 6 character length'
+      },
     };
 
     this.form = this.formBuilder.group({
@@ -77,7 +87,19 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
       ],
       'endpointfqdn': ['', Validators.required],
       'endpointPort': ['', Validators.required],
-    });
+      'rootPassword': ['',
+        [
+          Validators.required,
+          Validators.minLength(6)
+        ]
+      ],
+      'rootPasswordConfirmation': ['',
+        [
+          Validators.required,
+          Validators.minLength(6)
+        ]
+      ]
+    },{validator: this.matchingPassword});
 
     // Trigger validation on form data change
     this.form.valueChanges.subscribe((data) => {
@@ -102,7 +124,9 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
           password: data.config.smtpPassword,
           email: data.config.smtpEmail,
           endpointfqdn: data.config.endpointFqdn,
-          endpointPort: data.config.endpointPort
+          endpointPort: data.config.endpointPort,
+          rootPassword: data.config.rootPassword,
+          rootPasswordConfirmation: data.config.rootPassword,
         });
 
         this.isLoading = false;
@@ -129,7 +153,9 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
       SmtpUserName: formValue.username,
       SmtpPassword: formValue.password,
       EndpointFqdn: formValue.endpointfqdn,
-      EndpointPort: formValue.endpointPort
+      EndpointPort: formValue.endpointPort,
+      RootPassword: formValue.rootPassword,
+      RootPasswordConfirmation: formValue.rootPasswordConfirmation
     };
 
     this.configurationService.post(configDto).subscribe(
@@ -141,5 +167,12 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
         this.isLoading = false;
       }
     );
+  }
+
+  matchingPassword(group: FormGroup) {
+    const pass = group.value;
+    return (pass.rootPassword === pass.rootPasswordConfirmation) ? null : {
+      invalid: true
+    };
   }
 }

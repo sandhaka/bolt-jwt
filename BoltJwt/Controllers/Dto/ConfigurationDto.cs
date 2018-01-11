@@ -9,5 +9,7 @@
 
         public string EndpointFqdn { get; set; }
         public int EndpointPort { get; set; }
+        public string RootPassword { get; set; }
+        public string RootPasswordConfirmation { get; set; }
     }
 }
