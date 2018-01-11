@@ -3,9 +3,9 @@
 *Work in progress*
 
 ### Availables tags
-1.0 [(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
+1.1, dev
 
-dev
+[(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
 
 ### Usage
 
@@ -38,7 +38,7 @@ docker run -p 80:80 -e 'SQL_CONNECTION_STRING=<your sql conn string>' -v <your c
 #### Available environment variables
 
 ##### SQL_CONNECTION_STRING
-Specify the connection string for a MS SQL Server instance.
+Connection string of the MS SQL Server instance.
 
 #### Api
 ```text

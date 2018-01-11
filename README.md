@@ -28,7 +28,7 @@ following the instruction in [BoltJwt/README.md](https://github.com/sandhaka/bol
 
 Run
 ```sh
-$ docker-compose -f docker-compose -f <your-compose-file-config> up --build -d
+$ docker-compose -f docker-compose.yml -f <your-compose-file-config> up --build -d
 ```
 
 ##### Connect to the web app
@@ -49,10 +49,6 @@ Use yours authorizations in yours services. Authorizations are embedded in the T
 with the public key created bofore.**
 
 ##### TODO
-Root password management
-
-Users password management
-
 Roles and groups management
 
 #### Consumers setup example
