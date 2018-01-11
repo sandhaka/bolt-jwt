@@ -50,7 +50,9 @@ with the public key created bofore.**
 
 ##### TODO
 Root password management
+
 Users password management
+
 Roles and groups management
 
 #### Consumers setup example

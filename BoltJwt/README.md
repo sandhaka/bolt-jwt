@@ -5,6 +5,8 @@
 ### Availables tags
 1.0 [(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
 
+dev
+
 ### Usage
 
 #### Exposed ports:
