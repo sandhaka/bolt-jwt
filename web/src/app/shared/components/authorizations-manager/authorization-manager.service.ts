@@ -19,6 +19,15 @@ export class AuthorizationManagerService {
   }
 
   /**
+   * Get role authorizations list
+   * @param {number} id
+   * @returns {Observable<any>}
+   */
+  getRoleAuthorizations(id: number): Observable<any> {
+    return this.httpClient.get<Authorization[]>(`/api/v1/role/authorizations?id=${id}`);
+  }
+
+  /**
    * Get all authorizations
    * @returns {Observable<any>}
    */
@@ -48,5 +57,29 @@ export class AuthorizationManagerService {
     });
 
     return this.httpClient.delete(`/api/v1/user/rm.auth?userId=${command.userId}&authorizations=${authReduced}`);
+  }
+
+  /**
+   * Assign an authorization to a role
+   * @param command
+   * @returns {Observable<any>}
+   */
+  addRoleAuthorizations(command: any): Observable<any> {
+    return this.httpClient.post('/api/v1/role/add.auth', command);
+  }
+
+  /**
+   * Remove an authorization from a role
+   * @param command
+   * @returns {Observable<any>}
+   */
+  removeRoleAuthorization(command: any): Observable<any> {
+
+    // Encode to a string to send via uri
+    const authReduced = command.authorizations.reduce((a,b) => {
+      return a+','+b;
+    });
+
+    return this.httpClient.delete(`/api/v1/role/rm.auth?roleId=${command.userId}&authorizations=${authReduced}`);
   }
 }

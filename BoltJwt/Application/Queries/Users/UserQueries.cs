@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using BoltJwt.Application.Queries.Authorizations;
 using BoltJwt.Application.Queries.QueryUtils;
 using BoltJwt.Controllers.Pagination;
 using Dapper;
@@ -67,7 +68,7 @@ namespace BoltJwt.Application.Queries.Users
                         "def_authorizations.Id = user_authorizations.DefAuthorizationId " +
                     @"WHERE user_authorizations.UserId = @id", new { id });
 
-                return MapUserAuthorizations(result);
+                return AuthorizationQueries.MapEntityAuthorizations(result);
             }
         }
 
@@ -156,24 +157,6 @@ namespace BoltJwt.Application.Queries.Users
             dto.name = user.Name;
             dto.surname = user.Surname;
             dto.username = user.UserName;
-
-            return dto;
-        }
-
-        private IEnumerable<dynamic> MapUserAuthorizations(IEnumerable<dynamic> authorizations)
-        {
-            var dto = new List<dynamic>();
-
-            foreach (var auth in authorizations)
-            {
-                dynamic item = new ExpandoObject();
-
-                item.entityAuthId = auth.id;
-                item.authId = auth.authId;
-                item.name = auth.name;
-
-                dto.Add(item);
-            }
 
             return dto;
         }

@@ -34,6 +34,11 @@ export const routes: Routes = [
         canActivate: [AuthGuardService]
       },
       {
+        path: 'roles',
+        loadChildren: './views/roles/roles.module#RolesModule',
+        canActivate: [AuthGuardService]
+      },
+      {
         path: 'authorizations',
         loadChildren: './views/authorizations/authorizations.module#AuthorizationsModule',
         canActivate: [AuthGuardService]
@@ -41,7 +46,7 @@ export const routes: Routes = [
       {
         path: 'configuration',
         loadChildren: './views/configuration/configuration.module#ConfigurationModule',
-        canActivate: [AuthGuardService] //TODO: Only root
+        canActivate: [AuthGuardService] //TODO: Only root (and redirect to a 403 page)
       }
     ]
   },

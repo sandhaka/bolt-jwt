@@ -124,6 +124,24 @@ namespace BoltJwt.Application.Queries.Authorizations
             }
         }
 
+        public static IEnumerable<dynamic> MapEntityAuthorizations(IEnumerable<dynamic> authorizations)
+        {
+            var dto = new List<dynamic>();
+
+            foreach (var auth in authorizations)
+            {
+                dynamic item = new ExpandoObject();
+
+                item.entityAuthId = auth.id;
+                item.authId = auth.authId;
+                item.name = auth.name;
+
+                dto.Add(item);
+            }
+
+            return dto;
+        }
+
         private dynamic MapAuthResult(dynamic result)
         {
             dynamic dto = new ExpandoObject();

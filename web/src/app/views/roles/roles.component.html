@@ -1,0 +1,49 @@
+<div class="animated fadeIn">
+  <div class="row" style="margin-bottom: 25px;">
+    <div class="col-sm-12">
+      <button
+        style="margin-right: 3px;"
+        class="pull-right btn btn-primary"
+        (click)="addNew()">
+        Add
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <a (click)="toggleAccordion()">Filters</a>
+        </div>
+        <div *ngIf="filtersAccordionOpened">
+          <app-data-table-filters
+            [filters]="filters">
+          </app-data-table-filters>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-bottom: 25px;">
+    <div class="col-sm-12">
+      <app-data-table
+        [pageSize]="8"
+        [columnNames]="columnNames"
+        [getData]="getDataFunc"
+        [select]="onSelectFunc">
+      </app-data-table>
+    </div>
+  </div>
+  <div class="row" *ngIf="selectedRole">
+    <div class="col-sm-6">
+
+    </div>
+    <div class="col-sm-6">
+      <div class="animated fadeIn">
+        <app-authorizations-manager
+          [entity]="entity"
+          [entityData]="selectedRole">
+        </app-authorizations-manager>
+      </div>
+    </div>
+  </div>
+</div>

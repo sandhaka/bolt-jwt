@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web.Http;
 using BoltJwt.Application.Commands.Roles;
 using BoltJwt.Application.Queries.Roles;
 using BoltJwt.Controllers.Pagination;
@@ -23,6 +24,18 @@ namespace BoltJwt.Controllers
             _roleQueries = roleQueries ?? throw new ArgumentNullException(nameof(roleQueries));
         }
 
+        #region [ Queries ]
+
+        [Route("")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetAsync([FromUri] int id)
+        {
+            var result = await _roleQueries.GetAsync(id);
+
+            return Json(new {HttpStatusCode.OK});
+        }
+
         [Route("all")]
         [HttpGet]
         [Authorize(Policy = "bJwtAdmins")]
@@ -33,6 +46,20 @@ namespace BoltJwt.Controllers
 
             return Ok(result);
         }
+
+        [Route("authorizations")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetAuthAsync([FromUri] int id)
+        {
+            var result = await _roleQueries.GetAuthAsync(id);
+
+            return Ok(result);
+        }
+
+        #endregion
+
+        #region [ Commands ]
 
         [Route("")]
         [HttpPost]
@@ -69,5 +96,7 @@ namespace BoltJwt.Controllers
 
             return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }
+
+        #endregion
     }
 }

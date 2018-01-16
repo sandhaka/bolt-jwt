@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using BoltJwt.Application.Queries.Authorizations;
 using BoltJwt.Application.Queries.QueryUtils;
 using BoltJwt.Controllers.Pagination;
 using Dapper;
@@ -25,6 +26,53 @@ namespace BoltJwt.Application.Queries.Roles
         }
 
         /// <summary>
+        /// Return a role by id
+        /// </summary>
+        /// <param name="id">Role id</param>
+        /// <returns>Role</returns>
+        /// <exception cref="KeyNotFoundException">Role not found</exception>
+        public async Task<dynamic> GetAsync(int id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                var result =
+                    await connection.QueryAsync<dynamic>(
+                        @"SELECT * FROM IdentityContext.roles WHERE Id = @id", new {id});
+
+                var resultAsArray = result.ToArray();
+
+                if (resultAsArray.Length == 0)
+                    throw new KeyNotFoundException();
+
+                return MapRoleObject(resultAsArray.First());
+            }
+        }
+
+        /// <summary>
+        /// Retrieve the role authorizations list
+        /// </summary>
+        /// <param name="id">Role id</param>
+        /// <returns>Authorizations list</returns>
+        public async Task<dynamic> GetAuthAsync(int id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                var result = await connection.QueryAsync<dynamic>(
+                    "SELECT def_authorizations.Id as authId, role_authorizations.Id AS id, Name AS name " +
+                    "FROM IdentityContext.def_authorizations " +
+                    "LEFT JOIN IdentityContext.role_authorizations ON " +
+                    "def_authorizations.Id = role_authorizations.DefAuthorizationId " +
+                    @"WHERE role_authorizations.RoleId = @id", new { id });
+
+                return AuthorizationQueries.MapEntityAuthorizations(result);
+            }
+        }
+
+        /// <summary>
         /// Retrieve roles list with pagination
         /// </summary>
         /// <param name="query">Query page parameters</param>
@@ -42,8 +90,8 @@ namespace BoltJwt.Application.Queries.Roles
                 var descriptionValue = string.IsNullOrEmpty(description) ? string.Empty : $"%{description}%";
 
                 var count = await connection.QueryAsync<int>(
-                    "SELECT COUNT(*) FROM IdentityContext.roles" +
-                    ((!string.IsNullOrEmpty(descriptionValue)) ? "AND Description LIKE @descriptionValue " : ""),
+                    "SELECT COUNT(*) FROM IdentityContext.roles " +
+                    ((!string.IsNullOrEmpty(descriptionValue)) ? "WHERE Description LIKE @descriptionValue " : ""),
                     new
                     {
                         descriptionValue
@@ -55,10 +103,7 @@ namespace BoltJwt.Application.Queries.Roles
 
                 var queryResult = await connection.QueryAsync<dynamic>(
                     "SELECT * FROM ( " +
-                    "SELECT ROW_NUMBER() OVER ( ORDER BY Description ) AS RowNum, "+
-                    "roles.Id as roleId, Description as role, Name as auth FROM IdentityContext.roles " +
-                    "JOIN IdentityContext.role_authorizations ON roles.Id = role_authorizations.RoleId " +
-                    "JOIN IdentityContext.def_authorizations ON role_authorizations.DefAuthorizationId = def_authorizations.Id " +
+                    "SELECT ROW_NUMBER() OVER ( ORDER BY Description ) AS RowNum, * FROM IdentityContext.roles " +
                     ((!string.IsNullOrEmpty(descriptionValue)) ? "WHERE Description LIKE @descriptionValue " : "") +
                     ") AS RowConstrainedResult WHERE RowNum >= @startRow AND RowNum < @endRow ORDER BY RowNum",
                     new
@@ -74,26 +119,18 @@ namespace BoltJwt.Application.Queries.Roles
 
                 return new PagedData<dynamic>
                 {
-                    Data = queryResult.AsList().Select(item => MapRolesResult(item)).ToList(),
+                    Data = queryResult.AsList().Select(item => MapRoleObject(item)).ToList(),
                     Page = query
                 };
             }
         }
 
-        private dynamic MapRolesResult(dynamic result)
+        private dynamic MapRoleObject(dynamic result)
         {
             dynamic dto = new ExpandoObject();
 
-            dto.Role = result[0].role;
-            dto.Id = result[0].roleId;
-
-            dto.Authorizations = new List<dynamic>();
-
-            foreach (var r in result)
-            {
-                dto.Authorizations.Add(r.authId);
-                dto.Authorizations.Add(r.auth);
-            }
+            dto.id = result.Id;
+            dto.description = result.Description;
 
             return dto;
         }

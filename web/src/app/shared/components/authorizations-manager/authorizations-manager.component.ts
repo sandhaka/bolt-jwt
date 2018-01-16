@@ -6,6 +6,8 @@ import {UtilityService} from "../../utils.service";
 import {EntityData} from "./model/entity";
 import {Authorization, AuthorizationDefinition} from "./model/authorizations";
 import {ANIMATION_TYPES} from "ngx-loading";
+import {Observable} from "rxjs/Observable";
+import {observable} from "rxjs/symbol/observable";
 
 /**
  * This component manage authorization for a user, role or group
@@ -71,20 +73,24 @@ export class AuthorizationsManagerComponent implements OnChanges {
 
     this.isOnProcessing = true;
 
+    let observable: Observable<any>;
+
     if(this.entity === AppEntity.Role) {
-      console.error("Not yet implemented");
+      observable = this.authorizationManagerService.getRoleAuthorizations(this.entityData.Id);
     } else if(this.entity === AppEntity.User) {
-      this.authorizationManagerService.getUserAuthorizations(this.entityData.Id)
-        .subscribe((authorizations: Authorization[]) => {
+      observable = this.authorizationManagerService.getUserAuthorizations(this.entityData.Id);
+    }
+
+    observable
+      .subscribe((authorizations: Authorization[]) => {
           // Assign the authorizations
           this.entityData.AuthorizationsList = authorizations;
           this.isOnProcessing = false;
-          },
-          (errorResponse: HttpErrorResponse) => {
+        },
+        (errorResponse: HttpErrorResponse) => {
           this.utils.handleHttpError(errorResponse);
           this.isOnProcessing = false;
         });
-    }
   }
 
   /**
@@ -97,14 +103,31 @@ export class AuthorizationsManagerComponent implements OnChanges {
 
     if(authToRem.length > 0) {
 
-      const command = {
-        userId: this.entityData.Id,
-        authorizations: authToRem
-      };
-
       this.isOnProcessing = true;
 
-      this.authorizationManagerService.removeUserAuthorization(command).subscribe(
+      let observable: Observable<any>;
+
+      if(this.entity === AppEntity.Role) {
+
+        const command = {
+          roleId: this.entityData.Id,
+          authorizations: authToRem
+        };
+
+        observable = this.authorizationManagerService.removeRoleAuthorization(command);
+
+      } else if(this.entity === AppEntity.User) {
+
+        const command = {
+          userId: this.entityData.Id,
+          authorizations: authToRem
+        };
+
+        observable = this.authorizationManagerService.removeUserAuthorization(command);
+
+      }
+
+      observable.subscribe(
         response => {
           // Reload on success
           this.load();
@@ -188,32 +211,42 @@ export class AuthorizationsManagerComponent implements OnChanges {
   }
 
   private saveAndHideAddingDialog() {
-    if(this.entity === AppEntity.User) {
 
-      const authToAdd = this.collectsAuthorizationToAdd();
+    const authToAdd = this.collectsAuthorizationToAdd();
 
-      if(authToAdd.length > 0) {
+    let observable: Observable<any>;
 
-        this.isOnProcessing = true;
+    if(authToAdd.length > 0) {
 
+      this.isOnProcessing = true;
+
+      if(this.entity === AppEntity.User) {
         const command = {
           UserId: this.entityData.Id,
           Authorizations: authToAdd
         };
 
-        this.authorizationManagerService.addUserAuthorizations(command).subscribe(
-          response => {
-            // Reload on success
-            this.load();
-          },
-          (error: HttpErrorResponse) => {
-            this.utils.handleHttpError(error);
-            this.isOnProcessing = false;
-          }
-        );
+        observable = this.authorizationManagerService.addUserAuthorizations(command);
+      } else if(this.entity === AppEntity.Role) {
+        const command = {
+          RoleId: this.entityData.Id,
+          Authorizations: authToAdd
+        };
+
+        observable = this.authorizationManagerService.addRoleAuthorizations(command);
       }
-    } else if(this.entity === AppEntity.Role) {
-      console.error("Not yet implemented");
+
+      observable.subscribe(
+        response => {
+          // Reload on success
+          this.load();
+        },
+        (error: HttpErrorResponse) => {
+          this.utils.handleHttpError(error);
+          this.isOnProcessing = false;
+        }
+      );
+
     }
 
     this.addingDialog = false;
