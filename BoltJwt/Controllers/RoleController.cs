@@ -90,9 +90,33 @@ namespace BoltJwt.Controllers
         [Authorize(Policy = "bJwtAdmins")]
         [ProducesResponseType((int) HttpStatusCode.OK)]
         [ProducesResponseType((int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> DeleteAsync([FromBody] RoleDeleteCommand roleDeleteCommand)
+        public async Task<IActionResult> DeleteAsync([FromQuery] RoleDeleteCommand roleDeleteCommand)
         {
             var result = await _mediator.Send(roleDeleteCommand);
+
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
+        }
+
+        [Route("add.auth")]
+        [HttpPost]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> AddAuthAsync([FromBody] AddAuthorizationRoleCommand addAuthorizationRoleCommand)
+        {
+            var result = await _mediator.Send(addAuthorizationRoleCommand);
+
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
+        }
+
+        [Route("rm.auth")]
+        [HttpDelete]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> RemoveAuthAsync([FromQuery] RemoveAuthorizationRoleCommand removeAuthorizationRoleCommand)
+        {
+            var result = await _mediator.Send(removeAuthorizationRoleCommand);
 
             return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }

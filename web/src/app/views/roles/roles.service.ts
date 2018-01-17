@@ -28,4 +28,12 @@ export class RolesService {
 
     return this.httpClient.get<PagedData<any>>(url);
   }
+
+   edit(command: any): Observable<any> {
+    return this.httpClient.post('/api/v1/role/update', command);
+   }
+
+   delete(id: number): Observable<any> {
+    return this.httpClient.delete(`/api/v1/role?id=${id}`);
+   }
 }

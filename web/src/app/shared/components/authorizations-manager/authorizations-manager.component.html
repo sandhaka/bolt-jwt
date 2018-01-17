@@ -1,7 +1,7 @@
 <div class="card">
   <ngx-loading [show]="isOnProcessing" [config]="loadingConfig"></ngx-loading>
   <div class="card-header">
-    <strong>User</strong>
+    <strong>{{entityName()}}</strong>
     <small>Authorizations</small>
     <button *ngIf="addingDialog"
             type="button"

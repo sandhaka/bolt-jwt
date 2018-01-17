@@ -1,0 +1,29 @@
+<form [formGroup]="form" novalidate (ngSubmit)="saveRoleDetails()">
+  <div class="card">
+    <div class="card-header">
+      <strong>Role</strong>
+      <small>Data</small>
+      <button type="button" class="btn btn-sm btn-danger pull-right" (click)="delete()">Delete</button>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" class="form-control" formControlName="description">
+          </div>
+          <span style="color: red" *ngIf="formErrors.description">{{formErrors.description}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button [disabled]="form.invalid || !form.dirty"
+              [ladda]="isPending"
+              type="submit"
+              [ngClass]="{'btn-default': form.invalid || !form.dirty, 'btn-primary' : !form.invalid && form.dirty}"
+              class="btn btn-sm">
+        <i class="fa fa-dot-circle-o"></i> Save
+      </button>
+    </div>
+  </div>
+</form>

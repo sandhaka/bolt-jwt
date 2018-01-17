@@ -7,10 +7,9 @@ import {EntityData} from "./model/entity";
 import {Authorization, AuthorizationDefinition} from "./model/authorizations";
 import {ANIMATION_TYPES} from "ngx-loading";
 import {Observable} from "rxjs/Observable";
-import {observable} from "rxjs/symbol/observable";
 
 /**
- * This component manage authorization for a user, role or group
+ * Manage authorizations for user and role entities
  */
 @Component({
   selector: 'app-authorizations-manager',
@@ -153,6 +152,10 @@ export class AuthorizationsManagerComponent implements OnChanges {
       this.saveAndHideAddingDialog();
 
     }
+  }
+
+  entityName(): string {
+    return AppEntity[this.entity];
   }
 
   private collectsAvailableDefinitions() {

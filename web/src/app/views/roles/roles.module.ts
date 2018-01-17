@@ -5,11 +5,12 @@ import {SharedModule} from "../../shared/shared.module";
 import {LaddaModule} from "angular2-ladda";
 import {LoadingModule} from "ngx-loading";
 import {ErrorModalComponent} from "../../shared/modals/error/error-modal.component";
-import {GenericModalComponent} from "../../shared/modals";
+import {ConfirmModalComponent, GenericModalComponent} from "../../shared/modals";
 import {RolesRoutingModule} from "./roles.routing";
 import {ReactiveFormsModule} from "@angular/forms";
 import {RolesComponent} from "./roles.component";
 import {RolesService} from "./roles.service";
+import {RoleDetailsComponent} from "./role-details/role-details.component";
 
 @NgModule({
   imports: [
@@ -22,11 +23,13 @@ import {RolesService} from "./roles.service";
     LaddaModule
   ],
   declarations: [
-    RolesComponent
+    RolesComponent,
+    RoleDetailsComponent
   ],
   entryComponents: [
     ErrorModalComponent,
-    GenericModalComponent
+    GenericModalComponent,
+    ConfirmModalComponent
   ],
   providers: [
     RolesService

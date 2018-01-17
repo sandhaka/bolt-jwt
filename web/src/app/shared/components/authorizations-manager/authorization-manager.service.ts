@@ -80,6 +80,6 @@ export class AuthorizationManagerService {
       return a+','+b;
     });
 
-    return this.httpClient.delete(`/api/v1/role/rm.auth?roleId=${command.userId}&authorizations=${authReduced}`);
+    return this.httpClient.delete(`/api/v1/role/rm.auth?roleId=${command.roleId}&authorizations=${authReduced}`);
   }
 }

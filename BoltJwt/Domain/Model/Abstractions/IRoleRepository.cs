@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
 
@@ -30,5 +31,21 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">Role not found</exception>
         Task DeleteAsync(int id);
+
+        /// <summary>
+        /// Assign an authorization
+        /// </summary>
+        /// <param name="roleId">Role id</param>
+        /// <param name="authorizationsId">Authorizations Id</param>
+        /// <returns>Task</returns>
+        Task AssignAuthorizationsAsync(int roleId, IEnumerable<int> authorizationsId);
+
+        /// <summary>
+        /// Remove authorizations
+        /// </summary>
+        /// <param name="roleId">Role id</param>
+        /// <param name="authorizationsId">Authorizations id</param>
+        /// <returns>Task</returns>
+        Task RemoveAuthorizationAsync(int roleId, IEnumerable<int> authorizationsId);
     }
 }

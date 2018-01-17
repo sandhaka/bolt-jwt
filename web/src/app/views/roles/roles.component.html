@@ -35,7 +35,10 @@
   </div>
   <div class="row" *ngIf="selectedRole">
     <div class="col-sm-6">
-
+      <app-role-details
+        [role]="selectedRole"
+        (changed)="onUpdate()">
+      </app-role-details>
     </div>
     <div class="col-sm-6">
       <div class="animated fadeIn">
