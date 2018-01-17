@@ -40,7 +40,6 @@ namespace BoltJwtUnitTest.Application.Commands
             // Act
             commandHandlerSut.Handle(new RoleInsertCommand
             {
-                Authorizations = new[] {"1", "2"},
                 Description = "fake_role"
             }, CancellationToken.None);
 

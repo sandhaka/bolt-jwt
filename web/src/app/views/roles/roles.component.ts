@@ -6,6 +6,8 @@ import {PagedData} from "../../shared/datatable/model/paged-data";
 import {DataTableService} from "../../shared/datatable/data-table.service";
 import {RoleDto} from "./roleDto";
 import {RolesService} from "./roles.service";
+import {BsModalService} from "ngx-bootstrap";
+import {CreateRoleModalComponent} from "./create-role-modal/create-role-modal.component";
 
 @Component({
   templateUrl: 'roles.component.html',
@@ -43,7 +45,8 @@ export class RolesComponent implements OnInit {
   entity: AppEntity = AppEntity.Role;
 
   constructor(private dataTableService: DataTableService,
-              private rolesService: RolesService) {}
+              private rolesService: RolesService,
+              private modalService: BsModalService) {}
 
   ngOnInit(): void {
     // Bind
@@ -84,7 +87,15 @@ export class RolesComponent implements OnInit {
    * Open a modal to add a new role
    */
   addNew() {
-
+    const bsRoleCreationModal = this.modalService.show(CreateRoleModalComponent);
+    bsRoleCreationModal.content.modalTitle = "New role";
+    bsRoleCreationModal.content.modalCss = "modal-info";
+    bsRoleCreationModal.content.onCreated.subscribe(
+      () => {
+        bsRoleCreationModal.hide();
+        this.dataTableService.invokeReload();
+      }
+    )
   }
 
   /**

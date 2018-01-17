@@ -11,6 +11,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {RolesComponent} from "./roles.component";
 import {RolesService} from "./roles.service";
 import {RoleDetailsComponent} from "./role-details/role-details.component";
+import {CreateRoleModalComponent} from "./create-role-modal/create-role-modal.component";
 
 @NgModule({
   imports: [
@@ -24,12 +25,14 @@ import {RoleDetailsComponent} from "./role-details/role-details.component";
   ],
   declarations: [
     RolesComponent,
-    RoleDetailsComponent
+    RoleDetailsComponent,
+    CreateRoleModalComponent
   ],
   entryComponents: [
     ErrorModalComponent,
     GenericModalComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    CreateRoleModalComponent
   ],
   providers: [
     RolesService

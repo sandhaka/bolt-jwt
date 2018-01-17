@@ -36,4 +36,8 @@ export class RolesService {
    delete(id: number): Observable<any> {
     return this.httpClient.delete(`/api/v1/role?id=${id}`);
    }
+
+   add(command: any): Observable<any> {
+    return this.httpClient.post('/api/v1/role', command);
+   }
 }
