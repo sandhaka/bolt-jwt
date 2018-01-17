@@ -1,6 +1,6 @@
 import {Authorization} from "./authorizations";
 
-export interface EntityData {
+export interface AuthManagerEntityData {
   Id: number;
   AuthorizationsList: Authorization[];
 }

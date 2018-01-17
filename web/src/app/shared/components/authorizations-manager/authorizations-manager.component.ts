@@ -3,7 +3,7 @@ import {AuthorizationManagerService} from "./authorization-manager.service";
 import {AppEntity} from "../../common";
 import {HttpErrorResponse} from "@angular/common/http";
 import {UtilityService} from "../../utils.service";
-import {EntityData} from "./model/entity";
+import {AuthManagerEntityData} from "./model/auth-man-entity";
 import {Authorization, AuthorizationDefinition} from "./model/authorizations";
 import {ANIMATION_TYPES} from "ngx-loading";
 import {Observable} from "rxjs/Observable";
@@ -27,7 +27,7 @@ export class AuthorizationsManagerComponent implements OnChanges {
   /**
    * Entity data related
    */
-  @Input('entityData') entityData: EntityData;
+  @Input('entityData') entityData: AuthManagerEntityData;
 
   /**
    * A list a available authorization to assign
