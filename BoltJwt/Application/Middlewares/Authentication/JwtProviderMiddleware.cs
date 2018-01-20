@@ -71,7 +71,7 @@ namespace BoltJwt.Application.Middlewares.Authentication
             var response = new
             {
                 access_token = encodedJwt,
-                expires_in = (int)opts.Expiration.TotalSeconds
+                expires_in = (int)opts.Expiration.Ticks
             };
 
             try
