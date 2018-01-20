@@ -18,7 +18,7 @@ export class RolesService {
 
     // Combine query
     let url =
-      `/api/v1/role/all?pageNumber=${params.pageNumber}`+
+      `/api/v1/role/paged?pageNumber=${params.pageNumber}`+
       `&size=${params.size}`;
 
     // Send filters as json stringify object

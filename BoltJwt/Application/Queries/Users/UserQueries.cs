@@ -148,6 +148,18 @@ namespace BoltJwt.Application.Queries.Users
             }
         }
 
+//        public async Task<dynamic> GetUserRoles()
+//        {
+//            using (var connection = new SqlConnection(_connectionString))
+//            {
+//                connection.Open();
+//
+//                var result = await connection.QueryAsync<dynamic>(
+//                    ""
+//                    );
+//            }
+//        }
+
         private dynamic MapUserObject(dynamic user)
         {
             dynamic dto = new ExpandoObject();

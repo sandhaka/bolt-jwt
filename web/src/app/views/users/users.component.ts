@@ -9,6 +9,7 @@ import {AppEntity} from "../../shared/common";
 import {BsModalService} from "ngx-bootstrap";
 import {CreateUserModalComponent} from "./create-user-modal/create-user-modal.component";
 import {GenericModalComponent} from "../../shared/modals";
+import {RolesManagerModalComponent} from "../../shared/components/roles-manager-modal/roles-manager-modal.component";
 
 @Component({
   templateUrl: 'users.component.html',
@@ -47,7 +48,7 @@ export class UsersComponent implements OnInit {
   /**
    * Keep a copy of the item to working on
    */
-  selectedUser: UserDto;
+  selectedUser: UserDto = null;
 
   /**
    * Type entity
@@ -130,5 +131,17 @@ export class UsersComponent implements OnInit {
         bsUserCreatedModal.content.modalText = `The new account needs to be activate. An email has been sent to ${email}`;
       }
     );
+  }
+
+  openRolesManager() {
+    const bsRolesManagerModal = this.modalService.show(RolesManagerModalComponent);
+    bsRolesManagerModal.content.modalTitle = "User roles manager";
+    bsRolesManagerModal.content.modalCss = "modal-info";
+
+    // Manage roles of user entity
+    bsRolesManagerModal.content.serviceEntity = AppEntity.User;
+
+    // Load modal content
+    //bsRolesManagerModal.content.load();
   }
 }

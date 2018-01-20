@@ -13,6 +13,7 @@ import {AuthorizationsManagerComponent} from "./components/authorizations-manage
 import {UtilityService} from "./utils.service";
 import {LoadingModule} from "ngx-loading";
 import {ErrorModalComponent} from "./modals/error/error-modal.component";
+import {RolesManagerModalComponent} from "./components/roles-manager-modal/roles-manager-modal.component";
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import {ErrorModalComponent} from "./modals/error/error-modal.component";
     DataTableFiltersComponent,
     DataTableFiltersStringComponent,
     ReactiveFormComponent,
-    AuthorizationsManagerComponent
+    AuthorizationsManagerComponent,
+    RolesManagerModalComponent
   ],
   exports: [
     GenericModalComponent,
@@ -40,7 +42,8 @@ import {ErrorModalComponent} from "./modals/error/error-modal.component";
     DataTableComponent,
     DataTableFiltersComponent,
     ReactiveFormComponent,
-    AuthorizationsManagerComponent
+    AuthorizationsManagerComponent,
+    RolesManagerModalComponent
   ],
   providers: [
     UtilityService

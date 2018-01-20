@@ -18,7 +18,7 @@ export class UsersService {
 
     // Combine query
     let url =
-      `/api/v1/user/all?pageNumber=${params.pageNumber}`+
+      `/api/v1/user/paged?pageNumber=${params.pageNumber}`+
       `&size=${params.size}`;
 
     // Send filters as json stringify object

@@ -36,7 +36,7 @@ namespace BoltJwt.Controllers
             return Json(new {HttpStatusCode.OK});
         }
 
-        [Route("all")]
+        [Route("paged")]
         [HttpGet]
         [Authorize(Policy = "bJwtAdmins")]
         [ProducesResponseType(typeof(PagedData<IEnumerable<object>>), (int)HttpStatusCode.OK)]
