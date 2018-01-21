@@ -148,17 +148,24 @@ namespace BoltJwt.Application.Queries.Users
             }
         }
 
-//        public async Task<dynamic> GetUserRoles()
-//        {
-//            using (var connection = new SqlConnection(_connectionString))
-//            {
-//                connection.Open();
-//
-//                var result = await connection.QueryAsync<dynamic>(
-//                    ""
-//                    );
-//            }
-//        }
+        /// <summary>
+        /// Return user roles
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>Roles</returns>
+        public async Task<dynamic> GetRolesAsync(int userId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                return await connection.QueryAsync<dynamic>(
+                    @"SELECT Description as role, UserId as assignedRoleId, RoleId as roleId FROM IdentityContext.user_role
+                    JOIN IdentityContext.roles ON user_role.RoleId = roles.Id
+                    WHERE UserId = @userId ORDER BY Description", new { userId }
+                    );
+            }
+        }
 
         private dynamic MapUserObject(dynamic user)
         {

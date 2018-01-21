@@ -7,6 +7,12 @@ namespace BoltJwt.Application.Queries.Roles
     public interface IRoleQueries
     {
         /// <summary>
+        /// Reitreve all roles
+        /// </summary>
+        /// <returns>Roles</returns>
+        Task<dynamic> GetAsync();
+
+        /// <summary>
         /// Retrieve roles list with pagination
         /// </summary>
         /// <param name="query">Query page parameters</param>

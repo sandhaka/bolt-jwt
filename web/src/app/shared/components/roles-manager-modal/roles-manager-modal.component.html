@@ -23,9 +23,11 @@
                 </div>
               </div>
               <div class="row">
-                <select multiple formControlName="availableRoles">
-                  <option *ngFor="let option of availableRoles" value="option.id">{{option.description}}</option>
-                </select>
+                <div class="col-sm-12">
+                  <select multiple formControlName="availableRoles">
+                    <option *ngFor="let option of availableRoles" [value]="option.id">{{option.description}}</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -41,9 +43,11 @@
                 </div>
               </div>
               <div class="row">
-                <select multiple formControlName="assignedRoles">
-                  <option *ngFor="let option of assignedRoles" value="option.id">{{option.description}}</option>
-                </select>
+                <div class="col-sm-12">
+                  <select multiple formControlName="assignedRoles">
+                    <option *ngFor="let option of assignedRoles" [value]="option.id">{{option.role}}</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>

@@ -33,7 +33,17 @@ namespace BoltJwt.Controllers
         {
             var result = await _roleQueries.GetAsync(id);
 
-            return Json(new {HttpStatusCode.OK});
+            return Ok(result);
+        }
+
+        [Route("all")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetAsync()
+        {
+            var result = await _roleQueries.GetAsync();
+
+            return Ok(result);
         }
 
         [Route("paged")]

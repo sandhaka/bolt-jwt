@@ -51,6 +51,21 @@ namespace BoltJwt.Application.Queries.Roles
         }
 
         /// <summary>
+        /// Reitreve all roles
+        /// </summary>
+        /// <returns>Roles</returns>
+        public async Task<dynamic> GetAsync()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                return await connection.QueryAsync<dynamic>(
+                    @"SELECT Id as id, Description as description FROM IdentityContext.roles ORDER BY Description");
+            }
+        }
+
+        /// <summary>
         /// Retrieve the role authorizations list
         /// </summary>
         /// <param name="id">Role id</param>
@@ -66,7 +81,7 @@ namespace BoltJwt.Application.Queries.Roles
                     "FROM IdentityContext.def_authorizations " +
                     "LEFT JOIN IdentityContext.role_authorizations ON " +
                     "def_authorizations.Id = role_authorizations.DefAuthorizationId " +
-                    @"WHERE role_authorizations.RoleId = @id", new { id });
+                    "WHERE role_authorizations.RoleId = @id ORDER BY Name", new { id });
 
                 return AuthorizationQueries.MapEntityAuthorizations(result);
             }

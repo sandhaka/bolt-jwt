@@ -57,6 +57,16 @@ namespace BoltJwt.Controllers
             return Ok(result);
         }
 
+        [Route("roles")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetRolesAsync([FromUri] int id)
+        {
+            var result = await _userQueries.GetRolesAsync(id);
+
+            return Ok(result);
+        }
+
         #endregion
 
         #region [ Commands ]

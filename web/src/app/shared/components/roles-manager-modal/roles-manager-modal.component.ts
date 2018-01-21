@@ -8,9 +8,11 @@ import {AppEntity} from "../../common";
 import {RolesManagerService} from "./roles-manager.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {Role} from "./model/role";
+import {AssignedRole} from "./model/assignedRole";
 
 @Component({
   templateUrl: './roles-manager-modal.component.html',
+  styleUrls: ['./roles-manager.component.scss'],
   providers: [RolesManagerService]
 })
 export class RolesManagerModalComponent extends GenericModalComponent {
@@ -24,7 +26,7 @@ export class RolesManagerModalComponent extends GenericModalComponent {
   isOnProcessing = false;
 
   availableRoles: Role[] = [];
-  assignedRoles: Role[] = [];
+  assignedRoles: AssignedRole[] = [];
 
   serviceEntity: AppEntity;
 
@@ -103,12 +105,12 @@ export class RolesManagerModalComponent extends GenericModalComponent {
 
   }
 
-  load() {
+  load(entityId: number) {
 
     this.isOnProcessing = true;
 
-    this.rolesManagerService.getAssignedRoles(this.serviceEntity).subscribe(
-      (roles: Role[]) => {
+    this.rolesManagerService.getAssignedRoles(this.serviceEntity, entityId).subscribe(
+      (roles: AssignedRole[]) => {
         this.assignedRoles = roles;
 
         this.rolesManagerService.getRoles().subscribe(
@@ -116,7 +118,9 @@ export class RolesManagerModalComponent extends GenericModalComponent {
 
             // Filter role not assigned
             this.availableRoles = allRoles.filter((item: Role) => {
-              return this.assignedRoles.indexOf(item) === -1;
+              return this.assignedRoles.filter((assigned: AssignedRole) => {
+                return assigned.roleId === item.id;
+              }).length === 0;
             });
 
             this.isOnProcessing = false;
