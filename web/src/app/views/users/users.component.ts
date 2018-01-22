@@ -140,8 +140,9 @@ export class UsersComponent implements OnInit {
 
     // Manage roles of user entity
     bsRolesManagerModal.content.serviceEntity = AppEntity.User;
+    bsRolesManagerModal.content.entityId = this.selectedUser.Id;
 
     // Load modal content
-    bsRolesManagerModal.content.load(this.selectedUser.Id);
+    bsRolesManagerModal.content.load();
   }
 }

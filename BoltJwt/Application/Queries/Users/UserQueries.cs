@@ -160,7 +160,7 @@ namespace BoltJwt.Application.Queries.Users
                 connection.Open();
 
                 return await connection.QueryAsync<dynamic>(
-                    @"SELECT Description as role, UserId as assignedRoleId, RoleId as roleId FROM IdentityContext.user_role
+                    @"SELECT Description as role, UserId as entityId, RoleId as roleId FROM IdentityContext.user_role
                     JOIN IdentityContext.roles ON user_role.RoleId = roles.Id
                     WHERE UserId = @userId ORDER BY Description", new { userId }
                     );

@@ -2,7 +2,6 @@ import {Component} from "@angular/core";
 import {GenericModalComponent} from "../../modals";
 import {BsModalRef} from "ngx-bootstrap/modal";
 import {ANIMATION_TYPES} from "ngx-loading";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UtilityService} from "../../utils.service";
 import {AppEntity} from "../../common";
 import {RolesManagerService} from "./roles-manager.service";
@@ -17,99 +16,71 @@ import {AssignedRole} from "./model/assignedRole";
 })
 export class RolesManagerModalComponent extends GenericModalComponent {
 
+  // -- Modal input ---
+
+  // User or Group id
+  entityId: number;
+
+  // Define witch entity to serve
+  serviceEntity: AppEntity;
+
+  // -----------------
+
   // loading splash screen configuration
   loadingConfig = {
     backdropBorderRadius: '14px',
     animationType: ANIMATION_TYPES.wanderingCubes
   };
 
+  touched = false;
+
   isOnProcessing = false;
 
   availableRoles: Role[] = [];
+  selectedAvailableRoles: number[] = [];
+
   assignedRoles: AssignedRole[] = [];
-
-  serviceEntity: AppEntity;
-
-  //#region [ Form variables ]
-
-  form: FormGroup;
-  validationMessages = {
-    'availableRoles': {
-      'required': 'Required'
-    },
-    'assignedRoles': {
-      'required': 'Required'
-    }
-  };
-  formErrors = {
-    'availableRoles': '',
-    'assignedRoles': ''
-  };
-
-  /**
-   * Process the validation error messages
-   * @param data
-   */
-  private onDataChanged(data?: any) {
-    if (!this.form) {
-      return;
-    }
-
-    const _form = this.form;
-
-    for (const field in this.formErrors) {
-      if (this.formErrors.hasOwnProperty(field)) {
-        const control = _form.get(field);
-        this.formErrors[field] = '';
-
-        if (control && control.dirty && !control.valid) {
-          const messages = this.validationMessages[field];
-          for (const key in control.errors) {
-            if (control.errors.hasOwnProperty(key)) {
-              this.formErrors[field] += messages[key] + ' ';
-            }
-          }
-        }
-      }
-    }
-  }
-
-  //#endregion
+  selectedAssignedRoles: number[];
 
   constructor(public bsModalRef: BsModalRef,
-              private formBuilder: FormBuilder,
               private utils: UtilityService,
               private rolesManagerService: RolesManagerService) {
     super(bsModalRef);
-
-    this.form = this.formBuilder.group({
-      'availableRoles': [
-        [''],
-        Validators.required
-      ],
-      'assignedRoles': [
-        [''],
-        Validators.required
-      ]
-    });
-
-    // Trigger validation on form data change
-    this.form.valueChanges.subscribe((data) => {
-      this.onDataChanged(data);
-    });
-
-    this.onDataChanged();
   }
 
   submit() {
+    this.isOnProcessing = true;
 
+    let command = null;
+
+    if(this.serviceEntity === AppEntity.User) {
+      command = {
+        UserId: this.entityId,
+        Roles: []
+      };
+    } else if(this.serviceEntity === AppEntity.Group) {
+      command = {
+        GroupId: this.entityId,
+        Roles: []
+      };
+    }
+
+    this.rolesManagerService.assignRoles(this.serviceEntity, command).subscribe(
+      () => {
+        this.load();
+      },
+      (error: HttpErrorResponse) => {
+        this.utils.handleHttpError(error);
+        this.isOnProcessing = false;
+      }
+    );
   }
 
-  load(entityId: number) {
+  load() {
 
     this.isOnProcessing = true;
 
-    this.rolesManagerService.getAssignedRoles(this.serviceEntity, entityId).subscribe(
+    this.rolesManagerService.getAssignedRoles(this.serviceEntity, this.entityId).subscribe(
       (roles: AssignedRole[]) => {
         this.assignedRoles = roles;
 
@@ -124,6 +95,7 @@ export class RolesManagerModalComponent extends GenericModalComponent {
             });
 
             this.isOnProcessing = false;
+            this.touched = false;
 
           },
           (error: HttpErrorResponse) => {
@@ -138,5 +110,39 @@ export class RolesManagerModalComponent extends GenericModalComponent {
         this.isOnProcessing = false;
       }
     );
+  }
+
+  addToAssigned() {
+
+    if(this.selectedAvailableRoles.length === 0) {
+      return;
+    }
+
+    for(const id of this.selectedAvailableRoles) {
+      // Move to the assigned roles list
+      const role = this.availableRoles.find(i => i.id === id);
+      this.assignedRoles.push({roleId: role.id, entityId: this.entityId, role: role.description});
+      const indexToRemove = this.availableRoles.indexOf(role);
+      this.availableRoles.splice(indexToRemove, 1);
+    }
+    this.selectedAvailableRoles = [];
+    this.touched = true;
+  }
+
+  removeFromAssigned() {
+
+    if(this.selectedAssignedRoles.length === 0) {
+      return;
+    }
+
+    for(const id of this.selectedAssignedRoles) {
+      // Move to the available roles list
+      const role = this.assignedRoles.find(i => i.roleId === id);
+      this.availableRoles.push({id: role.roleId, description: role.role});
+      const indexToRemove = this.assignedRoles.indexOf(role);
+      this.assignedRoles.splice(indexToRemove, 1);
+    }
+    this.selectedAssignedRoles = [];
+    this.touched = true;
   }
 }

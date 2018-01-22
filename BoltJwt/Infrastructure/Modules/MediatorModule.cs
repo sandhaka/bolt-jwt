@@ -83,6 +83,11 @@ namespace BoltJwt.Infrastructure.Modules
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
 
+            builder
+                .RegisterAssemblyTypes(typeof(AddUserRolesCommand).GetTypeInfo().Assembly)
+                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+                .AsImplementedInterfaces();
+
             // Domain events handlers
 
             builder.RegisterAssemblyTypes(typeof(SendEmailToActivateUserCreatedDomainEventHandler).GetTypeInfo().Assembly)

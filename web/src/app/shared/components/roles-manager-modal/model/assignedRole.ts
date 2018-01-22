@@ -1,5 +1,5 @@
 export class AssignedRole {
   roleId: number;
-  assignedRoleId: number;
+  entityId: number;
   role: string;
 }

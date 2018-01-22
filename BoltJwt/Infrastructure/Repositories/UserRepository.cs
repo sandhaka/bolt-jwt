@@ -192,14 +192,11 @@ namespace BoltJwt.Infrastructure.Repositories
         /// Assign a role
         /// </summary>
         /// <param name="userId">User id</param>
-        /// <param name="roleId">Role id</param>
+        /// <param name="roles">Roles id</param>
         /// <returns>Task</returns>
         /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
-        public async Task AssignRoleAsync(int userId, int roleId)
+        public async Task AssignRoleAsync(int userId, IEnumerable<int> roles)
         {
-            var role = await _context.Roles.FindAsync(roleId) ??
-                       throw new EntityNotFoundException(nameof(Role));
-
             var user = await _context.Users.FindAsync(userId) ?? throw new EntityNotFoundException(nameof(User));
 
             if (user.Root)
@@ -207,17 +204,23 @@ namespace BoltJwt.Infrastructure.Repositories
                 throw new NotEditableEntityException("Root user");
             }
 
-            if (user.UserRoles.Any(i => i.RoleId == roleId))
+            foreach (var roleId in roles)
             {
-                return;
-            }
+                var role = await _context.Roles.FindAsync(roleId) ??
+                           throw new EntityNotFoundException(nameof(Role));
 
-            user.UserRoles.Add(
-                new UserRole
+                if (user.UserRoles.Any(i => i.RoleId == roleId))
                 {
-                    RoleId = role.Id,
-                    UserId = user.Id
-                });
+                    return;
+                }
+
+                user.UserRoles.Add(
+                    new UserRole
+                    {
+                        RoleId = role.Id,
+                        UserId = user.Id
+                    });
+            }
         }
 
         /// <summary>
