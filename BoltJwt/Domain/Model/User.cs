@@ -101,22 +101,5 @@ namespace BoltJwt.Domain.Model
         {
             return Authorizations.Any(i => i.DefAuthorizationId == definedAuthorization.Id);
         }
-
-        public static string PasswordEncrypt(string password)
-        {
-            using (var md5Hash = MD5.Create())
-            {
-                var hash = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-                var sBuilder = new StringBuilder();
-
-                foreach (var t in hash)
-                {
-                    sBuilder.Append(t.ToString("x2"));
-                }
-
-                return sBuilder.ToString();
-            }
-        }
     }
 }

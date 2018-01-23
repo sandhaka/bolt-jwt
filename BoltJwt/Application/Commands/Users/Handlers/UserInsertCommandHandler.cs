@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Infrastructure.Extensions;
 using MediatR;
 
 namespace BoltJwt.Application.Commands.Users.Handlers
@@ -32,7 +33,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
                 },
 
                 // Insert with a temporary password
-                User.PasswordEncrypt(Guid.NewGuid().ToString())
+                Guid.NewGuid().ToString().ToMd5Hash()
             );
 
             _userRepository.Add(newUser);

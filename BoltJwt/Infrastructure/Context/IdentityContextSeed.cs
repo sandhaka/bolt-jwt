@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
+using BoltJwt.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -61,7 +62,7 @@ namespace BoltJwt.Infrastructure.Context
                 Surname = "Root",
                 UserName = "root",
                 Email = "root@system.local",
-                Password = User.PasswordEncrypt("root"),
+                Password = "root".ToMd5Hash(),
                 Disabled = false
             };
 
@@ -79,7 +80,7 @@ namespace BoltJwt.Infrastructure.Context
                 SmtpPassword = "myPassword",
                 EndpointFqdn = "localhost",
                 EndpointPort = 80,
-                RootPassword = User.PasswordEncrypt("root")
+                RootPassword = "root".ToMd5Hash()
             };
         }
     }

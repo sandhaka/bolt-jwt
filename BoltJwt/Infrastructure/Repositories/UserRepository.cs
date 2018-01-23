@@ -8,6 +8,7 @@ using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.Context;
+using BoltJwt.Infrastructure.Extensions;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -254,7 +255,7 @@ namespace BoltJwt.Infrastructure.Repositories
                        throw new EntityNotFoundException(nameof(User));
 
             // If the user exists and if it's wainting for activation, edit his password and activate
-            user.Password = User.PasswordEncrypt(password);
+            user.Password = password.ToMd5Hash();
 
             user.Disabled = false;
 
@@ -302,7 +303,7 @@ namespace BoltJwt.Infrastructure.Repositories
                 throw new AuthorizationCodeException("Wrong authorization code");
             }
 
-            user.Password = User.PasswordEncrypt(newPassword);
+            user.Password = newPassword.ToMd5Hash();
 
             _context.Entry(user).State = EntityState.Modified;
         }
@@ -316,7 +317,7 @@ namespace BoltJwt.Infrastructure.Repositories
         {
             var user = await _context.Users.FirstAsync(i => i.Root);
 
-            user.Password = User.PasswordEncrypt(password);
+            user.Password = password.ToMd5Hash();
         }
 
         /// <summary>
@@ -336,7 +337,7 @@ namespace BoltJwt.Infrastructure.Repositories
                 .Include(i=>i.UserRoles)
                 .FirstOrDefaultAsync(i => i.UserName == username);
 
-            if (user == null || !user.Password.Equals(User.PasswordEncrypt(password)))
+            if (user == null || !user.Password.Equals(password.ToMd5Hash()))
             {
                 return null;
             }
