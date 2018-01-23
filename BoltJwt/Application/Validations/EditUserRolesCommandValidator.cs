@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace BoltJwt.Application.Validations
 {
-    public class AddUserRolesCommandValidator : AbstractValidator<AddUserRolesCommand>
+    public class EditUserRolesCommandValidator : AbstractValidator<EditUserRolesCommand>
     {
-        public AddUserRolesCommandValidator()
+        public EditUserRolesCommandValidator()
         {
             RuleFor(command => command.UserId).NotNull();
             RuleFor(command => command.Roles).NotNull();

@@ -56,12 +56,14 @@ export class RolesManagerModalComponent extends GenericModalComponent {
     if(this.serviceEntity === AppEntity.User) {
       command = {
         UserId: this.entityId,
-        Roles: []
+        Roles: this.assignedRoles
+          .map(role => role.roleId)
       };
     } else if(this.serviceEntity === AppEntity.Group) {
       command = {
         GroupId: this.entityId,
-        Roles: []
+        Roles: this.assignedRoles
+          .map(role => role.roleId)
       };
     }
 

@@ -195,23 +195,30 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <param name="roles">Roles id</param>
         /// <returns>Task</returns>
         /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
-        public async Task AssignRoleAsync(int userId, IEnumerable<int> roles)
+        public async Task EditRolesAsync(int userId, IEnumerable<int> roles)
         {
-            var user = await _context.Users.FindAsync(userId) ?? throw new EntityNotFoundException(nameof(User));
+            var user = await _context.Users
+                           .Include(u => u.UserRoles)
+                           .FirstAsync(u => u.Id == userId) ??
+                       throw new EntityNotFoundException(nameof(User));
 
             if (user.Root)
             {
                 throw new NotEditableEntityException("Root user");
             }
 
-            foreach (var roleId in roles)
+            var roleIds = roles as int[] ?? roles.ToArray();
+
+            // Add new roles
+            foreach (var roleId in roleIds)
             {
                 var role = await _context.Roles.FindAsync(roleId) ??
                            throw new EntityNotFoundException(nameof(Role));
 
+                // Skip if the role is just assigned
                 if (user.UserRoles.Any(i => i.RoleId == roleId))
                 {
-                    return;
+                    continue;
                 }
 
                 user.UserRoles.Add(
@@ -220,6 +227,15 @@ namespace BoltJwt.Infrastructure.Repositories
                         RoleId = role.Id,
                         UserId = user.Id
                     });
+            }
+
+            // Remove deleted roles
+            foreach (var userRole in user.UserRoles.ToArray())
+            {
+                if (!roleIds.Contains(userRole.RoleId))
+                {
+                    user.UserRoles.Remove(userRole);
+                }
             }
         }
 

@@ -84,7 +84,7 @@ namespace BoltJwt.Infrastructure.Modules
                 .AsImplementedInterfaces();
 
             builder
-                .RegisterAssemblyTypes(typeof(AddUserRolesCommand).GetTypeInfo().Assembly)
+                .RegisterAssemblyTypes(typeof(EditUserRolesCommand).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
 

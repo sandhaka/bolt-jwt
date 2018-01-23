@@ -6,18 +6,18 @@ using MediatR;
 
 namespace BoltJwt.Application.Commands.Users.Handlers
 {
-    public class AddUserRolesCommandHandler : IRequestHandler<AddUserRolesCommand, bool>
+    public class EditUserRolesCommandHandler : IRequestHandler<EditUserRolesCommand, bool>
     {
         private readonly IUserRepository _userRepository;
 
-        public AddUserRolesCommandHandler(IUserRepository userRepository)
+        public EditUserRolesCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        public async Task<bool> Handle(AddUserRolesCommand addUserRolesCommand, CancellationToken cancellationToken)
+        public async Task<bool> Handle(EditUserRolesCommand editUserRolesCommand, CancellationToken cancellationToken)
         {
-            await _userRepository.AssignRoleAsync(addUserRolesCommand.UserId, addUserRolesCommand.Roles);
+            await _userRepository.EditRolesAsync(editUserRolesCommand.UserId, editUserRolesCommand.Roles);
 
             return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
