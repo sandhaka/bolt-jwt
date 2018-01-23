@@ -81,7 +81,7 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <returns></returns>
         private bool IsInUse(int authId)
         {
-            return _context.Roles.Any(i => i.Authorizations.Any(j => j.DefAuthorizationId == authId)) &&
+            return _context.Roles.Any(i => i.Authorizations.Any(j => j.DefAuthorizationId == authId)) ||
                    _context.Users.Any(i => i.Authorizations.Any(j => j.DefAuthorizationId == authId));
         }
     }
