@@ -9,6 +9,10 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {Role} from "./model/role";
 import {AssignedRole} from "./model/assignedRole";
 
+/**
+ * Roles manager component
+ * Manage roles for a user or group entity
+ */
 @Component({
   templateUrl: './roles-manager-modal.component.html',
   styleUrls: ['./roles-manager.component.scss'],
@@ -32,13 +36,23 @@ export class RolesManagerModalComponent extends GenericModalComponent {
     animationType: ANIMATION_TYPES.wanderingCubes
   };
 
+  // Touched flag
   touched = false;
 
+  // Waiting for an application server response flag
   isOnProcessing = false;
 
+  /**
+   * Collection of available roles for the user
+   * @type {any[]}
+   */
   availableRoles: Role[] = [];
   selectedAvailableRoles: number[] = [];
 
+  /**
+   * Collection of user assigned roles
+   * @type {any[]}
+   */
   assignedRoles: AssignedRole[] = [];
   selectedAssignedRoles: number[];
 
@@ -48,11 +62,16 @@ export class RolesManagerModalComponent extends GenericModalComponent {
     super(bsModalRef);
   }
 
+  /**
+   * Save the current assigned roles to the user
+   * Add the new roles and remove the unassigned
+   */
   submit() {
     this.isOnProcessing = true;
 
     let command = null;
 
+    // Command creation is on entity condition
     if(this.serviceEntity === AppEntity.User) {
       command = {
         UserId: this.entityId,
@@ -69,6 +88,7 @@ export class RolesManagerModalComponent extends GenericModalComponent {
 
     this.rolesManagerService.assignRoles(this.serviceEntity, command).subscribe(
       () => {
+        // Reload table on success
         this.load();
       },
       (error: HttpErrorResponse) => {
@@ -78,18 +98,25 @@ export class RolesManagerModalComponent extends GenericModalComponent {
     );
   }
 
+  /**
+   * Load routine
+   * First, load the user assigned roles then, create a list of available roles for that user
+   */
   load() {
 
     this.isOnProcessing = true;
 
     this.rolesManagerService.getAssignedRoles(this.serviceEntity, this.entityId).subscribe(
       (roles: AssignedRole[]) => {
+
+        // User roles
         this.assignedRoles = roles;
 
+        // Get all roles available in the sustem
         this.rolesManagerService.getRoles().subscribe(
           (allRoles: Role[]) => {
 
-            // Filter role not assigned
+            // Subtract from all roles the assigned ones
             this.availableRoles = allRoles.filter((item: Role) => {
               return this.assignedRoles.filter((assigned: AssignedRole) => {
                 return assigned.roleId === item.id;
@@ -114,6 +141,9 @@ export class RolesManagerModalComponent extends GenericModalComponent {
     );
   }
 
+  /**
+   * Move one or more roles from the available column to the assigned column
+   */
   addToAssigned() {
 
     if(this.selectedAvailableRoles.length === 0) {
@@ -131,6 +161,9 @@ export class RolesManagerModalComponent extends GenericModalComponent {
     this.touched = true;
   }
 
+  /**
+   * Move one or more roles from the assigned column to the available column
+   */
   removeFromAssigned() {
 
     if(this.selectedAssignedRoles.length === 0) {
