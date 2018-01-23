@@ -49,7 +49,7 @@ Use yours authorizations in yours services. Authorizations are embedded in the T
 with the public key created bofore.**
 
 ##### TODO
-Roles and groups management
+Groups management
 
 #### Consumers setup example
 ##### ASP.Net Core implementation.
