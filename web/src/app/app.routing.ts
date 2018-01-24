@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import {AuthGuardService} from './security/auth.guard.service';
+import {AuthRootGuardService} from "./security/auth.root-guard.service";
 
 // Import Containers
 import {
@@ -51,7 +52,7 @@ export const routes: Routes = [
       {
         path: 'configuration',
         loadChildren: './views/configuration/configuration.module#ConfigurationModule',
-        canActivate: [AuthGuardService] //TODO: Only root (and redirect to a 403 page)
+        canActivate: [AuthRootGuardService]
       }
     ]
   },
@@ -66,9 +67,18 @@ export const routes: Routes = [
       {
         path: 'account',
         loadChildren: './account/account.module#AccountModule'
+      },
+      {
+        path: 'error',
+        loadChildren: './error-pages/error-pages.module#ErrorPagesModule'
       }
     ]
-  }
+  },
+  {
+    path: '**',
+    redirectTo: 'login',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

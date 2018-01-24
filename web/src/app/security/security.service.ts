@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import {HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {TokenResponse} from './token.response';
 import {UtilityService} from "../shared/utils.service";
+import {AuthenticationStatus} from "./auth-status";
 
 @Injectable()
 export class SecurityService {
@@ -50,27 +51,16 @@ export class SecurityService {
   }
 
   /**
-   * Return decoded token
-   * @returns {JSON}
-   */
-  getDecodedToken(): JSON {
-
-    if(this.token === null) {
-      return null;
-    }
-
-    const base64 = this.token.split('.')[1]
-      .replace('-', '+')
-      .replace('_', '/');
-
-    return JSON.parse(window.atob(base64));
-  }
-
-  /** // TODO: Adding check on 'admin' user and 'root'
    * Establish if the token is valid, if it's going to expire, renew it
-   * @returns {boolean}
+   * @returns {AuthenticationStatus}
    */
-  tokenCheck(): boolean {
+  tokenCheck(): AuthenticationStatus {
+
+    const status = {
+      Authenticated: false,
+      AdminUser: false,
+      RootUser: false
+    };
 
     // Retrieve the local copy of the token
     const storedToken = localStorage.getItem('currentUser');
@@ -79,32 +69,52 @@ export class SecurityService {
 
       const tokenData = JSON.parse(storedToken);
 
-      // If the token is going to expire in less of a day renew it
-      if (tokenData.exp > Date.now() &&
-        tokenData.exp < (Date.now() + 86400)) {
+      if (tokenData.exp < Date.now()) {
 
-        this.tokenRenew().subscribe(
-          (result) => {
-            if (!result) {
-              console.warn('Error on token renew');
-            }
-            console.debug('Token renewed');
-          },
-          (error: HttpErrorResponse) => {
-            console.warn(`Error on token renew: ${error.message}`);
-          });
-
-        return true;
-      } else if (tokenData.exp < Date.now()) {
         console.debug('Token expired');
+
         localStorage.removeItem('currentUser');
-        return false;
+
+        return status;
+
+      } else {
+
+        status.Authenticated = true;
+
+        const decodedUserToken = UtilityService.decodeToken(this.token);
+
+        // Verify root user
+        if(decodedUserToken.isRoot === "true") {
+          status.RootUser = true;
+          status.AdminUser = true;
+        }
+
+        // Verify the 'admin' authorization
+        if(decodedUserToken.authorizations.includes("administrative")) {
+          status.AdminUser = true;
+        }
       }
 
-      return true;
+      if(status.Authenticated) {
+
+        // If the token is going to expire in less of a day renew it
+        if (tokenData.exp > Date.now() && tokenData.exp < (Date.now() + 86400)) {
+
+          this.tokenRenew().subscribe(
+            (result) => {
+              if (!result) {
+                console.warn('Error on token renew');
+              }
+              console.debug('Token renewed');
+            },
+            (error: HttpErrorResponse) => {
+              console.warn(`Error on token renew: ${error.message}`);
+            });
+        }
+      }
     }
 
-    return false;
+    return status;
   }
 
   /**

@@ -4,22 +4,22 @@ import {Observable} from 'rxjs/Observable';
 import {SecurityService} from './security.service';
 
 /**
- * General guard to protect routes
+ * Guard to protect root routes
  */
 @Injectable()
-export class AuthGuardService implements CanActivate {
+export class AuthRootGuardService implements CanActivate {
 
   private router: Router;
   private authService;
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
-    : boolean | Observable<boolean> | Promise<boolean> {
+  : boolean | Observable<boolean> | Promise<boolean> {
 
     const authStatus = this.authService.tokenCheck();
 
     if (authStatus.Authenticated) {
 
-      if(!authStatus.AdminUser) {
+      if(!authStatus.RootUser) {
         this.router.navigate(['/error/403']);
         return false;
       }
