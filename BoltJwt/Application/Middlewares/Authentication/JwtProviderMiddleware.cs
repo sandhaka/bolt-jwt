@@ -84,7 +84,7 @@ namespace BoltJwt.Application.Middlewares.Authentication
                 {
                     Timestamp = DateTime.Now,
                     UserId = userId,
-                    Value = encodedJwt
+                    Value = encodedJwt.Remove(6) + "..."
                 });
 
                 await _tokenLogsRepository.UnitOfWork.SaveEntitiesAsync();

@@ -148,16 +148,16 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
     const formValue = this.form.value;
 
     const configDto = {
-      SmtpHostname: formValue.hostname,
-      SmtpPort: formValue.port,
-      SmtpUserName: formValue.username,
-      SmtpPassword: formValue.password,
-      EndpointFqdn: formValue.endpointfqdn,
-      EndpointPort: formValue.endpointPort,
-      RootPassword: formValue.rootPassword,
-      RootPasswordConfirmation: formValue.rootPasswordConfirmation
+      SmtpHostname: this.form.controls.hostname.dirty ? formValue.hostname : null,
+      SmtpPort: this.form.controls.port.dirty ? formValue.port : null,
+      SmtpUserName: this.form.controls.username.dirty ? formValue.username : null,
+      SmtpPassword: this.form.controls.password.dirty ? formValue.password : null,
+      EndpointFqdn: this.form.controls.endpointfqdn.dirty ? formValue.endpointfqdn : null,
+      EndpointPort: this.form.controls.endpointPort.dirty ? formValue.endpointPort : null,
+      RootPassword: this.form.controls.rootPassword.dirty ? formValue.rootPassword : null,
+      RootPasswordConfirmation: this.form.controls.rootPasswordConfirmation.dirty ? formValue.rootPasswordConfirmation : null
     };
-
+    
     this.configurationService.post(configDto).subscribe(
       () => {
         this.isLoading = false;

@@ -73,8 +73,7 @@ export class DashboardComponent implements OnInit {
     // To have working cell template columns must be into the ngOnInit routine
     this.columnNames = [
       {name: 'Timestamp', prop: 'timestamp', cellTemplate: this.dateCol, sortable: true},
-      {name: 'UserId', prop: 'userId', sortable: true},
-      {name: 'Value', prop: 'value', sortable: true}
+      {name: 'UserId', prop: 'userId', sortable: true}
     ];
 
     // Bind

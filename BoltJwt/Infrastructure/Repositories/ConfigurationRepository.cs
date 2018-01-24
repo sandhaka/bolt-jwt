@@ -34,7 +34,6 @@ namespace BoltJwt.Infrastructure.Repositories
             var config = await _context.Configuration.FirstAsync();
 
             // Pwd obfuscation
-            config.RootPassword = config.RootPassword.ToMd5Hash();
             config.SmtpPassword = config.SmtpPassword.ToMd5Hash();
 
             return config;
@@ -57,12 +56,13 @@ namespace BoltJwt.Infrastructure.Repositories
             c.EndpointFqdn = dto?.EndpointFqdn ?? c.EndpointFqdn;
             c.EndpointPort = dto?.EndpointPort ?? c.EndpointPort;
 
-            if (string.CompareOrdinal(c.RootPassword,dto?.RootPassword) != 0)
+            if (dto?.RootPassword != null && string.CompareOrdinal(c.RootPassword, dto.RootPassword.ToMd5Hash()) != 0)
             {
-                c.RootPassword = dto?.RootPassword ?? c.RootPassword;
+                // Save as md5 hash
+                c.RootPassword = dto.RootPassword.ToMd5Hash();
 
                 // Root password has changed
-                c.AddDomainEvent(new RootPasswordChangedDomainEvent { Password = c.RootPassword});
+                c.AddDomainEvent(new RootPasswordChangedDomainEvent { Password = dto.RootPassword});
             }
 
             _context.Entry(c).State = EntityState.Modified;
