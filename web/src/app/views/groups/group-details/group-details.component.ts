@@ -1,26 +1,19 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from "@angular/core";
+import {GroupDto} from "../groupDto";
 import {ReactiveFormComponent} from "../../../shared/base/reactiveForm.component";
-import {RoleDto} from "../roleDto";
+import {HttpErrorResponse} from "@angular/common/http";
 import {FormBuilder, Validators} from "@angular/forms";
 import {UtilityService} from "../../../shared/utils.service";
-import {RolesService} from "../roles.service";
-import {HttpErrorResponse} from "@angular/common/http";
+import {GroupsService} from "../groups.service";
 
 @Component({
-  selector: 'app-role-details',
-  templateUrl: './role-details.component.html'
+  selector: 'app-group-details',
+  templateUrl: './group-details.component.html'
 })
-export class RoleDetailsComponent extends ReactiveFormComponent implements OnChanges {
+export class GroupDetailsComponent extends ReactiveFormComponent implements OnChanges  {
 
-  /**
-   * Role
-   */
-  @Input('role') role: RoleDto;
+  @Input('group') group: GroupDto;
 
-  /**
-   * On a successfully changes
-   * @type {EventEmitter<any>}
-   */
   @Output('changed') changed: EventEmitter<any> = new EventEmitter();
 
   isPending = false;
@@ -28,7 +21,7 @@ export class RoleDetailsComponent extends ReactiveFormComponent implements OnCha
   constructor(
     private formBuilder: FormBuilder,
     private utils: UtilityService,
-    private roleService: RolesService
+    private groupService: GroupsService
   ) {
     super();
     this.formErrors = {
@@ -54,16 +47,16 @@ export class RoleDetailsComponent extends ReactiveFormComponent implements OnCha
     this.onDataChanged();
   }
 
-  saveRoleDetails() {
+  saveGroupDetails() {
 
     this.isPending = true;
 
     const command = {
-      Id: this.role.Id,
+      Id: this.group.Id,
       Description: this.form.value.description
     };
 
-    this.roleService.edit(command).subscribe(
+    this.groupService.edit(command).subscribe(
       response => {
         this.isPending = false;
         this.changed.emit();
@@ -76,9 +69,9 @@ export class RoleDetailsComponent extends ReactiveFormComponent implements OnCha
   }
 
   delete() {
-    const deleteRoleCallback = function() {
+    const deleteGroupCallback = function() {
 
-      this.roleService.delete(this.role.Id).subscribe(
+      this.groupService.delete(this.group.Id).subscribe(
         () => {
           this.changed.emit();
         },
@@ -90,22 +83,18 @@ export class RoleDetailsComponent extends ReactiveFormComponent implements OnCha
     // Call the delete service after confirmation
     this.utils.openConfirmModal(
       "Delete confirmation",
-      `Are you sure to delete the role: ${this.role.Description}?`, "modal-warning",
-      deleteRoleCallback
+      `Are you sure to delete the group: ${this.group.Description}?`, "modal-warning",
+      deleteGroupCallback
     );
   }
 
-  /**
-   * Update the form values on parent component selection changed
-   * @param {SimpleChanges} changes
-   */
   ngOnChanges(changes: SimpleChanges): void {
     this.resetForm();
   }
 
   private resetForm() {
     this.form.reset({
-      description: this.role.Description
+      description: this.group.Description
     });
   }
 }

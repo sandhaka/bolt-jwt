@@ -39,6 +39,11 @@ export const routes: Routes = [
         canActivate: [AuthGuardService]
       },
       {
+        path: 'groups',
+        loadChildren: './views/groups/groups.module#GroupsModule',
+        canActivate: [AuthGuardService]
+      },
+      {
         path: 'authorizations',
         loadChildren: './views/authorizations/authorizations.module#AuthorizationsModule',
         canActivate: [AuthGuardService]

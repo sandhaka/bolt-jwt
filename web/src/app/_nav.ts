@@ -10,6 +10,11 @@ export const navigation = [
     icon: 'icon-user'
   },
   {
+    name: 'Groups',
+    url: '/groups',
+    icon: 'icon-people'
+  },
+  {
     name: 'Roles',
     url: '/roles',
     icon: 'icon-mustache'
