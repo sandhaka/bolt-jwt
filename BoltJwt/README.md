@@ -3,7 +3,7 @@
 *Work in progress*
 
 ### Availables tags
-1.2.1, dev
+1.2.2, dev
 
 [(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
 
