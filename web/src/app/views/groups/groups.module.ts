@@ -11,6 +11,7 @@ import {GroupDetailsComponent} from "./group-details/group-details.component";
 import {GroupsService} from "./groups.service";
 import {GroupsComponent} from "./groups.component";
 import {GroupsRoutingModule} from "./groups.routing";
+import {RolesManagerModalComponent} from "../../shared/components/roles-manager-modal/roles-manager-modal.component";
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import {GroupsRoutingModule} from "./groups.routing";
   entryComponents: [
     ErrorModalComponent,
     GenericModalComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    RolesManagerModalComponent
   ],
   providers: [
     GroupsService

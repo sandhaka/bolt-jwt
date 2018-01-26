@@ -7,6 +7,13 @@
         (click)="addNew()">
         Add
       </button>
+      <button
+      style="margin-right: 3px;"
+      *ngIf="selectedGroup"
+      class="pull-right btn btn-primary"
+      (click)="openRolesManager()">
+      Manage Roles
+    </button>
     </div>
   </div>
   <div class="row">
@@ -39,14 +46,6 @@
         [group]="selectedGroup"
         (changed)="onUpdate()">
       </app-group-details>
-    </div>
-    <div class="col-sm-6">
-      <div class="animated fadeIn">
-        <app-authorizations-manager
-          [entity]="entity"
-          [entityData]="selectedGroup">
-        </app-authorizations-manager>
-      </div>
     </div>
   </div>
 </div>

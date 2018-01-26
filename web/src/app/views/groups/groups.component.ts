@@ -7,6 +7,7 @@ import {Page} from "../../shared/datatable/model/page";
 import {Observable} from "rxjs/Observable";
 import {GroupDto} from "./groupDto";
 import {GroupsService} from "./groups.service";
+import {RolesManagerModalComponent} from "../../shared/components/roles-manager-modal/roles-manager-modal.component";
 
 @Component({
   templateUrl: './groups.component.html',
@@ -102,5 +103,18 @@ export class GroupsComponent implements OnInit {
    */
   toggleAccordion() {
     this.filtersAccordionOpened = !this.filtersAccordionOpened
+  }
+
+  openRolesManager() {
+    const bsRolesManagerModal = this.modalService.show(RolesManagerModalComponent);
+    bsRolesManagerModal.content.modalTitle = "Group roles manager";
+    bsRolesManagerModal.content.modalCss = "modal-info";
+
+    // Manage roles of group entity
+    bsRolesManagerModal.content.serviceEntity = AppEntity.Group;
+    bsRolesManagerModal.content.entityId = this.selectedGroup.Id;
+
+    // Load modal content
+    bsRolesManagerModal.content.load();
   }
 }
