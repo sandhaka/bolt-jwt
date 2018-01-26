@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AccountService} from "../account.service";
 import {HttpErrorResponse} from "@angular/common/http";
 
+// TODO: need a 'return url' parameter to redirect to the real application
 @Component({
   selector: 'app-account-activation',
   templateUrl: './account-activation.component.html',

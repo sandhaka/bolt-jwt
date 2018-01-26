@@ -6,6 +6,7 @@ import {UtilityService} from "../../shared/utils.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {Component, OnInit} from "@angular/core";
 
+// TODO: need a 'return url' parameter to redirect to the real application
 @Component({
   templateUrl: '/password-recovery.component.html'
 })
