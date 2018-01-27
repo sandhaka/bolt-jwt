@@ -3,10 +3,13 @@ using BoltJwt.Application.Commands.Users;
 using System.Reflection;
 using Autofac;
 using BoltJwt.Application.Commands.Authorizations;
+using BoltJwt.Application.Commands.Groups;
 using BoltJwt.Application.Commands.Roles;
 using BoltJwt.Application.DomainEventHandlers;
 using BoltJwt.Application.Validations;
+using BoltJwt.Application.Validations.Account;
 using BoltJwt.Application.Validations.Authorizations;
+using BoltJwt.Application.Validations.Groups;
 using BoltJwt.Application.Validations.Roles;
 using BoltJwt.Application.Validations.Users;
 using FluentValidation;
@@ -54,7 +57,7 @@ namespace BoltJwt.Infrastructure.Modules
             builder.RegisterAssemblyTypes(typeof(ResetPasswordCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
-            // Commands validation
+            // Validators
 
             builder
                 .RegisterAssemblyTypes(typeof(UserInsertCommandValidator).GetTypeInfo().Assembly)
@@ -67,27 +70,22 @@ namespace BoltJwt.Infrastructure.Modules
                 .AsImplementedInterfaces();
 
             builder
-                .RegisterAssemblyTypes(typeof(RemoveAuthorizationUserCommand).GetTypeInfo().Assembly)
+                .RegisterAssemblyTypes(typeof(UserActivateCommandValidator).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
 
             builder
-                .RegisterAssemblyTypes(typeof(UserActivateCommand).GetTypeInfo().Assembly)
+                .RegisterAssemblyTypes(typeof(PasswordRecoveryCommandValidator).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
 
             builder
-                .RegisterAssemblyTypes(typeof(PasswordRecoveryCommand).GetTypeInfo().Assembly)
+                .RegisterAssemblyTypes(typeof(ResetPasswordCommandValidator).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
 
             builder
-                .RegisterAssemblyTypes(typeof(ResetPasswordCommand).GetTypeInfo().Assembly)
-                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
-                .AsImplementedInterfaces();
-
-            builder
-                .RegisterAssemblyTypes(typeof(EditUserRolesCommand).GetTypeInfo().Assembly)
+                .RegisterAssemblyTypes(typeof(EditUserRolesCommandValidator).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
 
@@ -120,7 +118,7 @@ namespace BoltJwt.Infrastructure.Modules
             builder.RegisterAssemblyTypes(typeof(RemoveAuthorizationRoleCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
-            // Commands validation
+            // Validators
 
             builder
                 .RegisterAssemblyTypes(typeof(RoleInsertCommandValidator).GetTypeInfo().Assembly)
@@ -148,7 +146,18 @@ namespace BoltJwt.Infrastructure.Modules
 
             #region [Groups]
 
+            // Commands handlers
 
+            builder.RegisterAssemblyTypes(typeof(GroupInsertCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
+
+            builder.RegisterAssemblyTypes(typeof(UserEditCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
+
+            builder
+                .RegisterAssemblyTypes(typeof(GroupInsertCommandValidator).GetTypeInfo().Assembly)
+                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+                .AsImplementedInterfaces();
 
             #endregion
 

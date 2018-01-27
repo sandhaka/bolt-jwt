@@ -51,6 +51,10 @@ namespace BoltJwt.Infrastructure.Modules
                 .As<IRoleRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<GroupRepository>()
+                .As<IGroupRepository>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<AuthorizationRepository>()
                 .As<IAuthorizationRepository>()
                 .InstancePerLifetimeScope();

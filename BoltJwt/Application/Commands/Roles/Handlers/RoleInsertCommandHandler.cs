@@ -10,11 +10,9 @@ namespace BoltJwt.Application.Commands.Roles.Handlers
     public class RoleInsertCommandHandler : IRequestHandler<RoleInsertCommand, bool>
     {
         private readonly IRoleRepository _roleRepository;
-        private readonly IAuthorizationRepository _authorizationRepository;
 
         public RoleInsertCommandHandler(IRoleRepository roleRepository, IAuthorizationRepository authorizationRepository)
         {
-            _authorizationRepository = authorizationRepository ?? throw new ArgumentNullException(nameof(authorizationRepository));
             _roleRepository = roleRepository  ?? throw new ArgumentNullException(nameof(roleRepository));
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using BoltJwt.Application.Commands.Groups;
 using BoltJwt.Application.Queries.Groups;
 using BoltJwt.Controllers.Pagination;
 using MediatR;
@@ -49,6 +50,42 @@ namespace BoltJwt.Controllers
         #endregion
 
         #region [ Commands ]
+
+        [Route("")]
+        [HttpPost]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> AddAsync([FromBody] GroupInsertCommand groupInsertCommand)
+        {
+            var result = await _mediator.Send(groupInsertCommand);
+
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
+        }
+
+        [Route("update")]
+        [HttpPost]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> UpdateAsync([FromBody] GroupEditCommand groupEditCommand)
+        {
+            var result = await _mediator.Send(groupEditCommand);
+
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
+        }
+
+        [Route("")]
+        [HttpDelete]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DeleteAsync([FromQuery] GroupDeleteCommand groupDeleteCommand)
+        {
+            var result = await _mediator.Send(groupDeleteCommand);
+
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
+        }
 
         #endregion
     }

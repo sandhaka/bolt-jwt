@@ -8,6 +8,7 @@ import {Observable} from "rxjs/Observable";
 import {GroupDto} from "./groupDto";
 import {GroupsService} from "./groups.service";
 import {RolesManagerModalComponent} from "../../shared/components/roles-manager-modal/roles-manager-modal.component";
+import {CreateGroupModalComponent} from "./create-group-modal/create-group-modal.component";
 
 @Component({
   templateUrl: './groups.component.html',
@@ -87,15 +88,15 @@ export class GroupsComponent implements OnInit {
    * Open a modal to add a new role
    */
   addNew() {
-    // const bsRoleCreationModal = this.modalService.show();
-    // bsRoleCreationModal.content.modalTitle = "New group";
-    // bsRoleCreationModal.content.modalCss = "modal-info";
-    // bsRoleCreationModal.content.onCreated.subscribe(
-    //   () => {
-    //     bsRoleCreationModal.hide();
-    //     this.dataTableService.invokeReload();
-    //   }
-    // );
+    const bsGroupCreationModal = this.modalService.show(CreateGroupModalComponent);
+    bsGroupCreationModal.content.modalTitle = "New group";
+    bsGroupCreationModal.content.modalCss = "modal-info";
+    bsGroupCreationModal.content.onCreated.subscribe(
+      () => {
+        bsGroupCreationModal.hide();
+        this.dataTableService.invokeReload();
+      }
+    );
   }
 
   /**
