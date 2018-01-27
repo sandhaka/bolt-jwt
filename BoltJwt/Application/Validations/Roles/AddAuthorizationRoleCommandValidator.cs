@@ -1,7 +1,7 @@
 ﻿using BoltJwt.Application.Commands.Roles;
 using FluentValidation;
 
-namespace BoltJwt.Application.Validations
+namespace BoltJwt.Application.Validations.Roles
 {
     public class AddAuthorizationRoleCommandValidator: AbstractValidator<AddAuthorizationRoleCommand>
     {

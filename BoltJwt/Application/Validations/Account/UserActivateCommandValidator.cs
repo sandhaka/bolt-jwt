@@ -1,13 +1,12 @@
 ﻿using BoltJwt.Application.Commands.Users;
 using FluentValidation;
 
-namespace BoltJwt.Application.Validations
+namespace BoltJwt.Application.Validations.Account
 {
-    public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordCommand>
+    public class UserActivateCommandValidator : AbstractValidator<UserActivateCommand>
     {
-        public ResetPasswordCommandValidator()
+        public UserActivateCommandValidator()
         {
-            RuleFor(command => command.UserId).NotNull();
             RuleFor(command => command.Code).NotEmpty();
             RuleFor(command => command.Password).NotEmpty();
             RuleFor(command => command.ConfirmPassword).NotEmpty();

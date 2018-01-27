@@ -1,7 +1,7 @@
 ﻿using BoltJwt.Application.Commands.Authorizations;
 using FluentValidation;
 
-namespace BoltJwt.Application.Validations
+namespace BoltJwt.Application.Validations.Authorizations
 {
     public class AuthorizationInsertCommandValidator : AbstractValidator<AuthorizationInsertCommand>
     {
