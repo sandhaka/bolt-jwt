@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using BoltJwt.Application.Queries.Authorizations;
+using BoltJwt.Application.Queries.Groups;
 using BoltJwt.Application.Queries.Logs;
 using BoltJwt.Application.Queries.Roles;
 using BoltJwt.Application.Queries.Users;
@@ -13,28 +14,32 @@ namespace BoltJwt.Infrastructure.Modules
 {
     public class ApplicationModule : Module
     {
-        public string ConnectionString { get; }
+        private readonly string _connectionString;
 
         public ApplicationModule(string connectionString)
         {
-            ConnectionString = connectionString;
+            _connectionString = connectionString;
         }
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(compContext => new UserQueries(ConnectionString))
+            builder.Register(compContext => new UserQueries(_connectionString))
                 .As<IUserQueries>()
                 .InstancePerLifetimeScope();
 
-            builder.Register(compContext => new RoleQueries(ConnectionString))
+            builder.Register(compContext => new RoleQueries(_connectionString))
                 .As<IRoleQueries>()
                 .InstancePerLifetimeScope();
 
-            builder.Register(compContext => new AuthorizationQueries(ConnectionString))
+            builder.Register(compContext => new GroupQueries(_connectionString))
+                .As<IGroupQueries>()
+                .InstancePerLifetimeScope();
+
+            builder.Register(compContext => new AuthorizationQueries(_connectionString))
                 .As<IAuthorizationQueries>()
                 .InstancePerLifetimeScope();
 
-            builder.Register(compContext => new TokenLogsQueries(ConnectionString))
+            builder.Register(compContext => new TokenLogsQueries(_connectionString))
                 .As<ITokenLogsQueries>()
                 .InstancePerLifetimeScope();
 

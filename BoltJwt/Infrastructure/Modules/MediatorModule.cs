@@ -143,6 +143,12 @@ namespace BoltJwt.Infrastructure.Modules
 
             #endregion
 
+            #region [Groups]
+
+
+
+            #endregion
+
             builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
 

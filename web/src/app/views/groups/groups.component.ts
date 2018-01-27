@@ -21,7 +21,7 @@ export class GroupsComponent implements OnInit {
     {name: 'Description'}
   ];
 
-  selectedGroup: GroupDto;
+  selectedGroup: GroupDto = null;
 
   /**
    * Filters object for data table component
