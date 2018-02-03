@@ -126,7 +126,7 @@ namespace BoltJwt.Application.Middlewares.Authentication
                 issuer: options.Issuer,
                 audience: options.Audience,
                 claims: claims,
-                notBefore: now,
+                notBefore: null,
                 expires: now.Add(options.Expiration),
                 signingCredentials: options.SigningCredentials);
 
