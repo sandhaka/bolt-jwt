@@ -89,7 +89,7 @@ namespace BoltJwt.Infrastructure.Repositories
             // Add new roles
             foreach (var roleId in roleIds)
             {
-                var role = _context.Roles.FindAsync(roleId) ?? throw new EntityNotFoundException(nameof(Role));
+                var role = await _context.Roles.FindAsync(roleId) ?? throw new EntityNotFoundException(nameof(Role));
 
                 // Skip if the role is just assigned
                 if (group.GroupRoles.Any(g => g.RoleId == roleId))
