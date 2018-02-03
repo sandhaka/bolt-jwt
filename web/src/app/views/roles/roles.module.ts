@@ -12,6 +12,7 @@ import {RolesComponent} from "./roles.component";
 import {RolesService} from "./roles.service";
 import {RoleDetailsComponent} from "./role-details/role-details.component";
 import {CreateRoleModalComponent} from "./create-role-modal/create-role-modal.component";
+import {ViewRoleUsageModalComponent} from "./view-role-usage-modal/view-role-usage-modal.component";
 
 @NgModule({
   imports: [
@@ -26,13 +27,15 @@ import {CreateRoleModalComponent} from "./create-role-modal/create-role-modal.co
   declarations: [
     RolesComponent,
     RoleDetailsComponent,
-    CreateRoleModalComponent
+    CreateRoleModalComponent,
+    ViewRoleUsageModalComponent
   ],
   entryComponents: [
     ErrorModalComponent,
     GenericModalComponent,
     ConfirmModalComponent,
-    CreateRoleModalComponent
+    CreateRoleModalComponent,
+    ViewRoleUsageModalComponent
   ],
   providers: [
     RolesService

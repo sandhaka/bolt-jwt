@@ -29,15 +29,39 @@ export class RolesService {
     return this.httpClient.get<PagedData<any>>(url);
   }
 
-   edit(command: any): Observable<any> {
+  /**
+   * Update a role
+   * @param command
+   * @returns {Observable<any>}
+   */
+  edit(command: any): Observable<any> {
     return this.httpClient.post('/api/v1/role/update', command);
-   }
+  }
 
-   delete(id: number): Observable<any> {
+  /**
+   * Delete a role
+   * @param {number} id
+   * @returns {Observable<any>}
+   */
+  delete(id: number): Observable<any> {
     return this.httpClient.delete(`/api/v1/role?id=${id}`);
-   }
+  }
 
-   add(command: any): Observable<any> {
+  /**
+   * Add a new role
+   * @param command
+   * @returns {Observable<any>}
+   */
+  add(command: any): Observable<any> {
     return this.httpClient.post('/api/v1/role', command);
-   }
+  }
+
+  /**
+   * Query role usage
+   * @param {number} id
+   * @returns {Observable<any>} User and group list
+   */
+  getUsage(id: number): Observable<any> {
+    return this.httpClient.get(`/api/v1/role/usage?id=${id}`);
+  }
 }

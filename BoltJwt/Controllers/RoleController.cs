@@ -67,6 +67,17 @@ namespace BoltJwt.Controllers
             return Ok(result);
         }
 
+        [Route("usage")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType(typeof(object), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetUsageAsync([FromUri] int id)
+        {
+            var result = await _roleQueries.GetUsageAsync(id);
+
+            return Ok(result);
+        }
+
         #endregion
 
         #region [ Commands ]

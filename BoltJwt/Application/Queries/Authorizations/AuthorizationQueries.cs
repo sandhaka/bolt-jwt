@@ -101,7 +101,7 @@ namespace BoltJwt.Application.Queries.Authorizations
         /// Return authorization usage
         /// </summary>
         /// <param name="id">Authorization id</param>
-        /// <returns>Lists of user and group names</returns>
+        /// <returns>Lists of user and role names</returns>
         public async Task<dynamic> GetUsageAsync(int id)
         {
             using (var connection = new SqlConnection(_connectionString))

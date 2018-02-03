@@ -140,6 +140,33 @@ namespace BoltJwt.Application.Queries.Roles
             }
         }
 
+        /// <summary>
+        /// Return role usage
+        /// </summary>
+        /// <param name="id">role id</param>
+        /// <returns>Lists of user and group names</returns>
+        public async Task<dynamic> GetUsageAsync(int id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                var groups = await connection.QueryAsync<dynamic>(
+                    @"SELECT Description as groupDescr FROM IdentityContext.groups
+                        JOIN IdentityContext.group_role on groups.Id = group_role.GroupId
+                    WHERE RoleId = @id", new { id }
+                );
+
+                var users = await connection.QueryAsync<dynamic>(
+                    @"SELECT UserName FROM IdentityContext.users
+                        JOIN IdentityContext.user_role on users.Id = user_role.UserId
+                    WHERE RoleId = @id", new { id }
+                );
+
+                return CombineUsageResults(users, groups);
+            }
+        }
+
         private dynamic MapRoleObject(dynamic result)
         {
             dynamic dto = new ExpandoObject();
@@ -148,6 +175,16 @@ namespace BoltJwt.Application.Queries.Roles
             dto.description = result.Description;
 
             return dto;
+        }
+
+        private dynamic CombineUsageResults(IEnumerable<dynamic> users, IEnumerable<dynamic> groups)
+        {
+            dynamic result = new ExpandoObject();
+
+            result.groups = groups.Select(i => i.groupDescr);
+            result.users = users.Select(i => i.UserName);
+
+            return result;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
@@ -68,6 +69,50 @@ namespace BoltJwt.Infrastructure.Repositories
             }
 
             _context.Entry(groupToDelete).State = EntityState.Deleted;
+        }
+
+        /// <summary>
+        /// Assign / Remove roles
+        /// </summary>
+        /// <param name="groupId">Group id</param>
+        /// <param name="roles">Roles id</param>
+        /// <returns>Task</returns>
+        public async Task EditRolesAsync(int groupId, IEnumerable<int> roles)
+        {
+            var group = await _context.Groups
+                            .Include(g => g.GroupRoles)
+                            .FirstAsync(g => g.Id == groupId) ??
+                        throw new EntityNotFoundException(nameof(Group));
+
+            var roleIds = roles as int[] ?? roles.ToArray();
+
+            // Add new roles
+            foreach (var roleId in roleIds)
+            {
+                var role = _context.Roles.FindAsync(roleId) ?? throw new EntityNotFoundException(nameof(Role));
+
+                // Skip if the role is just assigned
+                if (group.GroupRoles.Any(g => g.RoleId == roleId))
+                {
+                    continue;
+                }
+
+                group.GroupRoles.Add(
+                    new GroupRole
+                    {
+                        RoleId = role.Id,
+                        GroupId = group.Id
+                    });
+            }
+
+            // Remove deleted roles
+            foreach (var groupRole in group.GroupRoles.ToArray())
+            {
+                if (!roleIds.Contains(groupRole.RoleId))
+                {
+                    group.GroupRoles.Remove(groupRole);
+                }
+            }
         }
     }
 }

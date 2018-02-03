@@ -190,7 +190,7 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Assign a role
+        /// Assign / Remove roles
         /// </summary>
         /// <param name="userId">User id</param>
         /// <param name="roles">Roles id</param>

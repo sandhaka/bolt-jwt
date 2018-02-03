@@ -33,5 +33,13 @@ namespace BoltJwt.Application.Queries.Roles
         /// <param name="id">Role id</param>
         /// <returns>Authorizations list</returns>
         Task<dynamic> GetAuthAsync(int id);
+
+
+        /// <summary>
+        /// Return role usage
+        /// </summary>
+        /// <param name="id">Role id</param>
+        /// <returns>Lists of user and group names</returns>
+        Task<dynamic> GetUsageAsync(int id);
     }
 }

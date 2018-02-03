@@ -3,6 +3,13 @@
     <div class="col-sm-12">
       <button
         style="margin-right: 3px;"
+        *ngIf="selectedRole"
+        class="pull-right btn btn-primary"
+        (click)="viewUsage()">
+        View usage
+      </button>
+      <button
+        style="margin-right: 3px;"
         class="pull-right btn btn-primary"
         (click)="addNew()">
         Add

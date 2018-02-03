@@ -8,6 +8,7 @@ import {RoleDto} from "./roleDto";
 import {RolesService} from "./roles.service";
 import {BsModalService} from "ngx-bootstrap";
 import {CreateRoleModalComponent} from "./create-role-modal/create-role-modal.component";
+import {ViewRoleUsageModalComponent} from "./view-role-usage-modal/view-role-usage-modal.component";
 
 @Component({
   templateUrl: 'roles.component.html',
@@ -21,7 +22,7 @@ export class RolesComponent implements OnInit {
     {name: 'Description'}
   ];
 
-  selectedRole: RoleDto;
+  selectedRole: RoleDto = null;
 
   /**
    * Filters object for data table component
@@ -103,5 +104,16 @@ export class RolesComponent implements OnInit {
    */
   toggleAccordion() {
     this.filtersAccordionOpened = !this.filtersAccordionOpened
+  }
+
+  /**
+   * Show role usage
+   */
+  viewUsage() {
+    const bsRoleUsageModal = this.modalService.show(ViewRoleUsageModalComponent);
+    bsRoleUsageModal.content.roleId = this.selectedRole.Id;
+    bsRoleUsageModal.content.modalTitle = "Role usage";
+    bsRoleUsageModal.content.modalCss = "modal-info";
+    bsRoleUsageModal.content.load();
   }
 }

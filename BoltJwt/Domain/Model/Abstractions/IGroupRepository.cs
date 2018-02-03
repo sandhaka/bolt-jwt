@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
 
@@ -30,5 +31,13 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">Group not found</exception>
         Task DeleteAsync(int id);
+
+        /// <summary>
+        /// Assign / Remove roles
+        /// </summary>
+        /// <param name="groupId">Group id</param>
+        /// <param name="roles">Roles id</param>
+        /// <returns>Task</returns>
+        Task EditRolesAsync(int groupId, IEnumerable<int> roles);
     }
 }
