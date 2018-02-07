@@ -149,7 +149,7 @@ namespace BoltJwt.Application.Queries.Users
         }
 
         /// <summary>
-        /// Return user roles
+        /// User roles
         /// </summary>
         /// <param name="userId">User id</param>
         /// <returns>Roles</returns>
@@ -164,6 +164,25 @@ namespace BoltJwt.Application.Queries.Users
                     JOIN IdentityContext.roles ON user_role.RoleId = roles.Id
                     WHERE UserId = @userId ORDER BY Description", new { userId }
                     );
+            }
+        }
+
+        /// <summary>
+        /// User groups
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>Groups</returns>
+        public async Task<dynamic> GetGroupsAsync(int userId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                return await connection.QueryAsync<dynamic>(
+                    @"SELECT Description as groupName, UserId as userId, GroupId as groupId FROM IdentityContext.user_group
+                    JOIN IdentityContext.groups ON user_group.GroupId = groups.Id
+                    WHERE UserId = @userId ORDER BY Description", new { userId }
+                );
             }
         }
 

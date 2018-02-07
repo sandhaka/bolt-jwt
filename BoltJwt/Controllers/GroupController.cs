@@ -26,6 +26,16 @@ namespace BoltJwt.Controllers
 
         #region [ Queries ]
 
+        [Route("all")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetAsync()
+        {
+            var result = await _groupQueries.GetAsync();
+
+            return Ok(result);
+        }
+
         [Route("paged")]
         [HttpGet]
         [Authorize(Policy = "bJwtAdmins")]

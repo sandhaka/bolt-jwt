@@ -5,7 +5,7 @@ import { DashboardRoutingModule } from './dashboard.routing';
 import {TokenLogsService} from "./token-logs.service";
 import {SharedModule} from "../../shared/shared.module";
 import {ModalModule} from "ngx-bootstrap";
-import {ErrorModalComponent} from "../../shared/modals/error/error-modal.component";
+import {ErrorModalComponent} from "../../shared/modals";
 import {CommonModule} from "@angular/common";
 
 @NgModule({

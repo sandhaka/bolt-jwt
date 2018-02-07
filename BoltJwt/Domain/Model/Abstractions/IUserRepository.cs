@@ -73,6 +73,15 @@ namespace BoltJwt.Domain.Model.Abstractions
         Task EditRolesAsync(int userId, IEnumerable<int> roles);
 
         /// <summary>
+        /// Assign / Remove groups
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <param name="groups">Groups id</param>
+        /// <returns>Task</returns>
+        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
+        Task EditGroupsAsync(int userId, IEnumerable<int> groups);
+
+        /// <summary>
         /// Activate user, customize password on activation
         /// </summary>
         /// <param name="code">Activation code</param>

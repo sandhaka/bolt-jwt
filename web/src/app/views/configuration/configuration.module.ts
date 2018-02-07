@@ -5,10 +5,9 @@ import {ModalModule} from "ngx-bootstrap";
 import {SharedModule} from "../../shared/shared.module";
 import {LoadingModule} from "ngx-loading";
 import {ConfigurationComponent} from "./configuration.component";
-import {GenericModalComponent} from "../../shared/modals";
+import {GenericModalComponent, ErrorModalComponent} from "../../shared/modals";
 import {ConfigurationRoutingModule} from "./configuration.routing";
 import {ConfigurationService} from "./configuration.service";
-import {ErrorModalComponent} from "../../shared/modals/error/error-modal.component";
 
 @NgModule({
   imports: [

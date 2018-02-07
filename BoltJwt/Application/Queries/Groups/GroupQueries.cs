@@ -21,6 +21,21 @@ namespace BoltJwt.Application.Queries.Groups
         }
 
         /// <summary>
+        /// Reitreve all groups
+        /// </summary>
+        /// <returns>Groups</returns>
+        public async Task<dynamic> GetAsync()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                return await connection.QueryAsync<dynamic>(
+                    @"SELECT Id as id, Description as description FROM IdentityContext.groups ORDER BY Description");
+            }
+        }
+
+        /// <summary>
         /// Retrieve groups list with pagination
         /// </summary>
         /// <param name="query">Query page parameters</param>

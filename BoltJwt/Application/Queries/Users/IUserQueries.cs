@@ -34,5 +34,12 @@ namespace BoltJwt.Application.Queries.Users
         /// <param name="userId">User id</param>
         /// <returns>Roles</returns>
         Task<dynamic> GetRolesAsync(int userId);
+
+        /// <summary>
+        /// User groups
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>Groups</returns>
+        Task<dynamic> GetGroupsAsync(int userId);
     }
 }

@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpErrorResponse} from "@angular/common/http";
-import {ConfirmModalComponent, GenericModalComponent} from "./modals";
+import {ConfirmModalComponent, GenericModalComponent, ErrorModalComponent} from "./modals";
 import {BsModalService} from "ngx-bootstrap";
-import {ErrorModalComponent} from "./modals/error/error-modal.component";
 
 @Injectable()
 export class UtilityService {

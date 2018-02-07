@@ -10,6 +10,7 @@ import {BsModalService} from "ngx-bootstrap";
 import {CreateUserModalComponent} from "./create-user-modal/create-user-modal.component";
 import {GenericModalComponent} from "../../shared/modals";
 import {RolesManagerModalComponent} from "../../shared/components/roles-manager-modal/roles-manager-modal.component";
+import {GroupsManagerModalComponent} from "./groups-manager-modal/groups-manager-modal.component";
 
 @Component({
   templateUrl: 'users.component.html',
@@ -144,5 +145,17 @@ export class UsersComponent implements OnInit {
 
     // Load modal content
     bsRolesManagerModal.content.load();
+  }
+
+  openGroupsManager() {
+    const bsGroupsManagerModal = this.modalService.show(GroupsManagerModalComponent);
+    bsGroupsManagerModal.content.modalTitle = "User groups manager";
+    bsGroupsManagerModal.content.modalCss = "modal-info";
+
+    // Manage roles of user entity
+    bsGroupsManagerModal.content.userId = this.selectedUser.Id;
+
+    // Load modal content
+    bsGroupsManagerModal.content.load();
   }
 }

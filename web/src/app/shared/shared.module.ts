@@ -8,11 +8,10 @@ import {ReactiveFormComponent} from "./base/reactiveForm.component";
 import {DataTableFiltersComponent} from "./datatable/filters/data-table-filters.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {DataTableFiltersStringComponent} from "./datatable/filters/fields";
-import {GenericModalComponent, ConfirmModalComponent} from "./modals";
+import {GenericModalComponent, ConfirmModalComponent, ErrorModalComponent} from "./modals";
 import {AuthorizationsManagerComponent} from "./components/authorizations-manager/authorizations-manager.component";
 import {UtilityService} from "./utils.service";
 import {LoadingModule} from "ngx-loading";
-import {ErrorModalComponent} from "./modals/error/error-modal.component";
 import {RolesManagerModalComponent} from "./components/roles-manager-modal/roles-manager-modal.component";
 
 @NgModule({

@@ -241,6 +241,57 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Assign / Remove groups
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <param name="groups">Groups id</param>
+        /// <returns>Task</returns>
+        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
+        public async Task EditGroupsAsync(int userId, IEnumerable<int> groups)
+        {
+            var user = await _context.Users
+                           .Include(u => u.UserGroups)
+                           .FirstAsync(u => u.Id == userId) ??
+                       throw new EntityNotFoundException(nameof(User));
+
+            if (user.Root)
+            {
+                throw new NotEditableEntityException("Root user");
+            }
+
+            var groupIds = groups as int[] ?? groups.ToArray();
+
+            // Add new group
+            foreach (var groupId in groupIds)
+            {
+                var group = await _context.Groups.FindAsync(groupId) ??
+                           throw new EntityNotFoundException(nameof(Group));
+
+                // Skip if the group is just assigned
+                if (user.UserGroups.Any(i => i.GroupId == groupId))
+                {
+                    continue;
+                }
+
+                user.UserGroups.Add(
+                    new UserGroup
+                    {
+                        GroupId = group.Id,
+                        UserId = user.Id
+                    });
+            }
+
+            // Remove deleted groups
+            foreach (var userGroup in user.UserGroups.ToArray())
+            {
+                if (!groupIds.Contains(userGroup.GroupId))
+                {
+                    user.UserGroups.Remove(userGroup);
+                }
+            }
+        }
+
+        /// <summary>
         /// Activate user, customize password on activation
         /// </summary>
         /// <param name="code">Activation code</param>

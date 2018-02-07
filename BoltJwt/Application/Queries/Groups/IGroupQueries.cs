@@ -18,5 +18,11 @@ namespace BoltJwt.Application.Queries.Groups
         /// <param name="groupId">Group id</param>
         /// <returns>Roles</returns>
         Task<dynamic> GetRolesAsync(int groupId);
+
+        /// <summary>
+        /// Reitreve all groups
+        /// </summary>
+        /// <returns>Groups</returns>
+        Task<dynamic> GetAsync();
     }
 }

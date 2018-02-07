@@ -67,6 +67,16 @@ namespace BoltJwt.Controllers
             return Ok(result);
         }
 
+        [Route("groups")]
+        [HttpGet]
+        [Authorize(Policy = "bJwtAdmins")]
+        public async Task<IActionResult> GetGroupsAsync([FromUri] int id)
+        {
+            var result = await _userQueries.GetGroupsAsync(id);
+
+            return Ok(result);
+        }
+
         #endregion
 
         #region [ Commands ]
@@ -139,6 +149,18 @@ namespace BoltJwt.Controllers
         public async Task<IActionResult> EditRolesAsync([FromBody] EditUserRolesCommand editUserRolesCommand)
         {
             var result = await _mediator.Send(editUserRolesCommand);
+
+            return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
+        }
+
+        [Route("edit.groups")]
+        [HttpPost]
+        [Authorize(Policy = "bJwtAdmins")]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> EditGroupsAsync([FromBody] EditUserGroupsCommand editUserGroupsCommand)
+        {
+            var result = await _mediator.Send(editUserGroupsCommand);
 
             return result ? Json(new { HttpStatusCode.OK }) : (IActionResult) BadRequest();
         }

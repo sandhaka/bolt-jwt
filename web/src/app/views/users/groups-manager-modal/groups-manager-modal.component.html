@@ -1,0 +1,62 @@
+<div [ngClass]="modalClass">
+  <div class="modal-content">
+    <ngx-loading [show]="isOnProcessing" [config]="loadingConfig"></ngx-loading>
+    <div class="modal-header">
+      <h4 class="modal-title">{{modalTitle}}</h4>
+      <button type="button" class="close" (click)="bsModalRef.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Available</label>
+            <div class="row">
+              <div class="col-sm-12 text-center">
+                <button class="btn btn-sm" (click)="addToAssigned()">
+                  <i class="icon-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <select multiple [(ngModel)]="selectedAvailableGroups">
+                  <option *ngFor="let option of availableGroups" [value]="option.id">{{option.description}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Assigned</label>
+            <div class="row">
+              <div class="col-sm-12 text-center">
+                <button class="btn btn-sm" (click)="removeFromAssigned()">
+                  <i class="icon-arrow-left"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <select multiple [(ngModel)]="selectedAssignedGroups">
+                  <option *ngFor="let option of assignedGroups" [value]="option.groupId">{{option.groupName}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn"
+              (click)="submit()"
+              [ngClass]="{'btn-default': !touched, 'btn-primary' : touched }"
+              [disabled]=" !touched">
+        Save
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()">Cancel</button>
+    </div>
+  </div>
+</div>
