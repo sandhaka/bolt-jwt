@@ -48,9 +48,6 @@ Configure the system settings from the page http://localhost/#/configuration
 Use yours authorizations in yours services. Authorizations are embedded in the Token. **You can decode it
 with the public key created bofore.**
 
-##### TODO
-Groups management
-
 #### Consumers setup example
 ##### ASP.Net Core implementation.
 

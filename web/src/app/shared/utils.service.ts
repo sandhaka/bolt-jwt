@@ -32,11 +32,16 @@ export class UtilityService {
       const descr = errorResponse.statusText != null ? errorResponse.statusText : errorResponse.message;
       const detailedDescr = errorResponse.statusText + '\n\n' + errorResponse.message;
       this.openErrorModal(errorResponse.status, descr, detailedDescr);
-    } else {
+    } else if(errorResponse.error !== null) {
       // Managed exception
       const descr = errorResponse.error.Message;
-      const detailedDescr = errorResponse.error.Details + '\n\n' + "StackTrace:" + '\n' + errorResponse.error.StackTrace;
+      const detailedDescr = errorResponse.error.Details;
       this.openErrorModal(errorResponse.error.StatusCode, descr, detailedDescr);
+    } else {
+      // Others
+      const descr = errorResponse.statusText;
+      const detailedDescr = errorResponse.message;
+      this.openErrorModal(errorResponse.status, descr, detailedDescr);
     }
   }
 

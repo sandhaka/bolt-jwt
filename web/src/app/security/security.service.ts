@@ -31,7 +31,7 @@ export class SecurityService {
         // login successful if there's a jwt token in the response
         const token = response.access_token;
         if (token) {
-          this.storeToken(token);
+          this.storeToken(token, response.expires_in);
           // return true to indicate successful login
           return true;
         } else {
@@ -129,7 +129,7 @@ export class SecurityService {
         const token = response.access_token;
 
         if (token) {
-          this.storeToken(token);
+          this.storeToken(token, response.expires_in);
           return true;
         }
 
@@ -137,7 +137,7 @@ export class SecurityService {
       });
   }
 
-  private storeToken(token: string) {
+  private storeToken(token: string, exp: number) {
     this.token = token;
 
     const tokenData = UtilityService.decodeToken(this.token);
@@ -148,7 +148,7 @@ export class SecurityService {
         username: tokenData.username,
         userId: tokenData.userId,
         token: token,
-        exp: Date.now() + tokenData.exp
+        exp: Date.now() + exp
       });
 
     localStorage.setItem('currentUser', userData);

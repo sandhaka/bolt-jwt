@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -71,7 +72,7 @@ namespace BoltJwt.Application.Middlewares.Authentication
             var response = new
             {
                 access_token = encodedJwt,
-                expires_in = (int)opts.Expiration.Ticks
+                expires_in = opts.Expiration.TotalMilliseconds
             };
 
             try
@@ -105,15 +106,13 @@ namespace BoltJwt.Application.Middlewares.Authentication
         {
             var now = DateTime.UtcNow;
 
-            var issuedAt = new DateTimeOffset(now).ToUniversalTime().ToUnixTimeSeconds().ToString();
-
             // Add public claims
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Iss, options.Issuer),
                 new Claim(JwtRegisteredClaimNames.Sub, username),
                 new Claim(JwtRegisteredClaimNames.Aud, options.Audience),
-                new Claim(JwtRegisteredClaimNames.Iat, issuedAt, ClaimValueTypes.Integer64),
+                new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(CultureInfo.InvariantCulture)),
                 new Claim(JwtRegisteredClaimNames.Jti, await options.NonceGenerator())
             };
 
@@ -127,7 +126,7 @@ namespace BoltJwt.Application.Middlewares.Authentication
                 audience: options.Audience,
                 claims: claims,
                 notBefore: null,
-                expires: now.Add(options.Expiration),
+                expires: now.Add(options.Expiration).ToUniversalTime(),
                 signingCredentials: options.SigningCredentials);
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
