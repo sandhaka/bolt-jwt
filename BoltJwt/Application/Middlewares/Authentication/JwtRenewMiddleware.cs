@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Threading.Tasks;
 using BoltJwt.Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
@@ -35,16 +34,18 @@ namespace BoltJwt.Application.Middlewares.Authentication
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
+            var opts = ((TokenProviderOptions) Options);
+
             var token = tokenHandler.ReadJwtToken(encodedToken);
 
             // Update token duration (+ 1 week)
             var jwt = new JwtSecurityToken(
-                issuer: token.Issuer,
-                audience: token.Audiences.First(),
+                issuer: opts.Issuer,
+                audience: opts.Audience,
                 claims: token.Claims,
-                notBefore: DateTime.Now,
-                expires: DateTime.Now.Add(Options.Expiration),
-                signingCredentials: token.SigningCredentials
+                notBefore: null,
+                expires: DateTime.UtcNow.Add(opts.Expiration).ToUniversalTime(),
+                signingCredentials: opts.SigningCredentials
             );
 
             var encodedJwt = tokenHandler.WriteToken(jwt);
@@ -52,7 +53,7 @@ namespace BoltJwt.Application.Middlewares.Authentication
             var response = new
             {
                 access_token = encodedJwt,
-                expires_in = (int)Options.Expiration.TotalSeconds
+                expires_in = (int)Options.Expiration.TotalMilliseconds
             };
 
             httpContext.Response.ContentType = "application/json";

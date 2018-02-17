@@ -37,12 +37,9 @@ namespace BoltJwt.Application.Middlewares.Authentication
                 a => a.UseMiddleware<JwtProviderMiddleware>(Options.Create(tokenProviderOptions))
             );
 
-            // Setup Token renew options
-            var tokenRenewOptions = new TokenOptions();
-
             return builder.Map(
                 new PathString("/api/tokenrenew"),
-                a => a.UseMiddleware<JwtRenewMiddleware>(Options.Create(tokenRenewOptions))
+                a => a.UseMiddleware<JwtRenewMiddleware>(Options.Create(tokenProviderOptions))
             );
         }
     }

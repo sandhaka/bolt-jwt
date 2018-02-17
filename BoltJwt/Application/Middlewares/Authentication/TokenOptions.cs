@@ -13,7 +13,7 @@ namespace BoltJwt.Application.Middlewares.Authentication
         /// <summary>
         /// The expiration time for the generated tokens.
         /// </summary>
-        /// <remarks>The default is 1 week.</remarks>
-        public TimeSpan Expiration { get; set; } = TimeSpan.FromDays(1);
+        /// <remarks>1 week as default.</remarks>
+        public TimeSpan Expiration { get; set; } = TimeSpan.FromDays(7);
     }
 }
