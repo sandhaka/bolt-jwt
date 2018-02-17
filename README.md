@@ -4,8 +4,6 @@ BoltJwt - Json Web Token provider
 
 [![Build Status](https://travis-ci.org/sandhaka/bolt-jwt.svg?branch=master)](https://travis-ci.org/sandhaka/bolt-jwt)
 
-**...Work in progress!**
-
 #### What's is it?
 **BoltJwt** is a tiny .Net Core authentication service. Built as **docker image**,  easy to integrate into 
 docker-based web projects using **JWT** technology.   
