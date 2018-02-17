@@ -1,11 +1,12 @@
 packages/
 .idea/
+.vscode/
 
-BoltJwt/bin
-BoltJwt/obj
+BoltJwt/bin/
+BoltJwt/obj/
 !BoltJwt/obj/docker/release.tar
 
-BoltJwt/wwwroot/*
+BoltJwt/wwwroot/
 
 # Certificates:
 *.key
