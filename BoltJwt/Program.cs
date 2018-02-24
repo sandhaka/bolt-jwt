@@ -32,6 +32,8 @@ namespace BoltJwt
 
         private static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel(options =>
                 {
                     options.Limits.MaxConcurrentConnections = 25;
@@ -41,15 +43,12 @@ namespace BoltJwt
                         new MinDataRate(bytesPerSecond: 100, gracePeriod: TimeSpan.FromSeconds(10));
                     options.Limits.MinResponseDataRate =
                         new MinDataRate(bytesPerSecond: 100, gracePeriod: TimeSpan.FromSeconds(10));
-                    options.Listen(IPAddress.Loopback, 443, listenOptions =>
+                    options.Listen(IPAddress.Any, 443, listenOptions =>
                         {
                             listenOptions.UseHttps("certs/dev.boltjwt.pfx",
                                 File.ReadAllText("certs/dev.boltjwt.passphrase"));
                         });
                 })
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
                 .Build();
     }
 }
