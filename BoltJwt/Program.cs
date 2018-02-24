@@ -41,7 +41,7 @@ namespace BoltJwt
                         new MinDataRate(bytesPerSecond: 100, gracePeriod: TimeSpan.FromSeconds(10));
                     options.Limits.MinResponseDataRate =
                         new MinDataRate(bytesPerSecond: 100, gracePeriod: TimeSpan.FromSeconds(10));
-                    options.Listen(IPAddress.Loopback, 433, listenOptions =>
+                    options.Listen(IPAddress.Loopback, 443, listenOptions =>
                         {
                             listenOptions.UseHttps("certs/dev.boltjwt.pfx",
                                 File.ReadAllText("certs/dev.boltjwt.passphrase"));

@@ -1,14 +1,14 @@
 ## BoltJwt docker image
 
 ### Availables tags
-1.3, dev
+1.4, dev
 
 [(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
 
 ### Usage
 
 #### Exposed ports:
-- 80 tcp
+- 443 tcp
 
 #### Database
 Only MS SQL is supported
