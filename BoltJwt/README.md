@@ -30,7 +30,7 @@ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=<your strong password>' -p 1433:14
 ```
 #### Start BoltJwt
 ```sh
-docker run -p 80:80 -e 'SQL_CONNECTION_STRING=<your sql conn string>' -v <your certs path>:/app/certs -d sandhaka/bolt-jwt:0.1-dev 
+docker run -p 443:443 -e 'SQL_CONNECTION_STRING=<your sql conn string>' -v <your certs path>:/app/certs -d sandhaka/bolt-jwt:dev 
 ```
 
 #### Available environment variables
@@ -86,5 +86,5 @@ curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"root\",\"pa
 ```
 
 #### Management:
-Manage from the web interface administration, default is http://localhost/#/login
+Manage from the web interface administration, default is https://localhost/#/login
 Default root user password: 'root'

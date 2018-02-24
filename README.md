@@ -41,7 +41,7 @@ The administrator users are allowed to manage the service entities (users, group
 system configuration.
 
 ##### Configure
-Configure the system settings from the page http://localhost/#/configuration
+Configure the system settings from the page https://localhost/#/configuration
 
 Use yours authorizations in yours services. Authorizations are embedded in the Token. **You can decode it
 with the public key created bofore.**
