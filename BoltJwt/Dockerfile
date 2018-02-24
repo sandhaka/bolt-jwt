@@ -1,6 +1,6 @@
 FROM microsoft/aspnetcore:2.0.5
 WORKDIR /app
-EXPOSE 80
+EXPOSE 433
 
 COPY obj/docker/release.tar /app
 RUN tar -xf release.tar

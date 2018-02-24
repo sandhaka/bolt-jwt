@@ -14,7 +14,7 @@ services:
   boltjwt:
     image: sandhaka/bolt-jwt:dev
     ports:
-      - "80:80"
+      - "433:433"
     depends_on:
       - sql.data
     environment:
