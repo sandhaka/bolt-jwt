@@ -10,6 +10,8 @@ using BoltJwt.Infrastructure.Modules;
 using BoltJwt.Infrastructure.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -75,6 +77,9 @@ namespace BoltJwt
                 options.AddCustomPolicies();
             });
 
+            // Apply the https require attribute globally
+            services.Configure<MvcOptions>(options => { options.Filters.Add(new RequireHttpsAttribute()); });
+
             // Adding options
             services.AddOptions();
 
@@ -108,6 +113,9 @@ namespace BoltJwt
             {
                 loggerFactory.AddDebug(LogLevel.Warning);
             }
+
+            // Make sure to serve only over a secure way
+            app.UseRewriter(new RewriteOptions().AddRedirectToHttps());
 
             // Configuring the Json Web Token provider
             app.UseJwtProvider(services, Configuration);
