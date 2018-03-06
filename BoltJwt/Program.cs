@@ -14,7 +14,7 @@ namespace BoltJwt
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).MigrateDbContext<IdentityContext>((context, services) =>
+            CreateWebHostBuilder(args).Build().MigrateDbContext<IdentityContext>((context, services) =>
             {
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 var logger = loggerFactory.CreateLogger("BuildWebHost");
@@ -30,7 +30,7 @@ namespace BoltJwt
             }).Run();
         }
 
-        private static IWebHost BuildWebHost(string[] args) =>
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseContentRoot(Directory.GetCurrentDirectory())
@@ -48,7 +48,6 @@ namespace BoltJwt
                             listenOptions.UseHttps("certs/dev.boltjwt.pfx",
                                 File.ReadAllText("certs/dev.boltjwt.passphrase"));
                         });
-                })
-                .Build();
+                });
     }
 }

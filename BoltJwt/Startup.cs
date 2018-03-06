@@ -84,7 +84,7 @@ namespace BoltJwt
             services.AddOptions();
 
             // Add Mvc
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Using Autofac as additional dependency injection container
             var container = new ContainerBuilder();
@@ -104,6 +104,9 @@ namespace BoltJwt
 
             // Adding exception handling middleware
             app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+            // HTTP Strict Transport Security
+            app.UseHsts();
 
             if (env.IsDevelopment())
             {
