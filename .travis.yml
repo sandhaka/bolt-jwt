@@ -1,6 +1,6 @@
 language: csharp
 mono: none
-dotnet: 2.0.3
+dotnet: 2.1.0-preview1-26216-03
 node_js:
   - "8.2.1"
 branches:
