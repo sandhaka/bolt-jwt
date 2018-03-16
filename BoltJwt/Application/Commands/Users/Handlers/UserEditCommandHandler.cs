@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BoltJwt.Application.Commands.Users.Responses;
 using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 
 namespace BoltJwt.Application.Commands.Users.Handlers
 {
-    public class UserEditCommandHandler : IRequestHandler<UserEditCommand, UserEditResponse>
+    public class UserEditCommandHandler : IRequestHandler<UserEditCommand, bool>
     {
         private readonly IUserRepository _userRepository;
 
@@ -17,7 +16,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        public async Task<UserEditResponse> Handle(UserEditCommand userEditCommand, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UserEditCommand userEditCommand, CancellationToken cancellationToken)
         {
             var userEditDto = new UserEditDto
             {
@@ -27,15 +26,9 @@ namespace BoltJwt.Application.Commands.Users.Handlers
                 UserName = userEditCommand.UserName
             };
 
-            var entity = await _userRepository.UpdateAsync(userEditDto);
+            var entity = await _userRepository.UpdateInfoAsync(userEditDto);
 
-            await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-
-            return new UserEditResponse
-            {
-                Command = userEditCommand,
-                Id = entity.Id
-            };
+            return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }

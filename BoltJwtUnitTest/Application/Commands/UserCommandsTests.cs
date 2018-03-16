@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Application.Commands.Users;
 using BoltJwt.Application.Commands.Users.Handlers;
-using BoltJwt.Application.Commands.Users.Responses;
 using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
@@ -54,9 +52,9 @@ namespace BoltJwtUnitTest.Application.Commands
         public void UpdateTest()
         {
             // Arrange
-            _userRepository.Setup(x => x.UpdateAsync(It.IsAny<UserEditDto>())).Returns(Task.FromResult(new User()));
+            _userRepository.Setup(x => x.UpdateInfoAsync(It.IsAny<UserEditDto>())).Returns(Task.FromResult(new User()));
 
-            IRequestHandler<UserEditCommand, UserEditResponse> commandHandlerSut =
+            IRequestHandler<UserEditCommand, bool> commandHandlerSut =
                 new UserEditCommandHandler(_userRepository.Object);
 
             // Act
@@ -69,7 +67,7 @@ namespace BoltJwtUnitTest.Application.Commands
             }, CancellationToken.None);
 
             // Verify
-            _userRepository.Verify(x => x.UpdateAsync(It.IsAny<UserEditDto>()), Times.Exactly(1));
+            _userRepository.Verify(x => x.UpdateInfoAsync(It.IsAny<UserEditDto>()), Times.Exactly(1));
             _unitOfwork.Verify(x => x.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Exactly(1));
         }
     }

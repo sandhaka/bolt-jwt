@@ -16,10 +16,13 @@ namespace BoltJwt.Application.Commands.Users.Handlers
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        public async Task<bool> Handle(RemoveAuthorizationUserCommand removeAuthorizationUserCommand, CancellationToken cancellationToken)
+        public async Task<bool> Handle(
+            RemoveAuthorizationUserCommand removeAuthorizationUserCommand,
+            CancellationToken cancellationToken)
         {
-            await _userRepository.RemoveAuthorizationAsync(removeAuthorizationUserCommand.UserId,
-                removeAuthorizationUserCommand.Authorizations.Split(',').Select(int.Parse));
+            var user = await _userRepository.GetWithAutorizationsAsync(removeAuthorizationUserCommand.UserId);
+
+            user.RemoveAuthorizations(removeAuthorizationUserCommand.Authorizations.Split(',').Select(int.Parse));
 
             return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

@@ -39,7 +39,16 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <returns>User entity</returns>
         public async Task<User> GetAsync(int id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users.SingleAsync(u => u.Id == id);
+        }
+
+        /// <summary>
+        /// Get the root user
+        /// </summary>
+        /// <returns>User</returns>
+        public async Task<User> GetRootAsync()
+        {
+            return await _context.Users.SingleAsync(i => i.Root);
         }
 
         /// <summary>
@@ -51,6 +60,56 @@ namespace BoltJwt.Infrastructure.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(i => i.Email == email) ??
                    throw new EntityNotFoundException(nameof(User));
+        }
+
+        /// <summary>
+        /// Get user with the all authorizations
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>User</returns>
+        public async Task<User> GetWithAutorizationsAsync(int userId)
+        {
+            return await _context.Users
+                       .Include(i => i.Authorizations)
+                       .SingleAsync(i => i.Id == userId) ??
+                   throw new EntityNotFoundException(nameof(User));
+        }
+
+        /// <summary>
+        /// Get user with the all roles
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>User</returns>
+        public async Task<User> GetWithRolesAsync(int userId)
+        {
+            return await _context.Users
+                       .Include(i => i.UserRoles)
+                       .SingleAsync(i => i.Id == userId) ??
+                   throw new EntityNotFoundException(nameof(User));
+        }
+
+        /// <summary>
+        /// Get user with the all groups
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>User</returns>
+        public async Task<User> GetWithGroupsAsync(int userId)
+        {
+            return await _context.Users
+                       .Include(i => i.UserGroups)
+                       .SingleAsync(i => i.Id == userId) ??
+                   throw new EntityNotFoundException(nameof(User));
+        }
+
+        /// <summary>
+        /// Get user activation code
+        /// </summary>
+        /// <param name="code">Code</param>
+        /// <returns>User activation code</returns>
+        public async Task<UserActivationCode> GetUserActivationCode(string code)
+        {
+            return await _context.UserActivationCodes.FirstAsync(i => i.Code == code) ??
+                   throw new EntityNotFoundException(nameof(UserActivationCode));
         }
 
         /// <summary>
@@ -76,12 +135,21 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// User update
+        /// </summary>
+        /// <param name="user">User</param>
+        public void Update(User user)
+        {
+            _context.Entry(user).State = EntityState.Modified;
+        }
+
+        /// <summary>
         /// Update user informations
         /// </summary>
         /// <param name="userEditDto">User info</param>
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">User not found</exception>
-        public async Task<User> UpdateAsync(UserEditDto userEditDto)
+        public async Task<User> UpdateInfoAsync(UserEditDto userEditDto)
         {
             var userToUpdate = await _context.Users.FindAsync(userEditDto.Id) ??
                                throw new EntityNotFoundException($"{nameof(User)} - Id: {userEditDto.Id}");
@@ -127,248 +195,12 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Assign an authorization directly
+        /// Delete activation code
         /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="authorizationsId">Authorizations Id</param>
-        /// <returns>Task</returns>
-        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
-        public async Task AssignAuthorizationAsync(int userId, IEnumerable<int> authorizationsId)
+        /// <param name="code">user activation code</param>
+        public void DeleteUserActivationCode(UserActivationCode code)
         {
-            var user = await _context.Users.FindAsync(userId) ?? throw new EntityNotFoundException(nameof(User));
-
-            if (user.Root)
-            {
-                throw new NotEditableEntityException("Root user");
-            }
-
-            foreach (var id in authorizationsId)
-            {
-                // Skip already added authorizations
-                if(user.Authorizations.Any(i => i.DefAuthorizationId == id))
-                {
-                    continue;
-                }
-
-                user.Authorizations.Add(
-                    new UserAuthorization
-                    {
-                        DefAuthorizationId = id,
-                        UserId = user.Id
-                    });
-            }
-        }
-
-        /// <summary>
-        /// Remove authorizations
-        /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="authorizationsId">User authorization id</param>
-        /// <returns></returns>
-        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
-        public async Task RemoveAuthorizationAsync(int userId, IEnumerable<int> authorizationsId)
-        {
-            var user = await _context.Users
-                           .Include(i => i.Authorizations)
-                           .FirstAsync(i => i.Id == userId) ??
-                       throw new EntityNotFoundException(nameof(User));
-
-            if (user.Root)
-            {
-                throw new NotEditableEntityException("Root user");
-            }
-
-            foreach (var id in authorizationsId)
-            {
-                var authorizationtoRemove = user.Authorizations.FirstOrDefault(i => i.Id == id);
-
-                if (authorizationtoRemove != null)
-                {
-                    _context.Entry(authorizationtoRemove).State = EntityState.Deleted;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Assign / Remove roles
-        /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="roles">Roles id</param>
-        /// <returns>Task</returns>
-        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
-        public async Task EditRolesAsync(int userId, IEnumerable<int> roles)
-        {
-            var user = await _context.Users
-                           .Include(u => u.UserRoles)
-                           .FirstAsync(u => u.Id == userId) ??
-                       throw new EntityNotFoundException(nameof(User));
-
-            if (user.Root)
-            {
-                throw new NotEditableEntityException("Root user");
-            }
-
-            var roleIds = roles as int[] ?? roles.ToArray();
-
-            // Add new roles
-            foreach (var roleId in roleIds)
-            {
-                var role = await _context.Roles.FindAsync(roleId) ??
-                           throw new EntityNotFoundException(nameof(Role));
-
-                // Skip if the role is just assigned
-                if (user.UserRoles.Any(i => i.RoleId == roleId))
-                {
-                    continue;
-                }
-
-                user.UserRoles.Add(
-                    new UserRole
-                    {
-                        RoleId = role.Id,
-                        UserId = user.Id
-                    });
-            }
-
-            // Remove deleted roles
-            foreach (var userRole in user.UserRoles.ToArray())
-            {
-                if (!roleIds.Contains(userRole.RoleId))
-                {
-                    user.UserRoles.Remove(userRole);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Assign / Remove groups
-        /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="groups">Groups id</param>
-        /// <returns>Task</returns>
-        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
-        public async Task EditGroupsAsync(int userId, IEnumerable<int> groups)
-        {
-            var user = await _context.Users
-                           .Include(u => u.UserGroups)
-                           .FirstAsync(u => u.Id == userId) ??
-                       throw new EntityNotFoundException(nameof(User));
-
-            if (user.Root)
-            {
-                throw new NotEditableEntityException("Root user");
-            }
-
-            var groupIds = groups as int[] ?? groups.ToArray();
-
-            // Add new group
-            foreach (var groupId in groupIds)
-            {
-                var group = await _context.Groups.FindAsync(groupId) ??
-                           throw new EntityNotFoundException(nameof(Group));
-
-                // Skip if the group is just assigned
-                if (user.UserGroups.Any(i => i.GroupId == groupId))
-                {
-                    continue;
-                }
-
-                user.UserGroups.Add(
-                    new UserGroup
-                    {
-                        GroupId = group.Id,
-                        UserId = user.Id
-                    });
-            }
-
-            // Remove deleted groups
-            foreach (var userGroup in user.UserGroups.ToArray())
-            {
-                if (!groupIds.Contains(userGroup.GroupId))
-                {
-                    user.UserGroups.Remove(userGroup);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Activate user, customize password on activation
-        /// </summary>
-        /// <param name="code">Activation code</param>
-        /// <param name="password">New Password</param>
-        /// <returns></returns>
-        public async Task ActivateUserAsync(string code, string password)
-        {
-            var userActivationCode = await _context.UserActivationCodes.FirstAsync(i => i.Code == code) ??
-                                     throw new EntityNotFoundException(nameof(UserActivationCode));
-
-            var user = await _context.Users.FindAsync(userActivationCode.UserId) ??
-                       throw new EntityNotFoundException(nameof(User));
-
-            // If the user exists and if it's wainting for activation, edit his password and activate
-            user.Password = password.ToMd5Hash();
-
-            user.Disabled = false;
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            // Delete the activation code
-            _context.Entry(userActivationCode).State = EntityState.Deleted;
-        }
-
-        /// <summary>
-        /// Generate an authorization code to recover the password
-        /// </summary>
-        /// <param name="id">User id</param>
-        /// <returns>Auth code</returns>
-        public async Task<string> GenerateForgotPasswordAuthorizationCodeAsync(int id)
-        {
-            var user = await GetAsync(id);
-
-            user.ForgotPasswordAuthCode = Guid.NewGuid().ToString();
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            return user.ForgotPasswordAuthCode;
-        }
-
-        /// <summary>
-        /// Edit the user password
-        /// </summary>
-        /// <param name="userId">User Id</param>
-        /// <param name="authorizationcode">Authorization code</param>
-        /// <param name="newPassword">Password</param>
-        /// <returns>Task</returns>
-        /// <exception cref="AuthorizationCodeException">Authorization code is missing or wrong</exception>
-        public async Task EditPasswordAsync(int userId, string authorizationcode, string newPassword)
-        {
-            var user = await _context.Users.FindAsync(userId) ?? throw new EntityNotFoundException(nameof(User));
-
-            if (string.IsNullOrEmpty(user.ForgotPasswordAuthCode))
-            {
-                throw new AuthorizationCodeException("Illicit request. The user has never requested a password reset");
-            }
-
-            if (!user.ForgotPasswordAuthCode.Equals(authorizationcode))
-            {
-                throw new AuthorizationCodeException("Wrong authorization code");
-            }
-
-            user.Password = newPassword.ToMd5Hash();
-
-            _context.Entry(user).State = EntityState.Modified;
-        }
-
-        /// <summary>
-        /// Edit the root password
-        /// </summary>
-        /// <param name="password">Passowrd</param>
-        /// <returns>Task</returns>
-        public async Task EditRootPasswordAsync(string password)
-        {
-            var user = await _context.Users.FirstAsync(i => i.Root);
-
-            user.Password = password.ToMd5Hash();
+            _context.Entry(code).State = EntityState.Deleted;
         }
 
         /// <summary>

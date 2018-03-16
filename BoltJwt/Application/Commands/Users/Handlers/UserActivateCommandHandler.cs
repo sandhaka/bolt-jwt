@@ -17,7 +17,15 @@ namespace BoltJwt.Application.Commands.Users.Handlers
 
         public async Task<bool> Handle(UserActivateCommand command, CancellationToken cancellationToken)
         {
-            await _userRepository.ActivateUserAsync(command.Code, command.Password);
+            var userActivationCode = await _userRepository.GetUserActivationCode(command.Code);
+
+            var user = await _userRepository.GetAsync(userActivationCode.UserId);
+
+            user.ActivateUser(command.Password);
+
+            _userRepository.DeleteUserActivationCode(userActivationCode);
+
+            _userRepository.Update(user);
 
             return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

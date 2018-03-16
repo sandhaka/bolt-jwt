@@ -17,6 +17,12 @@ namespace BoltJwt.Domain.Model.Abstractions
         Role Add(Role role);
 
         /// <summary>
+        /// Get roles
+        /// </summary>
+        /// <returns>Roles</returns>
+        IEnumerable<Role> GetAll();
+
+        /// <summary>
         /// Update role description
         /// </summary>
         /// <param name="roleEditDto">Role dto</param>

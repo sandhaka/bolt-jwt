@@ -32,7 +32,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
             var config = await _configurationRepository.GetAsync();
 
             // Generate an authorization code
-            var authorizationCode = await _userRepository.GenerateForgotPasswordAuthorizationCodeAsync(user.Id);
+            var authorizationCode = user.GenerateForgotPasswordAuthorizationCode();
 
             // Create the message
             var message = new MimeMessage
@@ -48,6 +48,8 @@ namespace BoltJwt.Application.Commands.Users.Handlers
                            $"http://{config.EndpointFqdn}:{config.EndpointPort}/#/account/password-recovery/{user.Id}/{authorizationCode}"
                 }
             };
+
+            _userRepository.Update(user);
 
             await _mailService.SendAnEmailAsync(message, cancellationToken);
 

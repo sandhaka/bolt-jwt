@@ -26,6 +26,15 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Get groups
+        /// </summary>
+        /// <returns>Groups</returns>
+        public IEnumerable<Group> GetAll()
+        {
+            return _context.Groups;
+        }
+
+        /// <summary>
         /// Add a new group
         /// </summary>
         /// <param name="group">Group</param>

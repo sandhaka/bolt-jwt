@@ -20,9 +20,11 @@ namespace BoltJwt.Application.DomainEventHandlers
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        public async Task Handle(RootPasswordChangedDomainEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(RootPasswordChangedDomainEvent domainEvent, CancellationToken cancellationToken)
         {
-            await _userRepository.EditRootPasswordAsync(notification.Password);
+            var rootUser = await _userRepository.GetRootAsync();
+
+            rootUser.EditRootPassword(domainEvent.Password);
         }
     }
 }

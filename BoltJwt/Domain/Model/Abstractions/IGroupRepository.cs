@@ -10,6 +10,13 @@ namespace BoltJwt.Domain.Model.Abstractions
         IUnitOfWork UnitOfWork { get; }
 
         /// <summary>
+        /// Get groups
+        /// </summary>
+        /// <param name="groupsId">Groups id</param>
+        /// <returns>Groups</returns>
+        IEnumerable<Group> GetAll();
+
+        /// <summary>
         /// Add a new group
         /// </summary>
         /// <param name="group">Group</param>

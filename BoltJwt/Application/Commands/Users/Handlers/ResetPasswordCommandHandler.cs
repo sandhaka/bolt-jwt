@@ -17,7 +17,11 @@ namespace BoltJwt.Application.Commands.Users.Handlers
 
         public async Task<bool> Handle(ResetPasswordCommand command, CancellationToken cancellationToken)
         {
-            await _userRepository.EditPasswordAsync(command.UserId, command.Code, command.Password);
+            var user = await _userRepository.GetAsync(command.UserId);
+
+            user.EditPassword(command.Code, command.Password);
+
+            _userRepository.Update(user);
 
             return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

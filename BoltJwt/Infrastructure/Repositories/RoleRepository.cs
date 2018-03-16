@@ -29,6 +29,15 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Get roles
+        /// </summary>
+        /// <returns>Roles</returns>
+        public IEnumerable<Role> GetAll()
+        {
+            return _context.Roles;
+        }
+
+        /// <summary>
         /// Add a new role
         /// </summary>
         /// <param name="role">Role</param>

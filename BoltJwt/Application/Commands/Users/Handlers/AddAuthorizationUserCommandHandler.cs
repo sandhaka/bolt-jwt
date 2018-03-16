@@ -17,8 +17,9 @@ namespace BoltJwt.Application.Commands.Users.Handlers
 
         public async Task<bool> Handle(AddAuthorizationUserCommand addAuthorizationUserCommand, CancellationToken cancellationToken)
         {
-            await _userRepository.AssignAuthorizationAsync(addAuthorizationUserCommand.UserId,
-                addAuthorizationUserCommand.Authorizations);
+            var user = await _userRepository.GetWithAutorizationsAsync(addAuthorizationUserCommand.UserId);
+
+            user.AssignAuthorizations(addAuthorizationUserCommand.Authorizations);
 
             return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

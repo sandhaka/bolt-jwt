@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using BoltJwt.Application.Queries.QueryUtils;
+using BoltJwt.Domain.Exceptions;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -98,6 +99,24 @@ namespace BoltJwt.Application.Middlewares.ExceptionHandling
                     jsonResponse.Details = entityInUseException.Message;
 
                     jsonResponse.StatusCode = (int) HttpStatusCode.BadRequest;
+                    break;
+                }
+                case ForbiddenOperationDomainException forbiddenOperationDomainException:
+                {
+                    context.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+
+                    jsonResponse.Message = "Forbidden operation";
+                    jsonResponse.Details = forbiddenOperationDomainException.Message;
+                    jsonResponse.StatusCode = (int) HttpStatusCode.Forbidden;
+                    break;
+                }
+                case AuthorizationCodeDomainException authorizationCodeDomainException:
+                {
+                    context.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+
+                    jsonResponse.Message = "Authorization code error";
+                    jsonResponse.Details = authorizationCodeDomainException.Message;
+                    jsonResponse.StatusCode = (int) HttpStatusCode.Forbidden;
                     break;
                 }
                 default:

@@ -17,6 +17,39 @@ namespace BoltJwt.Domain.Model.Abstractions
         Task<User> GetAsync(int id);
 
         /// <summary>
+        /// Get user with the all authorizations
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>User</returns>
+        Task<User> GetWithAutorizationsAsync(int userId);
+
+        /// <summary>
+        /// Get user with the all roles
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>User</returns>
+        Task<User> GetWithRolesAsync(int userId);
+
+        /// <summary>
+        /// Get user with the all groups
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>User</returns>
+        Task<User> GetWithGroupsAsync(int userId);
+
+        /// <summary>
+        /// Get the root user
+        /// </summary>
+        /// <returns>User</returns>
+        Task<User> GetRootAsync();
+
+        /// <summary>
+        /// User update
+        /// </summary>
+        /// <param name="user">User</param>
+        void Update(User user);
+
+        /// <summary>
         /// Get a user by email
         /// </summary>
         /// <param name="email">Email</param>
@@ -36,7 +69,7 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <param name="userEditDto">User info</param>
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">User not found</exception>
-        Task<User> UpdateAsync(UserEditDto userEditDto);
+        Task<User> UpdateInfoAsync(UserEditDto userEditDto);
 
         /// <summary>
         /// Mark a user as deleted
@@ -47,70 +80,16 @@ namespace BoltJwt.Domain.Model.Abstractions
         Task DeleteAsync(int id);
 
         /// <summary>
-        /// Assign an authorization directly
+        /// Get user activation code
         /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="authorizationsId">Authorizations id</param>
-        /// <returns>Task</returns>
-        Task AssignAuthorizationAsync(int userId, IEnumerable<int> authorizationsId);
+        /// <param name="code">Code</param>
+        /// <returns>User activation code</returns>
+        Task<UserActivationCode> GetUserActivationCode(string code);
 
         /// <summary>
-        /// Remove authorizations
+        /// Delete activation code
         /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="authorizationsId">User authorization id</param>
-        /// <returns></returns>
-        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
-        Task RemoveAuthorizationAsync(int userId, IEnumerable<int> authorizationsId);
-
-        /// <summary>
-        /// Assign roles
-        /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="roles">Roles id</param>
-        /// <returns>Task</returns>
-        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
-        Task EditRolesAsync(int userId, IEnumerable<int> roles);
-
-        /// <summary>
-        /// Assign / Remove groups
-        /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="groups">Groups id</param>
-        /// <returns>Task</returns>
-        /// <exception cref="NotEditableEntityException">Root user is not editable</exception>
-        Task EditGroupsAsync(int userId, IEnumerable<int> groups);
-
-        /// <summary>
-        /// Activate user, customize password on activation
-        /// </summary>
-        /// <param name="code">Activation code</param>
-        /// <param name="password">New Password</param>
-        /// <returns></returns>
-        Task ActivateUserAsync(string code, string password);
-
-        /// <summary>
-        /// Generate an authorization code to recover the password
-        /// </summary>
-        /// <param name="id">User id</param>
-        /// <returns>Auth code</returns>
-        Task<string> GenerateForgotPasswordAuthorizationCodeAsync(int id);
-
-        /// <summary>
-        /// Edit the user password
-        /// </summary>
-        /// <param name="userId">User Id</param>
-        /// <param name="authorizationcode">Authorization code</param>
-        /// <param name="newPassword">Password</param>
-        /// <returns>Task</returns>
-        /// <exception cref="AuthorizationCodeException">Authorization code is missing or wrong</exception>
-        Task EditPasswordAsync(int userId, string authorizationcode, string newPassword);
-
-        /// <summary>
-        /// Edit the root password
-        /// </summary>
-        /// <param name="password">Passowrd</param>
-        /// <returns>Task</returns>
-        Task EditRootPasswordAsync(string password);
+        /// <param name="code">user activation code</param>
+        void DeleteUserActivationCode(UserActivationCode code);
     }
 }
