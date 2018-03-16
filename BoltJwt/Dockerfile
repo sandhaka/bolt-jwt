@@ -1,4 +1,4 @@
-FROM microsoft/aspnetcore:2.0.5
+FROM microsoft/aspnetcore:2.1.300-preview1-sdk
 WORKDIR /app
 EXPOSE 443
 
