@@ -18,7 +18,9 @@ namespace BoltJwt.Application.Commands.Authorizations.Handlers
 
         public async Task<bool> Handle(AuthorizationDeleteCommand authorizationDeleteCommand, CancellationToken cancellationToken)
         {
-            await _authorizationRepository.DeleteAsync(authorizationDeleteCommand.Id);
+            var authorization = await _authorizationRepository.GetAsync(authorizationDeleteCommand.Id);
+
+            _authorizationRepository.Delete(authorization);
 
             return await _authorizationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

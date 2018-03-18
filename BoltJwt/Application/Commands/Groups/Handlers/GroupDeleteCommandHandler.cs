@@ -17,7 +17,11 @@ namespace BoltJwt.Application.Commands.Groups.Handlers
 
         public async Task<bool> Handle(GroupDeleteCommand command, CancellationToken cancellationToken)
         {
-            await _groupRepository.DeleteAsync(command.Id);
+            var group = await _groupRepository.GetAsync(command.Id);
+
+            _groupRepository.CheckUsage(group);
+
+            _groupRepository.Delete(group);
 
             return await _groupRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

@@ -31,21 +31,42 @@ namespace BoltJwt.Domain.Model
         }
 
         /// <summary>
-        /// Add an authorization
+        /// Add authorizations
         /// </summary>
-        /// <param name="authorization">Authorization</param>
-        public void AddAuthorization(DefinedAuthorization authorization)
+        /// <param name="authorizations">Authorizations id</param>
+        /// <param name="authorizationEntities">Authorization entities</param>
+        public void AddAuthorizations(IEnumerable<int> authorizations, List<DefinedAuthorization> authorizationEntities)
         {
-            if (Authorizations.All(i => i.DefAuthorizationId != authorization.Id))
+            foreach (var id in authorizations)
             {
-                var roleAuthorization = new RoleAuthorization
+                // Skip already added
+                if (Authorizations.Any(i => i.DefAuthorizationId == id))
                 {
-                    DefAuthorizationId = authorization.Id,
-                    RoleId = Id
-                };
+                    continue;
+                }
 
-                Authorizations.Add(roleAuthorization);
+                var authToAdd = authorizationEntities.SingleOrDefault(a => a.Id == id);
+
+                if (authToAdd != null)
+                {
+                    var roleAuthorization = new RoleAuthorization
+                    {
+                        DefAuthorizationId = authToAdd.Id,
+                        RoleId = Id
+                    };
+
+                    Authorizations.Add(roleAuthorization);
+                }
             }
+        }
+
+        /// <summary>
+        /// Remove authorizations
+        /// </summary>
+        /// <param name="authorizations">Authorizations id to remove</param>
+        public void RemoveAuthorizations(IEnumerable<int> authorizations)
+        {
+            Authorizations.RemoveAll(a => authorizations.Contains(a.Id));
         }
     }
 }

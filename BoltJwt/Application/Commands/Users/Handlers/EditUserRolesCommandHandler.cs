@@ -22,7 +22,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
         {
             var user = await _userRepository.GetWithRolesAsync(editUserRolesCommand.UserId);
 
-            var roles = _roleRepository.GetAll();
+            var roles = _roleRepository.Query(r => editUserRolesCommand.Roles.Contains(r.Id));
 
             user.EditRoles(editUserRolesCommand.Roles, roles.ToList());
 

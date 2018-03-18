@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.Context;
@@ -39,7 +38,8 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <returns>User entity</returns>
         public async Task<User> GetAsync(int id)
         {
-            return await _context.Users.SingleAsync(u => u.Id == id);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id) ??
+                   throw new EntityNotFoundException(nameof(User));
         }
 
         /// <summary>
@@ -48,7 +48,8 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <returns>User</returns>
         public async Task<User> GetRootAsync()
         {
-            return await _context.Users.SingleAsync(i => i.Root);
+            return await _context.Users.SingleOrDefaultAsync(i => i.Root) ??
+                   throw new EntityNotFoundException(nameof(User));
         }
 
         /// <summary>
@@ -71,7 +72,7 @@ namespace BoltJwt.Infrastructure.Repositories
         {
             return await _context.Users
                        .Include(i => i.Authorizations)
-                       .SingleAsync(i => i.Id == userId) ??
+                       .FirstOrDefaultAsync(i => i.Id == userId) ??
                    throw new EntityNotFoundException(nameof(User));
         }
 
@@ -84,7 +85,7 @@ namespace BoltJwt.Infrastructure.Repositories
         {
             return await _context.Users
                        .Include(i => i.UserRoles)
-                       .SingleAsync(i => i.Id == userId) ??
+                       .FirstOrDefaultAsync(i => i.Id == userId) ??
                    throw new EntityNotFoundException(nameof(User));
         }
 
@@ -97,7 +98,7 @@ namespace BoltJwt.Infrastructure.Repositories
         {
             return await _context.Users
                        .Include(i => i.UserGroups)
-                       .SingleAsync(i => i.Id == userId) ??
+                       .FirstOrDefaultAsync(i => i.Id == userId) ??
                    throw new EntityNotFoundException(nameof(User));
         }
 
@@ -108,7 +109,7 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <returns>User activation code</returns>
         public async Task<UserActivationCode> GetUserActivationCode(string code)
         {
-            return await _context.UserActivationCodes.FirstAsync(i => i.Code == code) ??
+            return await _context.UserActivationCodes.FirstOrDefaultAsync(i => i.Code == code) ??
                    throw new EntityNotFoundException(nameof(UserActivationCode));
         }
 
@@ -144,54 +145,31 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Update user informations
+        /// Check username duplicates
         /// </summary>
-        /// <param name="userEditDto">User info</param>
-        /// <returns>Task</returns>
-        /// <exception cref="EntityNotFoundException">User not found</exception>
-        public async Task<User> UpdateInfoAsync(UserEditDto userEditDto)
+        /// <param name="username">Username</param>
+        /// <exception cref="DuplicatedIndexException"></exception>
+        public void CheckForDuplicates(string username)
         {
-            var userToUpdate = await _context.Users.FindAsync(userEditDto.Id) ??
-                               throw new EntityNotFoundException($"{nameof(User)} - Id: {userEditDto.Id}");
-
-            if (userToUpdate.Root)
+            if (_context.Users.Any(i => i.UserName == username))
             {
-                throw new NotEditableEntityException("Root user");
+                throw new DuplicatedIndexException(username);
             }
-
-            if (_context.Users.Any(i => i.UserName == userEditDto.UserName))
-            {
-                throw new DuplicatedIndexException(userEditDto.UserName);
-            }
-
-            userToUpdate.Name = userEditDto.Name;
-            userToUpdate.Surname = userEditDto.Surname;
-            userToUpdate.UserName = userEditDto.UserName;
-
-            var entry = _context.Entry(userToUpdate);
-
-            entry.State = EntityState.Modified;
-
-            return entry.Entity;
         }
 
         /// <summary>
         /// Mark a user as deleted
         /// </summary>
-        /// <param name="id">User id</param>
+        /// <param name="user">User</param>
         /// <returns>Task</returns>
-        /// <exception cref="EntityNotFoundException">User not found</exception>
-        public async Task DeleteAsync(int id)
+        public void Delete(User user)
         {
-            var userToDelete = await _context.Users.FindAsync(id) ??
-                               throw new EntityNotFoundException($"{nameof(User)} - Id: {id}");
-
-            if (userToDelete.Root)
+            if (user.Root)
             {
                 throw new NotEditableEntityException("Root user");
             }
 
-            _context.Entry(userToDelete).State = EntityState.Deleted;
+            _context.Entry(user).State = EntityState.Deleted;
         }
 
         /// <summary>

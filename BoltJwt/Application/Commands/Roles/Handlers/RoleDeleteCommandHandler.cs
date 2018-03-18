@@ -17,7 +17,11 @@ namespace BoltJwt.Application.Commands.Roles.Handlers
 
         public async Task<bool> Handle(RoleDeleteCommand roleDeleteCommand, CancellationToken cancellationToken)
         {
-            await _roleRepository.DeleteAsync(roleDeleteCommand.Id);
+            var role = await _roleRepository.GetAsync(roleDeleteCommand.Id);
+
+            _roleRepository.CheckUsasge(role);
+
+            _roleRepository.Delete(role);
 
             return await _roleRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

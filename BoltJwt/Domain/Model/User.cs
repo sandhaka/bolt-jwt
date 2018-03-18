@@ -94,6 +94,24 @@ namespace BoltJwt.Domain.Model
         }
 
         /// <summary>
+        /// Update user info
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="surname"></param>
+        /// <param name="username"></param>
+        public void Update(string name, string surname, string username)
+        {
+            if (Root)
+            {
+                throw new ForbiddenOperationDomainException("Root user");
+            }
+
+            Name = name;
+            Surname = surname;
+            UserName = username;
+        }
+
+        /// <summary>
         /// Edit the user password
         /// </summary>
         /// <param name="authorizationCode">Authorization code</param>
@@ -201,7 +219,7 @@ namespace BoltJwt.Domain.Model
             // Add new roles
             foreach (var roleId in roleIds)
             {
-                var role = roleEntities.FirstOrDefault(r => r.Id == roleId);
+                var role = roleEntities.SingleOrDefault(r => r.Id == roleId);
 
                 // Skip if the role to add no exists in the context
                 if (role == null)

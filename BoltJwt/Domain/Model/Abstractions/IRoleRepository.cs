@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
@@ -10,6 +11,20 @@ namespace BoltJwt.Domain.Model.Abstractions
         IUnitOfWork UnitOfWork { get; }
 
         /// <summary>
+        /// Get role
+        /// </summary>
+        /// <param name="id">Role id</param>
+        /// <returns>Role</returns>
+        Task<Role> GetAsync(int id);
+
+        /// <summary>
+        /// Get role with authorizations
+        /// </summary>
+        /// <param name="id">Role id</param>
+        /// <returns>Role</returns>
+        Task<Role> GetWithAuthorizationsAsync(int id);
+
+        /// <summary>
         /// Add a new role
         /// </summary>
         /// <param name="role">Role</param>
@@ -19,39 +34,23 @@ namespace BoltJwt.Domain.Model.Abstractions
         /// <summary>
         /// Get roles
         /// </summary>
+        /// <param name="query">Query</param>
         /// <returns>Roles</returns>
-        IEnumerable<Role> GetAll();
-
-        /// <summary>
-        /// Update role description
-        /// </summary>
-        /// <param name="roleEditDto">Role dto</param>
-        /// <returns>Task</returns>
-        /// <exception cref="EntityNotFoundException">Role not found</exception>
-        Task UpdateAsync(RoleEditDto roleEditDto);
+        IEnumerable<Role> Query(Func<Role, bool> query = null);
 
         /// <summary>
         /// Mark a role as deleted
         /// </summary>
-        /// <param name="id">Role id</param>
+        /// <param name="role">Role</param>
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">Role not found</exception>
-        Task DeleteAsync(int id);
+        void Delete(Role role);
 
         /// <summary>
-        /// Assign an authorization
+        /// Check role usage
         /// </summary>
-        /// <param name="roleId">Role id</param>
-        /// <param name="authorizationsId">Authorizations Id</param>
-        /// <returns>Task</returns>
-        Task AssignAuthorizationsAsync(int roleId, IEnumerable<int> authorizationsId);
-
-        /// <summary>
-        /// Remove authorizations
-        /// </summary>
-        /// <param name="roleId">Role id</param>
-        /// <param name="authorizationsId">Authorizations id</param>
-        /// <returns>Task</returns>
-        Task RemoveAuthorizationAsync(int roleId, IEnumerable<int> authorizationsId);
+        /// <param name="role">Role</param>
+        /// <exception cref="EntityInUseException"></exception>
+        void CheckUsasge(Role role);
     }
 }

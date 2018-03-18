@@ -152,12 +152,13 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
       SmtpPort: this.form.controls.port.dirty ? formValue.port : null,
       SmtpUserName: this.form.controls.username.dirty ? formValue.username : null,
       SmtpPassword: this.form.controls.password.dirty ? formValue.password : null,
+      SmtpEmail: this.form.controls.email.dirty ? formValue.email : null,
       EndpointFqdn: this.form.controls.endpointfqdn.dirty ? formValue.endpointfqdn : null,
       EndpointPort: this.form.controls.endpointPort.dirty ? formValue.endpointPort : null,
       RootPassword: this.form.controls.rootPassword.dirty ? formValue.rootPassword : null,
       RootPasswordConfirmation: this.form.controls.rootPasswordConfirmation.dirty ? formValue.rootPasswordConfirmation : null
     };
-    
+
     this.configurationService.post(configDto).subscribe(
       () => {
         this.isLoading = false;

@@ -50,6 +50,13 @@ namespace BoltJwt.Domain.Model.Abstractions
         void Update(User user);
 
         /// <summary>
+        /// Check username duplicates
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <exception cref="DuplicatedIndexException"></exception>
+        void CheckForDuplicates(string username);
+
+        /// <summary>
         /// Get a user by email
         /// </summary>
         /// <param name="email">Email</param>
@@ -64,20 +71,11 @@ namespace BoltJwt.Domain.Model.Abstractions
         User Add(User user);
 
         /// <summary>
-        /// Update user informations and mark it as modified
-        /// </summary>
-        /// <param name="userEditDto">User info</param>
-        /// <returns>Task</returns>
-        /// <exception cref="EntityNotFoundException">User not found</exception>
-        Task<User> UpdateInfoAsync(UserEditDto userEditDto);
-
-        /// <summary>
         /// Mark a user as deleted
         /// </summary>
-        /// <param name="id">User id</param>
+        /// <param name="user">User</param>
         /// <returns>Task</returns>
-        /// <exception cref="EntityNotFoundException">User not found</exception>
-        Task DeleteAsync(int id);
+        void Delete(User user);
 
         /// <summary>
         /// Get user activation code

@@ -22,7 +22,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
         {
             var user = await _userRepository.GetWithGroupsAsync(command.UserId);
 
-            var groups = _groupRepository.GetAll();
+            var groups = _groupRepository.Qyery(g => command.Groups.Contains(g.Id));
 
             user.EditGroups(command.Groups, groups.ToList());
 

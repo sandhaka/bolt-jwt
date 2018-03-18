@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 
@@ -18,15 +17,11 @@ namespace BoltJwt.Application.Commands.Users.Handlers
 
         public async Task<bool> Handle(UserEditCommand userEditCommand, CancellationToken cancellationToken)
         {
-            var userEditDto = new UserEditDto
-            {
-                Id = userEditCommand.Id,
-                Name = userEditCommand.Name,
-                Surname = userEditCommand.Surname,
-                UserName = userEditCommand.UserName
-            };
+            var user = await _userRepository.GetAsync(userEditCommand.Id);
 
-            var entity = await _userRepository.UpdateInfoAsync(userEditDto);
+            _userRepository.CheckForDuplicates(userEditCommand.UserName);
+
+            user.Update(userEditCommand.Name, userEditCommand.Surname, userEditCommand.UserName);
 
             return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

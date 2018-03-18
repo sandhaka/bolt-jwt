@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using BoltJwt.Controllers.Dto;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
 
 namespace BoltJwt.Domain.Model.Abstractions
@@ -10,11 +10,25 @@ namespace BoltJwt.Domain.Model.Abstractions
         IUnitOfWork UnitOfWork { get; }
 
         /// <summary>
+        /// Return group
+        /// </summary>
+        /// <param name="id">Group id</param>
+        /// <returns>Group</returns>
+        Task<Group> GetAsync(int id);
+
+        /// <summary>
+        /// Return group with his roles collection
+        /// </summary>
+        /// <param name="id">Group id</param>
+        /// <returns>Group</returns>
+        Task<Group> GetWithRolesAsync(int id);
+
+        /// <summary>
         /// Get groups
         /// </summary>
-        /// <param name="groupsId">Groups id</param>
+        /// <param name="query">Query</param>
         /// <returns>Groups</returns>
-        IEnumerable<Group> GetAll();
+        IEnumerable<Group> Qyery(Func<Group, bool> query = null);
 
         /// <summary>
         /// Add a new group
@@ -24,27 +38,17 @@ namespace BoltJwt.Domain.Model.Abstractions
         Group Add(Group group);
 
         /// <summary>
-        /// Update group description
-        /// </summary>
-        /// <param name="groupEditDto">Group dto</param>
-        /// <returns>Task</returns>
-        /// <exception cref="EntityNotFoundException">Group not found</exception>
-        Task UpdateAsync(GroupEditDto groupEditDto);
-
-        /// <summary>
         /// Mark a group as deleted
         /// </summary>
-        /// <param name="id">Group id</param>
-        /// <returns>Task</returns>
-        /// <exception cref="EntityNotFoundException">Group not found</exception>
-        Task DeleteAsync(int id);
+        /// <param name="group">Group</param>
+        /// <exception cref="EntityInUseException">Group is in use</exception>
+        void Delete(Group group);
 
         /// <summary>
-        /// Assign / Remove roles
+        /// Check group usage
         /// </summary>
-        /// <param name="groupId">Group id</param>
-        /// <param name="roles">Roles id</param>
-        /// <returns>Task</returns>
-        Task EditRolesAsync(int groupId, IEnumerable<int> roles);
+        /// <param name="group">Group</param>
+        /// <exception cref="EntityInUseException"></exception>
+        void CheckUsage(Group group);
     }
 }

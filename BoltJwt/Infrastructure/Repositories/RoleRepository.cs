@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
 using BoltJwt.Infrastructure.Context;
@@ -29,12 +28,37 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Get role
+        /// </summary>
+        /// <param name="id">Role id</param>
+        /// <returns>Role</returns>
+        public async Task<Role> GetAsync(int id)
+        {
+            return await _context.Roles.FirstOrDefaultAsync(r => r.Id == id) ??
+                   throw new EntityNotFoundException(nameof(Role));
+        }
+
+        /// <summary>
+        /// Get role with authorizations
+        /// </summary>
+        /// <param name="id">Role id</param>
+        /// <returns>Role</returns>
+        public async Task<Role> GetWithAuthorizationsAsync(int id)
+        {
+            return await _context.Roles.Include(r => r.Authorizations).FirstOrDefaultAsync(r => r.Id == id) ??
+                   throw new EntityNotFoundException(nameof(Role));
+        }
+
+        /// <summary>
         /// Get roles
         /// </summary>
+        /// <param name="query">Query</param>
         /// <returns>Roles</returns>
-        public IEnumerable<Role> GetAll()
+        public IEnumerable<Role> Query(Func<Role, bool> query = null)
         {
-            return _context.Roles;
+            return query == null ?
+                _context.Roles :
+                _context.Roles.Where(query);
         }
 
         /// <summary>
@@ -49,87 +73,27 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Update role description
-        /// </summary>
-        /// <param name="roleEditDto">Role dto</param>
-        /// <returns>Task</returns>
-        /// <exception cref="EntityNotFoundException">Role not found</exception>
-        public async Task UpdateAsync(RoleEditDto roleEditDto)
-        {
-            var roleToUpdate = await _context.Roles.FindAsync(roleEditDto.Id) ??
-                               throw new EntityNotFoundException($"{nameof(Role)} - Id: {roleEditDto.Id}");
-
-            roleToUpdate.Description = roleEditDto.Description;
-
-            _context.Entry(roleToUpdate).State = EntityState.Modified;
-        }
-
-        /// <summary>
         /// Mark a role as deleted
         /// </summary>
-        /// <param name="id">Role id</param>
+        /// <param name="role">Role</param>
         /// <returns>Task</returns>
         /// <exception cref="EntityNotFoundException">Role not found</exception>
-        public async Task DeleteAsync(int id)
+        public void Delete(Role role)
         {
-            var roleToDelete = await _context.Roles.FindAsync(id) ??
-                               throw new EntityNotFoundException($"{nameof(Role)} - Id: {id}");
-
-            if (_context.Groups.Any(g => g.GroupRoles.Any(r => r.RoleId == id)) ||
-                _context.Users.Any(u => u.UserRoles.Any(r => r.RoleId == id)))
-            {
-                throw new EntityInUseException(roleToDelete.Description);
-            }
-
-            _context.Entry(roleToDelete).State = EntityState.Deleted;
+            _context.Entry(role).State = EntityState.Deleted;
         }
 
         /// <summary>
-        /// Assign an authorization
+        /// Check role usage
         /// </summary>
-        /// <param name="roleId">Role id</param>
-        /// <param name="authorizationsId">Authorizations Id</param>
-        /// <returns>Task</returns>
-        public async Task AssignAuthorizationsAsync(int roleId, IEnumerable<int> authorizationsId)
+        /// <param name="role">Role</param>
+        /// <exception cref="EntityInUseException"></exception>
+        public void CheckUsasge(Role role)
         {
-            var role = await _context.Roles.FindAsync(roleId) ?? throw new EntityNotFoundException(nameof(Role));
-
-            foreach (var id in authorizationsId)
+            if (_context.Groups.Any(g => g.GroupRoles.Any(r => r.RoleId == role.Id)) ||
+                _context.Users.Any(u => u.UserRoles.Any(r => r.RoleId == role.Id)))
             {
-                // Skip already added
-                if (role.Authorizations.Any(i => i.DefAuthorizationId == id))
-                {
-                    continue;
-                }
-
-                var authToAdd = await _context.Authorizations.FindAsync(id) ??
-                                throw new EntityNotFoundException(nameof(DefinedAuthorization));
-
-                role.AddAuthorization(authToAdd);
-            }
-        }
-
-        /// <summary>
-        /// Remove authorizations
-        /// </summary>
-        /// <param name="roleId">Role id</param>
-        /// <param name="authorizationsId">Authorizations id</param>
-        /// <returns>Task</returns>
-        public async Task RemoveAuthorizationAsync(int roleId, IEnumerable<int> authorizationsId)
-        {
-            var role = await _context.Roles
-                           .Include(i => i.Authorizations)
-                           .FirstAsync(i => i.Id == roleId) ??
-                       throw new EntityNotFoundException(nameof(Role));
-
-            foreach (var id in authorizationsId)
-            {
-                var authorizationtoRemove = role.Authorizations.FirstOrDefault(i => i.Id == id);
-
-                if (authorizationtoRemove != null)
-                {
-                    _context.Entry(authorizationtoRemove).State = EntityState.Deleted;
-                }
+                throw new EntityInUseException(role.Description);
             }
         }
     }

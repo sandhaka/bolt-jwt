@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BoltJwt.Controllers.Dto;
 using BoltJwt.Domain.Model.Abstractions;
 using MediatR;
 
@@ -18,13 +17,9 @@ namespace BoltJwt.Application.Commands.Groups.Handlers
 
         public async Task<bool> Handle(GroupEditCommand command, CancellationToken cancellationToken)
         {
-            var groupEditDto = new GroupEditDto
-            {
-                Id = command.Id,
-                Description = command.Description
-            };
+            var group = await _groupRepository.GetAsync(command.Id);
 
-            await _groupRepository.UpdateAsync(groupEditDto);
+            group.Description = command.Description;
 
             return await _groupRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

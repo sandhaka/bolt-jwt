@@ -17,7 +17,9 @@ namespace BoltJwt.Application.Commands.Users.Handlers
 
         public async Task<bool> Handle(UserDeleteCommand userDeleteCommand, CancellationToken cancellationToken)
         {
-            await _userRepository.DeleteAsync(userDeleteCommand.Id);
+            var user = await _userRepository.GetAsync(userDeleteCommand.Id);
+
+            _userRepository.Delete(user);
 
             return await _userRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

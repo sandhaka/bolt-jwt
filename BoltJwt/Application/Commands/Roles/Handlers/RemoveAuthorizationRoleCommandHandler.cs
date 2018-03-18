@@ -18,8 +18,9 @@ namespace BoltJwt.Application.Commands.Roles.Handlers
 
         public async Task<bool> Handle(RemoveAuthorizationRoleCommand command, CancellationToken cancellationToken)
         {
-            await _roleRepository.RemoveAuthorizationAsync(command.RoleId,
-                command.Authorizations.Split(',').Select(int.Parse));
+            var role = await _roleRepository.GetWithAuthorizationsAsync(command.RoleId);
+
+            role.RemoveAuthorizations(command.Authorizations.Split(',').Select(int.Parse));
 
             return await _roleRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

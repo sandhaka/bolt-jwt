@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
+using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,9 +35,22 @@ namespace BoltJwt.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> SaveAsync([FromBody] ConfigurationDto dto)
         {
-            var result = await _configurationRepository.UpdateAsync(dto);
+            var config = await _configurationRepository.GetAsync();
 
-            await _configurationRepository.UnitOfWork.SaveEntitiesAsync();
+            // TODO: Move to application command and add dto validation
+            config.UpdateInfo(new Configuration
+            {
+                SmtpHostName = dto.SmtpHostName,
+                SmtpPort = dto?.SmtpPort ?? 0,
+                SmtpUserName = dto.SmtpUserName,
+                SmtpPassword = dto.SmtpPassword,
+                SmtpEmail = dto.SmtpEmail,
+                EndpointFqdn = dto.EndpointFqdn,
+                EndpointPort = dto?.EndpointPort ?? 0,
+                RootPassword = dto.RootPassword
+            });
+
+            var result = await _configurationRepository.UnitOfWork.SaveEntitiesAsync();
 
             return Json(new {HttpStatusCode.OK, result});
         }

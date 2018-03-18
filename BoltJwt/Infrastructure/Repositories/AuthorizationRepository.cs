@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
@@ -27,6 +28,28 @@ namespace BoltJwt.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// Return authorization
+        /// </summary>
+        /// <param name="id">Authorization id</param>
+        /// <returns>Authorization</returns>
+        public async Task<DefinedAuthorization> GetAsync(int id)
+        {
+            return await _context.Authorizations.FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        /// <summary>
+        /// Get authorizations
+        /// </summary>
+        /// <param name="query">Query</param>
+        /// <returns>Authorizations</returns>
+        public IEnumerable<DefinedAuthorization> Query(Func<DefinedAuthorization, bool> query = null)
+        {
+            return query == null ?
+                _context.Authorizations :
+                _context.Authorizations.Where(query);
+        }
+
+        /// <summary>
         /// Add a new authorization definition
         /// </summary>
         /// <param name="definedAuthorization">Authorization definition</param>
@@ -45,23 +68,21 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <summary>
         /// Delete a authorization if it's not assigned
         /// </summary>
-        /// <param name="id">Authorization id</param>
+        /// <param name="authorization">Authorization</param>
         /// <returns>Task</returns>
-        public async Task DeleteAsync(int id)
+        public void Delete(DefinedAuthorization authorization)
         {
-            var authToDelete = await _context.Authorizations.FindAsync(id);
-
-            if (authToDelete.Name == Constants.AdministrativeAuth)
+            if (authorization.Name == Constants.AdministrativeAuth)
             {
                 throw new NotEditableEntityException($"Authorization definition: {Constants.AdministrativeAuth}");
             }
 
-            if (IsInUse(id))
+            if (IsInUse(authorization.Id))
             {
-                throw new EntityInUseException(authToDelete.Name);
+                throw new EntityInUseException(authorization.Name);
             }
 
-            _context.Entry(authToDelete).State = EntityState.Deleted;
+            _context.Entry(authorization).State = EntityState.Deleted;
         }
 
         /// <summary>
@@ -79,7 +100,7 @@ namespace BoltJwt.Infrastructure.Repositories
         /// </summary>
         /// <param name="authId">Authorization Id</param>
         /// <returns></returns>
-        private bool IsInUse(int authId)
+        public bool IsInUse(int authId)
         {
             return _context.Roles.Any(i => i.Authorizations.Any(j => j.DefAuthorizationId == authId)) ||
                    _context.Users.Any(i => i.Authorizations.Any(j => j.DefAuthorizationId == authId));
