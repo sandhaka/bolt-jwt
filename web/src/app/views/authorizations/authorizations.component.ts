@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {PagedData} from "../../shared/datatable/model/paged-data";
 import {Page} from "../../shared/datatable/model/page";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {AuthorizationsService} from "./authorizations.service";
 import {DataTableService} from "../../shared/datatable/data-table.service";
 import {AuthorizationDto} from "./authDto";

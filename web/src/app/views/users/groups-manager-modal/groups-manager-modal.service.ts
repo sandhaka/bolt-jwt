@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {AssignedGroup} from "./model/assignedGroup";
 import {Group} from "./model/group";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 
 @Injectable()
 export class GroupsManagerModalService {

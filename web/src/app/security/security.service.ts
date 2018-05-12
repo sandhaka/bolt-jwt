@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
+
 import {HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {TokenResponse} from './token.response';
 import {UtilityService} from "../shared/utils.service";
 import {AuthenticationStatus} from "./auth-status";
+import {map} from "rxjs/operators";
 
 @Injectable()
 export class SecurityService {
@@ -27,7 +28,7 @@ export class SecurityService {
     const body = { username: username, password: password };
 
     return this.http.post<TokenResponse>('/api/token', body)
-      .map(response => {
+      .pipe(map(response => {
         // login successful if there's a jwt token in the response
         const token = response.access_token;
         if (token) {
@@ -38,7 +39,7 @@ export class SecurityService {
           // return false to indicate failed login
           return false;
         }
-      });
+      }));
   }
 
   /**
@@ -124,7 +125,7 @@ export class SecurityService {
   private tokenRenew(): Observable<boolean> {
 
     return this.http.get<TokenResponse>('/api/tokenrenew')
-      .map(response => {
+      .pipe(map(response => {
 
         const token = response.access_token;
 
@@ -134,7 +135,7 @@ export class SecurityService {
         }
 
         return false;
-      });
+      }));
   }
 
   private storeToken(token: string, exp: number) {

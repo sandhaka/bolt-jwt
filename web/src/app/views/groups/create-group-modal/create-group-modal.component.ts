@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {GenericModalComponent} from "../../../shared/modals";
-import {Subject} from "rxjs/Subject";
+import {Subject} from "rxjs";
 import {UtilityService} from "../../../shared/utils.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";

@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {PagedData} from "../../shared/datatable/model/paged-data";
 import {UsersService} from "./users.service";
 import {UserDto} from "./UserDto";

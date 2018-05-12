@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {GenericModalComponent} from "../../../shared/modals";
 import {BsModalRef} from "ngx-bootstrap/modal";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Subject} from "rxjs/Subject";
+import {Subject} from "rxjs";
 import {ANIMATION_TYPES} from "ngx-loading";
 import {HttpErrorResponse} from "@angular/common/http";
 import {UsersService} from "../users.service";

@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {PagedData} from "../../shared/datatable/model/paged-data";
 import {Page} from "../../shared/datatable/model/page";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 
 @Injectable()
 export class GroupsService {

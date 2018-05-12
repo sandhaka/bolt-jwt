@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Page} from "./model/page";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {PagedData} from "./model/paged-data";
 import {HttpErrorResponse} from "@angular/common/http";
 import {DataTableService} from "./data-table.service";

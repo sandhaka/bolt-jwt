@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {GenericModalComponent} from "../../../shared/modals";
-import {Subject} from "rxjs/Subject";
+import {Subject} from "rxjs";
 import {ANIMATION_TYPES} from "ngx-loading";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {BsModalRef} from "ngx-bootstrap/modal";

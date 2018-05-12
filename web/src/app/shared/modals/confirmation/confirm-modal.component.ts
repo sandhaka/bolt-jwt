@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {BsModalRef} from "ngx-bootstrap/modal";
 import {GenericModalComponent} from "../generic/generic-modal.component";
-import {Subject} from "rxjs/Subject";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-confirm-modal',

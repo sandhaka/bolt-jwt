@@ -4,7 +4,7 @@ import {AppEntity} from "../../shared/common";
 import {BsModalService} from "ngx-bootstrap";
 import {PagedData} from "../../shared/datatable/model/paged-data";
 import {Page} from "../../shared/datatable/model/page";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {GroupDto} from "./groupDto";
 import {GroupsService} from "./groups.service";
 import {RolesManagerModalComponent} from "../../shared/components/roles-manager-modal/roles-manager-modal.component";

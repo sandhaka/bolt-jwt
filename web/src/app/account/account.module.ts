@@ -6,7 +6,7 @@ import {SharedModule} from "../shared/shared.module";
 import {AccountActivationComponent} from "./activation/account-activation.component";
 import {AccountRoutingModule} from "./account.routing";
 import {AccountService} from "./account.service";
-import {GenericModalComponent} from "../shared/modals";
+import {ErrorModalComponent, GenericModalComponent} from "../shared/modals";
 import {LaddaModule} from "angular2-ladda";
 import {AccountActivatedConfirmationComponent} from "./confirmed/account-activated-confirmation.component";
 import {ForgotPasswordComponent} from "./forgot-password/forgot-password.component";
@@ -28,7 +28,8 @@ import {PasswordRecoveryComponent} from "./password-recovery/password-recovery.c
     PasswordRecoveryComponent
   ],
   entryComponents: [
-    GenericModalComponent
+    GenericModalComponent,
+    ErrorModalComponent
   ],
   providers: [
     AccountService

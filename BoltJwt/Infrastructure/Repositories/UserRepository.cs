@@ -218,7 +218,7 @@ namespace BoltJwt.Infrastructure.Repositories
             return claimsIdentity;
         }
 
-        /// <summary>
+        /// <summary> TODO: Move from here using dapper
         /// Get the comprensive list of the authorizations assigned directly or indirectly trough roles or groups
         /// </summary>
         /// <returns>Authorization names list</returns>

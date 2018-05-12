@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {GenericModalComponent} from "../../../shared/modals";
 import {BsModalRef} from "ngx-bootstrap/modal";
-import {Subject} from "rxjs/Subject";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-create-auth-modal',

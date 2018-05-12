@@ -6,7 +6,7 @@ import {UtilityService} from "../../utils.service";
 import {AuthManagerEntityData} from "./model/auth-man-entity";
 import {Authorization, AuthorizationDefinition} from "./model/authorizations";
 import {ANIMATION_TYPES} from "ngx-loading";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 
 /**
  * Manage authorizations for user and role entities
