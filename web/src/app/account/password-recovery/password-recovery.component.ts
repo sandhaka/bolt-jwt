@@ -8,12 +8,18 @@ import {Component, OnInit} from "@angular/core";
 
 // TODO: need a 'return url' parameter to redirect to the real application
 @Component({
-  templateUrl: '/password-recovery.component.html'
+  templateUrl: './password-recovery.component.html'
 })
 export class PasswordRecoveryComponent extends ReactiveFormComponent implements OnInit {
 
   private authorizationCode: string;
   private userId: number;
+
+  // Form setup
+  formErrors = {
+    password: '',
+    confirmPassword: ''
+  };
 
   isPending = false;
 
@@ -26,11 +32,6 @@ export class PasswordRecoveryComponent extends ReactiveFormComponent implements 
   ) {
     super();
 
-    // Form setup
-    this.formErrors = {
-      'password': '',
-      'confirmPassword': ''
-    };
     this.validationMessages = {
       'password': {
         'required': 'Required',

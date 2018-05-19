@@ -21,16 +21,16 @@ export class LoginComponent extends ReactiveFormComponent implements OnInit {
   private bsModalService: BsModalService;
   form: FormGroup;
 
+  formErrors = {
+    username: '',
+    password: ''
+  };
+
   loginError = '';
 
   constructor(authService: SecurityService, formBuilder: FormBuilder, router: Router, modalService: BsModalService) {
 
     super();
-
-    this.formErrors = {
-      'username': '',
-      'password': ''
-    };
 
     this.validationMessages = {
       'username': {

@@ -38,6 +38,12 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
 
   isPending = false;
 
+  formErrors = {
+    name: '',
+    surname: '',
+    username: ''
+  };
+
   constructor(
     private formBuilder: FormBuilder,
     private userService: UsersService,
@@ -46,12 +52,6 @@ export class UserDetailsComponent extends ReactiveFormComponent implements OnIni
   ) {
 
     super();
-
-    this.formErrors = {
-      'name': '',
-      'surname': '',
-      'username': ''
-    };
 
     this.validationMessages = {
       'name': {

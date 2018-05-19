@@ -16,6 +16,12 @@ export class AccountActivationComponent extends ReactiveFormComponent implements
 
   private activationCode: string;
 
+  // Form setup
+  formErrors = {
+    password: '',
+    confirmPassword: ''
+  };
+
   isPending = false;
 
   constructor(
@@ -27,11 +33,6 @@ export class AccountActivationComponent extends ReactiveFormComponent implements
   ) {
     super();
 
-    // Form setup
-    this.formErrors = {
-      'password': '',
-      'confirmPassword': ''
-    };
     this.validationMessages = {
       'password': {
         'required': 'Required',

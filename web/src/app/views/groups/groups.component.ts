@@ -12,7 +12,7 @@ import {CreateGroupModalComponent} from "./create-group-modal/create-group-modal
 
 @Component({
   templateUrl: './groups.component.html',
-  styleUrls: ['/groups.component.scss'],
+  styleUrls: ['./groups.component.scss'],
   // Provide the data table service for this component and his children
   providers: [DataTableService]
 })

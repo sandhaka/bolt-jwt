@@ -16,6 +16,10 @@ export class GroupDetailsComponent extends ReactiveFormComponent implements OnCh
 
   @Output('changed') changed: EventEmitter<any> = new EventEmitter();
 
+  formErrors = {
+    description: ''
+  };
+
   isPending = false;
 
   constructor(
@@ -24,9 +28,7 @@ export class GroupDetailsComponent extends ReactiveFormComponent implements OnCh
     private groupService: GroupsService
   ) {
     super();
-    this.formErrors = {
-      'description': ''
-    };
+
     this.validationMessages = {
       'description': {
         'required': 'Required'

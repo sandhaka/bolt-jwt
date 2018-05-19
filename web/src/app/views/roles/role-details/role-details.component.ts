@@ -23,6 +23,10 @@ export class RoleDetailsComponent extends ReactiveFormComponent implements OnCha
    */
   @Output('changed') changed: EventEmitter<any> = new EventEmitter();
 
+  formErrors = {
+    description: ''
+  };
+
   isPending = false;
 
   constructor(
@@ -31,9 +35,7 @@ export class RoleDetailsComponent extends ReactiveFormComponent implements OnCha
     private roleService: RolesService
   ) {
     super();
-    this.formErrors = {
-      'description': ''
-    };
+
     this.validationMessages = {
       'description': {
         'required': 'Required'

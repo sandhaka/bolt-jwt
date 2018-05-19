@@ -11,7 +11,7 @@ export class ErrorModalComponent {
   detailedErrorDescr: string;
   errorDescr: string;
 
-  private errorDetailsAccordionOpened: boolean;
+  errorDetailsAccordionOpened: boolean;
 
   constructor(public bsModalRef: BsModalRef) { }
 

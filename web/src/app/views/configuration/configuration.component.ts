@@ -15,6 +15,19 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
 
   isLoading = false;
 
+  // Form setup
+  formErrors = {
+    'hostname': '',
+    'port': '',
+    'username': '',
+    'password': '',
+    'email': '',
+    'endpointfqdn': '',
+    'endpointPort': '',
+    'rootPassword': '',
+    'rootPasswordConfirmation': ''
+  };
+
   // loading splash screen configuration
   loadingConfig = {
     backdropBorderRadius: '14px',
@@ -27,19 +40,6 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
     private utils: UtilityService
   ) {
     super();
-
-    // Form setup
-    this.formErrors = {
-      'hostname': '',
-      'port': '',
-      'username': '',
-      'password': '',
-      'email': '',
-      'endpointfqdn': '',
-      'endpointPort': '',
-      'rootPassword': '',
-      'rootPasswordConfirmation': ''
-    };
 
     this.validationMessages = {
       'hostname': {
@@ -126,7 +126,7 @@ export class ConfigurationComponent extends ReactiveFormComponent implements OnI
           endpointfqdn: data.config.endpointFqdn,
           endpointPort: data.config.endpointPort,
           rootPassword: data.config.rootPassword,
-          rootPasswordConfirmation: data.config.rootPassword,
+          rootPasswordConfirmation: data.config.rootPassword
         });
 
         this.isLoading = false;

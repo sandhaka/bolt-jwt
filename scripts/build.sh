@@ -4,7 +4,7 @@
 rm -r ../BoltJwt/wwwroot/*
 
 # Build frontend
-(cd ../web && ng build --env=prod)
+(cd ../web && ng build -c production)
 
 # Include it into the project
 cp ../web/dist/* ../BoltJwt/wwwroot/

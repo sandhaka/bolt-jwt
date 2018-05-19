@@ -12,6 +12,11 @@ export class ForgotPasswordComponent extends ReactiveFormComponent {
 
   isPending = false;
 
+  // Form setup
+  formErrors = {
+    'email': '',
+  };
+
   constructor(
     private accountService: AccountService,
     private formBuilder: FormBuilder,
@@ -19,10 +24,6 @@ export class ForgotPasswordComponent extends ReactiveFormComponent {
   ) {
     super();
 
-    // Form setup
-    this.formErrors = {
-      'email': '',
-    };
     this.validationMessages = {
       'email': {
         'required': 'Required',
