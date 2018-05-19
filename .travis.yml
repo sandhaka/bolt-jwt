@@ -2,13 +2,13 @@ language: csharp
 mono: none
 dotnet: 2.1.101
 node_js:
-  - "8.2.1"
+  - "9.11.1"
 branches:
   only:
     - master
 before_script:
   - sudo chmod +x scripts/build.sh
-  - npm install -g @angular/cli@1.6.3
+  - npm install -g @angular/cli@6.0.1
   - (cd web/ && npm install)
 script:
   - (cd scripts/ && ./build.sh)
