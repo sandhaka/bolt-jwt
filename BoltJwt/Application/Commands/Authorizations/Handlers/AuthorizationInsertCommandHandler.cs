@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.Authorization;
 using MediatR;
 
 namespace BoltJwt.Application.Commands.Authorizations.Handlers
@@ -19,7 +19,7 @@ namespace BoltJwt.Application.Commands.Authorizations.Handlers
 
         public async Task<bool> Handle(AuthorizationInsertCommand authorizationInsertCommand, CancellationToken cancellationToken)
         {
-            var auth = new DefinedAuthorization(authorizationInsertCommand.Name);
+            var auth = DefinedAuthorization.Create(authorizationInsertCommand.Name);
 
             _authorizationRepository.Add(auth);
 

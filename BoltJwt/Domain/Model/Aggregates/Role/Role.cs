@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.Authorization;
 
-namespace BoltJwt.Domain.Model
+namespace BoltJwt.Domain.Model.Aggregates.Role
 {
-    public class Role : Entity
+    public class Role : AggregateRoot
     {
         public string Description { get; set; }
 
@@ -23,8 +24,14 @@ namespace BoltJwt.Domain.Model
         /// </summary>
         public List<RoleAuthorization> Authorizations { get; set; }
 
-        public Role()
+        public static Role Create(string description)
         {
+            return new Role(description);
+        }
+
+        private Role(string description)
+        {
+            Description = description;
             Authorizations = new List<RoleAuthorization>();
             UserRoles = new List<UserRole>();
             GroupRoles = new List<GroupRole>();
@@ -66,7 +73,7 @@ namespace BoltJwt.Domain.Model
         /// <param name="authorizations">Authorizations id to remove</param>
         public void RemoveAuthorizations(IEnumerable<int> authorizations)
         {
-            Authorizations.RemoveAll(a => authorizations.Contains(a.Id));
+            Authorizations.RemoveAll(a => authorizations.Contains(a.DefAuthorizationId));
         }
     }
 }

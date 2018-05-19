@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.User;
 using BoltJwt.Infrastructure.Extensions;
 using MediatR;
 
@@ -19,7 +19,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
 
         public async Task<bool> Handle(UserInsertCommand userInsertCommand, CancellationToken cancellationToken)
         {
-            var newUser = new User(
+            var newUser = User.Create(
                 userInsertCommand.Name,
                 userInsertCommand.Surname,
                 userInsertCommand.UserName,

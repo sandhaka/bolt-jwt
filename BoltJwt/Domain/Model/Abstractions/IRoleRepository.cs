@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BoltJwt.Controllers.Dto;
+using BoltJwt.Domain.Model.Aggregates.Role;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
 
 namespace BoltJwt.Domain.Model.Abstractions

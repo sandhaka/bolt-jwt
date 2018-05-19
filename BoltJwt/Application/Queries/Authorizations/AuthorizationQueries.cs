@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BoltJwt.Application.Queries.QueryUtils;
 using BoltJwt.Controllers.Pagination;
-using BoltJwt.Domain.Model;
 using Dapper;
 
 namespace BoltJwt.Application.Queries.Authorizations
@@ -132,7 +131,6 @@ namespace BoltJwt.Application.Queries.Authorizations
             {
                 dynamic item = new ExpandoObject();
 
-                item.entityAuthId = auth.id;
                 item.authId = auth.authId;
                 item.name = auth.name;
 

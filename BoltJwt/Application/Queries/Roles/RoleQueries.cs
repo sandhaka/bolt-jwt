@@ -77,7 +77,7 @@ namespace BoltJwt.Application.Queries.Roles
                 connection.Open();
 
                 var result = await connection.QueryAsync<dynamic>(
-                    "SELECT def_authorizations.Id as authId, role_authorizations.Id AS id, Name AS name " +
+                    "SELECT def_authorizations.Id as authId, Name AS name " +
                     "FROM IdentityContext.def_authorizations " +
                     "LEFT JOIN IdentityContext.role_authorizations ON " +
                     "def_authorizations.Id = role_authorizations.DefAuthorizationId " +

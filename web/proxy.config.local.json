@@ -1,6 +1,6 @@
 {
   "/api/*": {
-    "target": "https://docker-host:443",
+    "target": "https://localhost",
     "secure": false,
     "changeOrigin": false,
     "logLevel": "debug"

@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using BoltJwt.Controllers.Dto;
+using BoltJwt.Domain.Model.Aggregates.Configuration;
 
 namespace BoltJwt.Domain.Model.Abstractions
 {

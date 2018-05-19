@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.Role;
 using MediatR;
 
 namespace BoltJwt.Application.Commands.Roles.Handlers
@@ -18,10 +18,7 @@ namespace BoltJwt.Application.Commands.Roles.Handlers
 
         public async Task<bool> Handle(RoleInsertCommand roleInsertCommand, CancellationToken cancellationToken)
         {
-            var role = new Role
-            {
-                Description = roleInsertCommand.Description
-            };
+            var role = Role.Create(roleInsertCommand.Description);
 
             _roleRepository.Add(role);
 

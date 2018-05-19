@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.Configuration;
 using BoltJwt.Infrastructure.Context;
-using BoltJwt.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BoltJwt.Infrastructure.Repositories
@@ -28,12 +27,7 @@ namespace BoltJwt.Infrastructure.Repositories
         /// <returns>Configuration</returns>
         public async Task<Configuration> GetAsync()
         {
-            var config = await _context.Configuration.SingleAsync();
-
-            // Pwd obfuscation
-            config.SmtpPassword = config.SmtpPassword.ToMd5Hash();
-
-            return config;
+            return await _context.Configuration.FirstAsync();
         }
     }
 }

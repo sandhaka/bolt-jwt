@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using BoltJwt.Controllers.Dto;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.Configuration;
+using BoltJwt.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,7 +48,7 @@ namespace BoltJwt.Controllers
                 SmtpEmail = dto.SmtpEmail,
                 EndpointFqdn = dto.EndpointFqdn,
                 EndpointPort = dto?.EndpointPort ?? 0,
-                RootPassword = dto.RootPassword
+                RootPassword = dto.RootPassword.ToMd5Hash()
             });
 
             var result = await _configurationRepository.UnitOfWork.SaveEntitiesAsync();

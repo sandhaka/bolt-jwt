@@ -1,13 +1,12 @@
 ﻿using BoltJwt.Domain.Events;
 using BoltJwt.Domain.Model.Abstractions;
-using BoltJwt.Infrastructure.Extensions;
 
-namespace BoltJwt.Domain.Model
+namespace BoltJwt.Domain.Model.Aggregates.Configuration
 {
     /// <summary>
     /// Configuration data
     /// </summary>
-    public class Configuration : Entity
+    public class Configuration : AggregateRoot
     {
         public Configuration()
         {
@@ -42,10 +41,10 @@ namespace BoltJwt.Domain.Model
             EndpointFqdn = dto?.EndpointFqdn ?? EndpointFqdn;
             EndpointPort = dto?.EndpointPort > 0 ? dto.EndpointPort : EndpointPort;
 
-            if (dto?.RootPassword != null && string.CompareOrdinal(RootPassword, dto.RootPassword.ToMd5Hash()) != 0)
+            if (dto?.RootPassword != null && string.CompareOrdinal(RootPassword, dto.RootPassword) != 0)
             {
                 // Save as md5 hash
-                RootPassword = dto.RootPassword.ToMd5Hash();
+                RootPassword = dto.RootPassword;
 
                 // Root password has changed
                 AddDomainEvent(new RootPasswordChangedDomainEvent { Password = dto.RootPassword});

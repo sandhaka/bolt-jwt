@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using MediatR;
 
 namespace BoltJwt.Domain.Model.Abstractions
 {
@@ -10,24 +8,11 @@ namespace BoltJwt.Domain.Model.Abstractions
 
         private int? _requestedHashCode;
 
-        private List<INotification> _domainEvents;
 
         public int Id
         {
             get => _id;
             protected set => _id = value;
-        }
-
-        public List<INotification> DomainEvents => _domainEvents;
-        public void AddDomainEvent(INotification eventItem)
-        {
-            _domainEvents = _domainEvents ?? new List<INotification>();
-            _domainEvents.Add(eventItem);
-        }
-
-        public void RemoveDomainEvent(INotification eventItem)
-        {
-            _domainEvents?.Remove(eventItem);
         }
 
         public override bool Equals(object obj)

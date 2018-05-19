@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.Group;
 using MediatR;
 
 namespace BoltJwt.Application.Commands.Groups.Handlers
@@ -18,10 +18,7 @@ namespace BoltJwt.Application.Commands.Groups.Handlers
 
         public async Task<bool> Handle(GroupInsertCommand command, CancellationToken cancellationToken)
         {
-            var group = new Group
-            {
-                Description = command.Description
-            };
+            var group = Group.Create(command.Description);
 
             _groupRepository.Add(group);
 

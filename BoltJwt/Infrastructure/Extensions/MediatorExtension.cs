@@ -12,10 +12,10 @@ namespace BoltJwt.Infrastructure.Extensions
         public static async Task DispatchDomainEventsAsync(this IMediator mediator, IdentityContext ctx)
         {
             var domainEntities = ctx.ChangeTracker
-                .Entries<Entity>()
+                .Entries<AggregateRoot>()
                 .Where(x => x.Entity.DomainEvents != null && x.Entity.DomainEvents.Any());
 
-            var entityEntries = domainEntities as EntityEntry<Entity>[] ?? domainEntities.ToArray();
+            var entityEntries = domainEntities as EntityEntry<AggregateRoot>[] ?? domainEntities.ToArray();
 
             var domainEvents = entityEntries
                 .SelectMany(x => x.Entity.DomainEvents)

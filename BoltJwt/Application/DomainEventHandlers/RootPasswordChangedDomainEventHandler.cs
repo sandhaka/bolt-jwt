@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Events;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Infrastructure.Extensions;
 using MediatR;
 
 namespace BoltJwt.Application.DomainEventHandlers
@@ -24,7 +25,7 @@ namespace BoltJwt.Application.DomainEventHandlers
         {
             var rootUser = await _userRepository.GetRootAsync();
 
-            rootUser.EditRootPassword(domainEvent.Password);
+            rootUser.EditRootPassword(domainEvent.Password.ToMd5Hash());
         }
     }
 }

@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model;
+using BoltJwt.Domain.Model.Aggregates.Authorization;
+using BoltJwt.Domain.Model.Aggregates.Configuration;
+using BoltJwt.Domain.Model.Aggregates.User;
 using BoltJwt.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -26,7 +29,7 @@ namespace BoltJwt.Infrastructure.Context
 
                     if (!context.Authorizations.Any(i => i.Name.Equals(Constants.AdministrativeAuth)))
                     {
-                        context.Authorizations.Add(new DefinedAuthorization(Constants.AdministrativeAuth));
+                        context.Authorizations.Add(DefinedAuthorization.Create(Constants.AdministrativeAuth));
 
                         await context.SaveChangesAsync();
                     }

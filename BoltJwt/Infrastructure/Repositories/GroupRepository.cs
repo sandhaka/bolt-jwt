@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.Group;
 using BoltJwt.Infrastructure.Context;
 using BoltJwt.Infrastructure.Repositories.Exceptions;
 using Microsoft.EntityFrameworkCore;

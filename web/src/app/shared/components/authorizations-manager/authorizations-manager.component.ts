@@ -181,7 +181,7 @@ export class AuthorizationsManagerComponent implements OnChanges {
     const collection = [];
     for(const a of this.entityData.AuthorizationsList) {
       if(a.checked === true) {
-        collection.push(a.entityAuthId);
+        collection.push(a.authId);
       }
     }
     return collection;

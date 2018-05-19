@@ -4,11 +4,10 @@ using System.Linq;
 using BoltJwt.Domain.Events;
 using BoltJwt.Domain.Exceptions;
 using BoltJwt.Domain.Model.Abstractions;
-using BoltJwt.Infrastructure.Extensions;
 
-namespace BoltJwt.Domain.Model
+namespace BoltJwt.Domain.Model.Aggregates.User
 {
-    public class User : Entity
+    public class User : AggregateRoot
     {
         public string Name { get; set; }
 
@@ -52,6 +51,13 @@ namespace BoltJwt.Domain.Model
         /// </summary>
         public UserActivationCode ActivationCode { get; set; }
 
+        public static User Create(string name, string surname, string username,
+            string email, UserActivationCode activationcode,
+            string password)
+        {
+            return new User(name, surname, username, email, activationcode, password);
+        }
+
         /// <summary>
         /// Default ctor
         /// </summary>
@@ -72,7 +78,7 @@ namespace BoltJwt.Domain.Model
         /// <param name="email"></param>
         /// <param name="activationcode"></param>
         /// <param name="password"></param>
-        public User(
+        private User(
             string name, string surname, string username,
             string email, UserActivationCode activationcode,
             string password)
@@ -129,7 +135,7 @@ namespace BoltJwt.Domain.Model
                 throw new AuthorizationCodeDomainException("Wrong authorization code");
             }
 
-            Password = newPassword.ToMd5Hash();
+            Password = newPassword;
         }
 
         /// <summary>
@@ -149,7 +155,7 @@ namespace BoltJwt.Domain.Model
         /// <param name="password">Password</param>
         public void ActivateUser(string password)
         {
-            Password = password.ToMd5Hash();
+            Password = password;
             Disabled = false;
         }
 
@@ -158,7 +164,7 @@ namespace BoltJwt.Domain.Model
         /// </summary>
         /// <param name="groups">Groups id</param>
         /// <param name="groupEntities">Group entities</param>
-        public void EditGroups(IEnumerable<int> groups, List<Group> groupEntities)
+        public void EditGroups(IEnumerable<int> groups, List<Group.Group> groupEntities)
         {
             if (Root)
             {
@@ -207,7 +213,7 @@ namespace BoltJwt.Domain.Model
         /// <param name="roles">Roles id</param>
         /// <param name="roleEntities">Role entities</param>
         /// <exception cref="ForbiddenOperationDomainException"></exception>
-        public void EditRoles(IEnumerable<int> roles, List<Role> roleEntities)
+        public void EditRoles(IEnumerable<int> roles, List<Role.Role> roleEntities)
         {
             if (Root)
             {
@@ -259,7 +265,7 @@ namespace BoltJwt.Domain.Model
         {
             if (Root)
             {
-                Password = password.ToMd5Hash();
+                Password = password;
             }
         }
 
@@ -275,7 +281,7 @@ namespace BoltJwt.Domain.Model
                 throw new ForbiddenOperationDomainException("Root user");
             }
 
-            Authorizations.RemoveAll(userAuth => authorizationsId.Contains(userAuth.Id));
+            Authorizations.RemoveAll(userAuth => authorizationsId.Contains(userAuth.DefAuthorizationId));
         }
 
         /// <summary>

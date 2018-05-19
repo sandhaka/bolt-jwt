@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using BoltJwt.Domain.Model.Aggregates.TokenLog;
 
 namespace BoltJwt.Domain.Model.Abstractions
 {

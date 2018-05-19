@@ -2,9 +2,9 @@
 using System.Linq;
 using BoltJwt.Domain.Model.Abstractions;
 
-namespace BoltJwt.Domain.Model
+namespace BoltJwt.Domain.Model.Aggregates.Group
 {
-    public class Group : Entity
+    public class Group : AggregateRoot
     {
         public string Description { get; set; }
 
@@ -18,8 +18,14 @@ namespace BoltJwt.Domain.Model
         /// </summary>
         public List<GroupRole> GroupRoles { get; }
 
-        public Group()
+        public static Group Create(string description)
         {
+            return new Group(description);
+        }
+
+        private Group(string description)
+        {
+            Description = description;
             UserGroups = new List<UserGroup>();
             GroupRoles = new List<GroupRole>();
         }
@@ -29,7 +35,7 @@ namespace BoltJwt.Domain.Model
         /// </summary>
         /// <param name="roles">Roles id</param>
         /// <param name="roleEntities">Role entities</param>
-        public void EditRoles(IEnumerable<int> roles, List<Role> roleEntities)
+        public void EditRoles(IEnumerable<int> roles, List<Role.Role> roleEntities)
         {
             var roleIds = roles as int[] ?? roles.ToArray();
 

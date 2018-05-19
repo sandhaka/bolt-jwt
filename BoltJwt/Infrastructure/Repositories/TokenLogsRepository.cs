@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.TokenLog;
 using BoltJwt.Infrastructure.Context;
 
 namespace BoltJwt.Infrastructure.Repositories

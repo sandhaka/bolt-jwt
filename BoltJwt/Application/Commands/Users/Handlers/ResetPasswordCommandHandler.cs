@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Infrastructure.Extensions;
 using MediatR;
 
 namespace BoltJwt.Application.Commands.Users.Handlers
@@ -19,7 +20,7 @@ namespace BoltJwt.Application.Commands.Users.Handlers
         {
             var user = await _userRepository.GetAsync(command.UserId);
 
-            user.EditPassword(command.Code, command.Password);
+            user.EditPassword(command.Code, command.Password.ToMd5Hash());
 
             _userRepository.Update(user);
 

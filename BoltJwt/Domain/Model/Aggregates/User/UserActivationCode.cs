@@ -1,6 +1,6 @@
 ﻿using BoltJwt.Domain.Model.Abstractions;
 
-namespace BoltJwt.Domain.Model
+namespace BoltJwt.Domain.Model.Aggregates.User
 {
     public class UserActivationCode : Entity
     {

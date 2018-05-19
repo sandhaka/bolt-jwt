@@ -4,7 +4,7 @@ using System.Text;
 namespace BoltJwt.Infrastructure.Extensions
 {
     /// <summary>
-    /// String extension class TODO: Resolve model contamination from this class!
+    /// String extension class
     /// </summary>
     public static class StringExtension
     {

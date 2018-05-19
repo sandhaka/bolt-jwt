@@ -2,8 +2,9 @@
 using System.Threading.Tasks;
 using BoltJwt.Application.Commands.Roles;
 using BoltJwt.Application.Commands.Roles.Handlers;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.Authorization;
+using BoltJwt.Domain.Model.Aggregates.Role;
 using MediatR;
 using Moq;
 using Xunit;
@@ -32,7 +33,7 @@ namespace BoltJwtUnitTest.Application.Commands
             // Arrange
             _roleRepository.Setup(x => x.Add(It.IsAny<Role>()));
             _authorizationRespository.Setup(x => x.GetByNameAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(new DefinedAuthorization("fake_auth")));
+                .Returns(Task.FromResult(DefinedAuthorization.Create("fake_auth")));
 
             IRequestHandler<RoleInsertCommand, bool> commandHandlerSut =
                 new RoleInsertCommandHandler(_roleRepository.Object, _authorizationRespository.Object);

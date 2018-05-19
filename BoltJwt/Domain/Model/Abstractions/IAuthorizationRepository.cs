@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BoltJwt.Domain.Model.Aggregates.Authorization;
 
 namespace BoltJwt.Domain.Model.Abstractions
 {

@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates;
+using BoltJwt.Domain.Model.Aggregates.Authorization;
+using BoltJwt.Domain.Model.Aggregates.Configuration;
+using BoltJwt.Domain.Model.Aggregates.Group;
+using BoltJwt.Domain.Model.Aggregates.Role;
+using BoltJwt.Domain.Model.Aggregates.TokenLog;
+using BoltJwt.Domain.Model.Aggregates.User;
 using BoltJwt.Infrastructure.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -66,9 +72,7 @@ namespace BoltJwt.Infrastructure.Context
              */
 
             modelBuilder.Entity<DefinedAuthorization>(ConfigureAuth);
-            modelBuilder.Entity<UserAuthorization>(ConfigureUserAuth);
             modelBuilder.Entity<UserActivationCode>(ConfigureUserActivationCodes);
-            modelBuilder.Entity<RoleAuthorization>(ConfigureRoleAuth);
             modelBuilder.Entity<Group>(ConfigureGroups);
             modelBuilder.Entity<User>(ConfigureUsers);
             modelBuilder.Entity<Role>(ConfigureRoles);
@@ -78,6 +82,13 @@ namespace BoltJwt.Infrastructure.Context
             /**
              * Configure join tables
              */
+            modelBuilder.Entity<UserAuthorization>().ToTable("user_authorizations", DefaultSchema);
+            modelBuilder.Entity<UserAuthorization>()
+                .HasKey(t => new {t.DefAuthorizationId, t.UserId});
+
+            modelBuilder.Entity<RoleAuthorization>().ToTable("role_authorizations", DefaultSchema);
+            modelBuilder.Entity<RoleAuthorization>()
+                .HasKey(t => new {t.DefAuthorizationId, t.RoleId});
 
             /**
              * Configure a many-to-many relationship with users and roles.
@@ -140,14 +151,6 @@ namespace BoltJwt.Infrastructure.Context
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
-        private void ConfigureUserAuth(EntityTypeBuilder<UserAuthorization> userAuthConfig)
-        {
-            userAuthConfig.ToTable("user_authorizations", DefaultSchema);
-            userAuthConfig.HasKey(a => a.Id);
-
-            userAuthConfig.HasIndex(i => new {i.DefAuthorizationId, i.UserId}).IsUnique();
-        }
-
         private void ConfigureUserActivationCodes(EntityTypeBuilder<UserActivationCode> userActivationCodeConfig)
         {
             userActivationCodeConfig.ToTable("user_activation_codes", DefaultSchema);
@@ -157,14 +160,6 @@ namespace BoltJwt.Infrastructure.Context
             userActivationCodeConfig.Property<string>("Code").IsRequired();
 
             userActivationCodeConfig.HasIndex(i => i.Code).IsUnique();
-        }
-
-        private void ConfigureRoleAuth(EntityTypeBuilder<RoleAuthorization> roleAuthConfig)
-        {
-            roleAuthConfig.ToTable("role_authorizations", DefaultSchema);
-            roleAuthConfig.HasKey(a => a.Id);
-
-            roleAuthConfig.HasIndex(i => new {i.DefAuthorizationId, i.RoleId}).IsUnique();
         }
 
         private void ConfigureAuth(EntityTypeBuilder<DefinedAuthorization> authConfig)

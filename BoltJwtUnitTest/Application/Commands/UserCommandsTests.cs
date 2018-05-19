@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using BoltJwt.Application.Commands.Users;
 using BoltJwt.Application.Commands.Users.Handlers;
-using BoltJwt.Controllers.Dto;
-using BoltJwt.Domain.Model;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.User;
 using MediatR;
 using Moq;
 using Xunit;

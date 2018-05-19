@@ -1,13 +1,20 @@
 ﻿using System.Collections.Generic;
 using BoltJwt.Domain.Model.Abstractions;
+using BoltJwt.Domain.Model.Aggregates.Role;
+using BoltJwt.Domain.Model.Aggregates.User;
 
-namespace BoltJwt.Domain.Model
+namespace BoltJwt.Domain.Model.Aggregates.Authorization
 {
-    public class DefinedAuthorization : Entity
+    public class DefinedAuthorization : AggregateRoot
     {
         protected DefinedAuthorization() {}
 
-        public DefinedAuthorization(string name)
+        public static DefinedAuthorization Create(string name)
+        {
+            return new DefinedAuthorization(name);
+        }
+
+        private DefinedAuthorization(string name)
         {
             Name = name;
         }
