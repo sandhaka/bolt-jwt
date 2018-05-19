@@ -1,7 +1,7 @@
 ## BoltJwt docker image
 
 ### Availables tags
-1.5.1, dev
+1.6, dev
 
 [(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
 
