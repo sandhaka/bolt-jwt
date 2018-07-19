@@ -18,7 +18,7 @@ services:
     depends_on:
       - sql.data
     environment:
-      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_ENVIRONMENT: "Development"
       SQL_CONNECTION_STRING: ${SQL_CONNECTION_STRING}
       CERT_NAME: "/app/certs/dev.boltjwt.pfx"
       CERT_PWD_NAME: "/app/certs/dev.boltjwt.passphrase"

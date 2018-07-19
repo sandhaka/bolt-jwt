@@ -1,7 +1,7 @@
 ## BoltJwt docker image
 
 ### Availables tags
-1.7, dev
+1.7.1, dev
 
 [(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
 
@@ -13,7 +13,7 @@
 #### Database
 Only MS SQL is supported
 
-#### Key pair
+#### Security
 You have to use a certificate to generate valid tokens:
 
 - The signed certificate to decode the token used by all other consumer services
