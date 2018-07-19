@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using BoltJwt.Infrastructure.Repositories;
+using BoltJwt.Infrastructure.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -16,9 +16,9 @@ namespace BoltJwt.Application.Middlewares.Authentication
             IConfiguration configuration)
         {
             // Get the private key
-            var pfxPath = "certs/dev.boltjwt.pfx";
-            var prvtKeyPassphrase = File.ReadAllText("certs/dev.boltjwt.passphrase");
-            var privateKey = new X509Certificate2(pfxPath, prvtKeyPassphrase).GetRSAPrivateKey();
+            var privateKey = new X509Certificate2(
+                CertsProviderService.GetCertificatePath(),
+                CertsProviderService.GetCertificatePassphrase()).GetRSAPrivateKey();
 
             // Use authentication middleware
             builder.UseAuthentication();

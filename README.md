@@ -15,7 +15,7 @@ Every token contains the 'authorizations' private claim with the user configured
 
 #### How to start?
 ##### Build your key pair
-Creates a valid **key pair** used to generate the signed tokens. **There is a certificates example list 
+Creates a valid **certificate** used to generate the signed tokens. **There is a certificates example list
 and a link with the detailed instructions in [BoltJwt/certs/README.md](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/certs/README.md).**
 
 ##### Run with docker-compose

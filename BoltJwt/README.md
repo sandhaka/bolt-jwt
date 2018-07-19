@@ -1,7 +1,7 @@
 ## BoltJwt docker image
 
 ### Availables tags
-1.6, dev
+1.7, dev
 
 [(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
 
@@ -14,13 +14,10 @@
 Only MS SQL is supported
 
 #### Key pair
-You have to use yours key pair to generate valid tokens
+You have to use a certificate to generate valid tokens:
 
-- **dev.boltjwt.pfx**: Private key
-- **dev.boltjwt.crt**: The signed certificate to decode the token used by all other consumer services
-- **dev.boltjwt.passphrase**: A file with the private key passphrase
-
-At the moment the key names are fixed.
+- The signed certificate to decode the token used by all other consumer services
+- A file with the private key passphrase
 
 Mount these files to '/app/certs' container folder.
 
@@ -37,6 +34,10 @@ docker run -p 443:443 -e 'SQL_CONNECTION_STRING=<your sql conn string>' -v <your
 
 ##### SQL_CONNECTION_STRING
 Connection string of the MS SQL Server instance.
+##### CERT_NAME
+Path of the certificate
+##### CERT_PWD_NAME
+Path of the file with the passphrase
 
 #### Api
 ```text

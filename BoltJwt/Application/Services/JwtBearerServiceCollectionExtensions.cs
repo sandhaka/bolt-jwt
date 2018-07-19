@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
+using BoltJwt.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,9 +22,9 @@ namespace BoltJwt.Application.Services
         public static IServiceCollection AddJwtBearerAuthentication(this IServiceCollection services,
             IConfiguration configuration)
         {
-            var pubKeyPath = "certs/dev.boltjwt.crt";
-
-            var publicKey = new X509Certificate2(pubKeyPath).GetRSAPublicKey();
+            var publicKey = new X509Certificate2(
+                CertsProviderService.GetCertificatePath(),
+                CertsProviderService.GetCertificatePassphrase()).GetRSAPublicKey();
 
             services
                 .AddAuthentication(options =>

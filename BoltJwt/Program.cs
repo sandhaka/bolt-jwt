@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using BoltJwt.Infrastructure.Context;
+using BoltJwt.Infrastructure.Security;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -45,8 +46,8 @@ namespace BoltJwt
                         new MinDataRate(bytesPerSecond: 100, gracePeriod: TimeSpan.FromSeconds(10));
                     options.Listen(IPAddress.Any, 443, listenOptions =>
                         {
-                            listenOptions.UseHttps("certs/dev.boltjwt.pfx",
-                                File.ReadAllText("certs/dev.boltjwt.passphrase"));
+                            listenOptions.UseHttps(CertsProviderService.GetCertificatePath(),
+                                CertsProviderService.GetCertificatePassphrase());
                         });
                 });
     }
