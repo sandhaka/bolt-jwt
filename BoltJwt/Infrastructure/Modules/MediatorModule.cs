@@ -5,12 +5,14 @@ using Autofac;
 using BoltJwt.Application.Commands.Authorizations;
 using BoltJwt.Application.Commands.Groups;
 using BoltJwt.Application.Commands.Roles;
+using BoltJwt.Application.Commands.Tokens;
 using BoltJwt.Application.DomainEventHandlers;
 using BoltJwt.Application.Validations;
 using BoltJwt.Application.Validations.Account;
 using BoltJwt.Application.Validations.Authorizations;
 using BoltJwt.Application.Validations.Groups;
 using BoltJwt.Application.Validations.Roles;
+using BoltJwt.Application.Validations.Tokens;
 using BoltJwt.Application.Validations.Users;
 using FluentValidation;
 using MediatR;
@@ -175,6 +177,17 @@ namespace BoltJwt.Infrastructure.Modules
 
             builder
                 .RegisterAssemblyTypes(typeof(EditGroupRolesCommandValidator).GetTypeInfo().Assembly)
+                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+                .AsImplementedInterfaces();
+
+            #endregion
+
+            #region [Token service]
+
+            builder.RegisterAssemblyTypes(typeof(ValidateTokenCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
+
+            builder.RegisterAssemblyTypes(typeof(ValidateTokenCommandValidator).GetTypeInfo().Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
                 .AsImplementedInterfaces();
 

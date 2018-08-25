@@ -1,7 +1,7 @@
 ## BoltJwt docker image
 
 ### Availables tags
-1.7.1, dev
+1.8, dev
 
 [(BoltJwt/Dockerfile)](https://github.com/sandhaka/bolt-jwt/blob/master/BoltJwt/Dockerfile)
 
@@ -41,14 +41,9 @@ Path of the file with the passphrase
 
 #### Api
 ```text
-/api/token
+POST /api/token
 ```
 Retrieve the token
-
-```text
-/api/tokenrenew
-```
-Renew the token
 
 Example:
 
@@ -85,6 +80,16 @@ On windows system the above command become:
 ```sh
 curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"root\",\"password\":\"root\"}" -v http://127.0.0.1:5000/api/token
 ```
+
+```text
+POST /api/tokenrenew
+```
+Renew the token
+
+```text
+POST /api/v1/tokenservice/validate
+```
+Validate a token (return HTTP 200 if the token is valid and authorized)
 
 #### Management:
 Manage from the web interface administration, default is https://localhost/#/login

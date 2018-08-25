@@ -6,6 +6,7 @@ using BoltJwt.Infrastructure.Security;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -34,6 +35,12 @@ namespace BoltJwt
         private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .ConfigureAppConfiguration((hostContext, config) =>
+                {
+                    config
+                        .AddEnvironmentVariables()
+                        .AddJsonFile("settings.json", optional: true, reloadOnChange: true);
+                })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel(options =>
                 {

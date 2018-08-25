@@ -176,19 +176,14 @@ public async Task<IActionResult> UpdateAsync([FromBody] Command command)
 
 #### Api
 ```text
-/api/token
+POST /api/token
 ```
 Retrieve the token
 
-```text
-/api/tokenrenew
-```
-Renew the token
-
 Example:
 
-```sh 
-$ curl -H "Content-Type: application/json" -X POST -d "{'username':'root','password':'root'}" -v http://127.0.0.1:5000/api/token
+```sh
+curl -H "Content-Type: application/json" -X POST -d "{'username':'root','password':'root'}" -v http://127.0.0.1:5000/api/token
 ```
 Output:
 ```sh
@@ -218,8 +213,22 @@ Output:
 ```
 On windows system the above command become:
 ```sh
-$ curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"root\",\"password\":\"root\"}" -v http://127.0.0.1:5000/api/token
+curl -H "Content-Type: application/json" -X POST -d "{\"username\":\"root\",\"password\":\"root\"}" -v http://127.0.0.1:5000/api/token
 ```
+
+```text
+POST /api/tokenrenew
+```
+Renew the token
+
+```text
+POST /api/v1/tokenservice/validate
+```
+Validate a token (return HTTP 200 if the token is valid and authorized)
+
+#### Management:
+Manage from the web interface administration, default is https://localhost/#/login
+Default root user password: 'root'
 
 #### Diagram
 ![alt text](https://albumizr.com/ia/caaf8ed99c4884152d2d867a68dcd306.jpg)
