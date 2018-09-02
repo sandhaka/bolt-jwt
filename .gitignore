@@ -6,6 +6,9 @@ BoltJwt/bin/
 BoltJwt/obj/
 !BoltJwt/obj/docker/release.tar
 
+# Deploy scripts may contents some confidential data
+scripts/deploy.sh
+
 BoltJwt/wwwroot/
 
 # Certificates:
