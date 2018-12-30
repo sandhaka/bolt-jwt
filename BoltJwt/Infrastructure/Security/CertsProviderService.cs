@@ -7,42 +7,34 @@ namespace BoltJwt.Infrastructure.Security
     {
         public static string GetCertificatePath()
         {
-            if (string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Production"))
+            string certName;
+
+            if (File.Exists("/app/secrets/auth/cert_pfx"))
             {
-                if (File.Exists("/run/secrets/cert"))
-                {
-                    return "/run/secrets/cert";
-                }
-                throw new Exception("Missing file: /run/secrets/cert");
+                certName = "/app/secrets/auth/cert_pfx";
+            }
+            else
+            {
+                certName = Environment.GetEnvironmentVariable("CERT_NAME");
             }
 
-            var certPathEnv = Environment.GetEnvironmentVariable("CERT_NAME");
-
-            if (File.Exists(certPathEnv))
-            {
-                return certPathEnv;
-            }
-            throw new Exception($"File not exists: {certPathEnv}");
+            return certName;
         }
 
         public static string GetCertificatePassphrase()
         {
-            if (string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Production"))
+            string certPwdName;
+
+            if (File.Exists("/app/secrets/auth/passphrase"))
             {
-                if (File.Exists("/run/secrets/cert_pwd"))
-                {
-                    return "/run/secrets/cert_pwd";
-                }
-                throw new Exception("Missing file: /run/secrets/cert_pwd");
+                certPwdName = "/app/secrets/auth/passphrase";
+            }
+            else
+            {
+                certPwdName = Environment.GetEnvironmentVariable("CERT_PWD_NAME");
             }
 
-            var certPwdPathEnv = Environment.GetEnvironmentVariable("CERT_PWD_NAME");
-
-            if (File.Exists(certPwdPathEnv))
-            {
-                return File.ReadAllText(certPwdPathEnv);
-            }
-            throw new Exception($"File not exists: {certPwdPathEnv}");
+            return certPwdName;
         }
     }
 }
