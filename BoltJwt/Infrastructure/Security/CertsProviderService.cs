@@ -34,7 +34,7 @@ namespace BoltJwt.Infrastructure.Security
                 certPwdName = Environment.GetEnvironmentVariable("CERT_PWD_NAME");
             }
 
-            return certPwdName;
+            return File.ReadAllText(certPwdName);
         }
     }
 }
